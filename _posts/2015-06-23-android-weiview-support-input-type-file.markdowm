@@ -1,0 +1,11 @@
+---
+layout: post
+title:  "Android的WebView设置支持input[type=file]"
+date:   2015-06-23 21:00:05
+categories: Android
+---
+
+1. 问题：在使用WebView的时候，项目需要使用图片上传功能，在Html中使用input，type为file的标签。然而，发现在ios和微信的移动端工作都正常，却在项目中完全没有任何反应。接下来，便自己写了一个demo，发现在Android4.1到Android5.0上，都不支持。
+2. 通过搜索、查资料，给出自己的解决方案如下（主要的注意事项有以下两点）：
+  + 重写WebView的WebChromClient，实现对应不同版本的OpenFileChooser和针对5.0以上的onShowFilleChooser方法，通过设置打开图片选择器，在OnActivityResult中，获取对应选中的文件图片。相应的代码如下：
+        
