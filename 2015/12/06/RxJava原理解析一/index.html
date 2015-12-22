@@ -1,0 +1,756 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RxJava," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="初学RxJava，对其许多的API颇感神奇，所以RxJava的原理充满了兴趣。正好最近教父大头鬼也出了一篇RxJava解析的文章，本人也结合源码给出自己的理解。
+这里主要先就一点来讲解。问题如下：
+订阅跟被订阅的关系？是如何实现这一机制的？
+首先，理解OnSubscribe的概念
+
+123456/** * Invoked when Observable.subscribe is called. *">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJava原理解析一">
+<meta property="og:url" content="http://david-wei.github.io/2015/12/06/RxJava原理解析一/index.html">
+<meta property="og:site_name" content="David">
+<meta property="og:description" content="初学RxJava，对其许多的API颇感神奇，所以RxJava的原理充满了兴趣。正好最近教父大头鬼也出了一篇RxJava解析的文章，本人也结合源码给出自己的理解。
+这里主要先就一点来讲解。问题如下：
+订阅跟被订阅的关系？是如何实现这一机制的？
+首先，理解OnSubscribe的概念
+
+123456/** * Invoked when Observable.subscribe is called. *">
+<meta property="og:updated_time" content="2015-12-22T03:10:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJava原理解析一">
+<meta name="twitter:description" content="初学RxJava，对其许多的API颇感神奇，所以RxJava的原理充满了兴趣。正好最近教父大头鬼也出了一篇RxJava解析的文章，本人也结合源码给出自己的理解。
+这里主要先就一点来讲解。问题如下：
+订阅跟被订阅的关系？是如何实现这一机制的？
+首先，理解OnSubscribe的概念
+
+123456/** * Invoked when Observable.subscribe is called. *">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> RxJava原理解析一 | David </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?dad0835db797349b47cdce72689c86ad";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">David</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">READ THE FUCKING SOURCE CODE</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RxJava原理解析一
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-06T23:53:00+08:00" content="2015-12-06">
+              2015-12-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/06/RxJava原理解析一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/06/RxJava原理解析一/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>初学RxJava，对其许多的API颇感神奇，所以RxJava的原理充满了兴趣。正好最近教父大头鬼也出了一篇<a href="http://blog.csdn.net/lzyzsd/article/details/50110355" target="_blank" rel="external">RxJava解析的文章</a>，本人也结合源码给出自己的理解。</p>
+<p>这里主要先就一点来讲解。问题如下：</p>
+<h3 id="u8BA2_u9605_u8DDF_u88AB_u8BA2_u9605_u7684_u5173_u7CFB_uFF1F_u662F_u5982_u4F55_u5B9E_u73B0_u8FD9_u4E00_u673A_u5236_u7684_uFF1F"><a href="#u8BA2_u9605_u8DDF_u88AB_u8BA2_u9605_u7684_u5173_u7CFB_uFF1F_u662F_u5982_u4F55_u5B9E_u73B0_u8FD9_u4E00_u673A_u5236_u7684_uFF1F" class="headerlink" title="订阅跟被订阅的关系？是如何实现这一机制的？"></a>订阅跟被订阅的关系？是如何实现这一机制的？</h3><ul>
+<li>首先，理解OnSubscribe的概念</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * Invoked when Observable.subscribe is called.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnSubscribe</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">Action1</span>&lt;<span class="title">Subscriber</span>&lt;? <span class="title">super</span> <span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// cover for generics insanity</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>OnSubscribe继承自Action1，来看看Action1是干什么的<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * A one-argument action.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Action1</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">Action</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span> call(T t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Action1仅仅是一个参数的泛型接口，提供了使用泛型的类型来作为参数，这样就可以调用这个指定的泛型类型。<br>在此，我把这个onSubscribe理解为订阅的行为。这个行为是指，我在创建一个被观察者的时候，就是要指定这个被观察者所要发布的行为；在观察者的角度来理解，就表示观察者订阅了这些行为。</p>
+<ul>
+<li>理解了这个OnSubscribe之后，看看Observable的创建。这里主要看Observable的构造方法：</li>
+</ul>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line"> <span class="keyword">*</span> Creates an Observable with a Function to execute when it is subscribed to.</span><br><span class="line"> <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span></span><br><span class="line"> <span class="keyword">*</span> <span class="variable">&lt;em&gt;</span>Note:<span class="variable">&lt;/em&gt;</span> Use &#123;<span class="comment">@link #create(OnSubscribe)&#125; to create an Observable, instead of this constructor,</span></span><br><span class="line"> <span class="keyword">*</span> unless you specifically have a need for inheritance.</span><br><span class="line"> <span class="keyword">*</span> </span><br><span class="line"> <span class="keyword">*</span> <span class="comment">@param f</span></span><br><span class="line"> <span class="keyword">*</span>            &#123;<span class="comment">@link OnSubscribe&#125; to be executed when &#123;@link #subscribe(Subscriber)&#125; is called</span></span><br><span class="line"> <span class="keyword">*</span>/</span><br><span class="line">protected Observable(OnSubscribe<span class="variable">&lt;T&gt;</span> f) &#123;</span><br><span class="line">    this.onSubscribe = f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>额，很简单的嘛。这里主要就是需要把OnSubscribe的属性保存下来，（即咱们所订阅的行为）。这里咱们着重点放在这段代码的类注释上面：<strong>创建一个带有执行操作的被观察者，当它被订阅时，执行它的操作（即咱们提到的订阅行为）</strong>，<em>翻译的不好，欢迎拍砖啊</em>。另外，就是这里的推荐的内容了，官方希望我们尽量通过create来创建Obserable，而不是使用继承。</p>
+<ul>
+<li>订阅者/观察者的使用。咱们知晓了被观察者的创建，接下来就是观察者。它的实现就很简单了。主要是由一些的主要的周期函数构成。在此，就略过了。</li>
+<li>订阅操作的实现。这个是咱们关注的重头戏。先看代码：</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Subscription <span class="title">subscribe</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> T&gt; subscriber, Observable&lt;T&gt; observable)</span> </span>&#123;</span><br><span class="line"><span class="comment">// validate and proceed</span></span><br><span class="line">  <span class="keyword">if</span> (subscriber == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"observer can not be null"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (observable.onSubscribe == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"onSubscribe function can not be null."</span>);</span><br><span class="line">      <span class="comment">/*</span><br><span class="line">       * the subscribe function can also be overridden but generally that's not the appropriate approach</span><br><span class="line">       * so I won't mention that in the exception</span><br><span class="line">       */</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// new Subscriber so onStart it</span></span><br><span class="line">  subscriber.onStart();</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/*</span><br><span class="line">   * See https://github.com/ReactiveX/RxJava/issues/216 for discussion on "Guideline 6.4: Protect calls</span><br><span class="line">   * to user code from within an Observer"</span><br><span class="line">   */</span></span><br><span class="line">  <span class="comment">// if not already wrapped</span></span><br><span class="line">  <span class="keyword">if</span> (!(subscriber <span class="keyword">instanceof</span> SafeSubscriber)) &#123;</span><br><span class="line">      <span class="comment">// assign to `observer` so we return the protected version</span></span><br><span class="line">      subscriber = <span class="keyword">new</span> SafeSubscriber&lt;T&gt;(subscriber);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The code below is exactly the same an unsafeSubscribe but not used because it would </span></span><br><span class="line">  <span class="comment">// add a significant depth to already huge call stacks.</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// allow the hook to intercept and/or decorate</span></span><br><span class="line">      hook.onSubscribeStart(observable, observable.onSubscribe).call(subscriber);</span><br><span class="line">      <span class="function"><span class="keyword">return</span> hook.<span class="title">onSubscribeReturn</span><span class="params">(subscriber)</span></span>;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">      <span class="comment">// special handling for certain Throwable/Error/Exception types</span></span><br><span class="line">      Exceptions.throwIfFatal(e);</span><br><span class="line">      <span class="comment">// if an unhandled error occurs executing the onSubscribe we will propagate it</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          subscriber.onError(hook.onSubscribeError(e));</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Throwable e2) &#123;</span><br><span class="line">          Exceptions.throwIfFatal(e2);</span><br><span class="line">          <span class="comment">// if this happens it means the onError itself failed (perhaps an invalid function implementation)</span></span><br><span class="line">          <span class="comment">// so we are unable to propagate the error correctly and will just throw</span></span><br><span class="line">          RuntimeException r = <span class="keyword">new</span> RuntimeException(<span class="string">"Error occurred attempting to subscribe ["</span> + e.getMessage() + <span class="string">"] and then again while trying to pass to onError."</span>, e2);</span><br><span class="line">          <span class="comment">// TODO could the hook be the cause of the error in the on error handling.</span></span><br><span class="line">          hook.onSubscribeError(r);</span><br><span class="line">          <span class="comment">// TODO why aren't we throwing the hook's return value.</span></span><br><span class="line">          <span class="keyword">throw</span> r;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="function"><span class="keyword">return</span> Subscriptions.<span class="title">unsubscribed</span><span class="params">()</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码略多，能一行行读下来，还是需要相当耐心的。这里，我就从代码中获取到的知识点做些说明：1）首先也是最重要的，当执行了subscribe的方法，就开始执行Subscriber的订阅操作。2）Subscriber的onStart方法，是第一个被调用的。3）在代码中，<em>hook.onSubscribeStart(observable, observable.onSubscribe).call(subscriber)</em>，这句代码主要是获取到observable的onSubscribe属性，然后调用它的call方法，而且参数还是subscriber，很熟悉了，有木有，这就是之前所说的订阅的行为。4）在执行观察者订阅的行为的时候，可能会出现错误，通过捕捉异常，来调用subscriber的onError方法。</p>
+<ul>
+<li><p>总结：这里一个简单的完整的订阅与被订阅的流程就结束了，对其原理做以概括：创建一个被观察者，需要给被观察者指定其所<strong>发布的行为（onSubscribe来实现）</strong>；指定观察者时，只需指定相应的观察回调即可；在完成订阅的操作时，是先调用subscriber的onStart方法，之后通过<strong>订阅行为onSubscribe</strong>来调用subscriber完成相应的订阅操作，最后若出现异常则会回调subscriber的onError方法。</p>
+</li>
+<li><p>问题：因为之前看过一些RxJava的介绍文章，提到一点Subscriber的onComplete方法和onError方法是只会执行一个，记不太确切了，是不是这样。<br>但是从源码中可以看出，若是执行到onComplete的方法时候，若在其中抛出了一场，那之后Observable的subscribe方法会捕捉异常，又会调用到onError方法，所以这样看的话，onComplete和onError是有机会都执行到的。</p>
+</li>
+</ul>
+<p>看了这个简单的订阅，产生了一些疑问，也就是接下来要去研究的问题，也是下篇要解决的问题，列举如下：</p>
+<ul>
+<li>TODO:<br>1) onError和onComplete的执行唯一性<br>2）多个观察者是如何处理订阅的？</li>
+</ul>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RxJava/" rel="tag">#RxJava</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/29/Activity之SwipeBack原理解析/" rel="next" title="Activity之SwipeBack原理解析">
+                <i class="fa fa-chevron-left"></i> Activity之SwipeBack原理解析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/22/Android内存泄露代码详解/" rel="prev" title="Android内存泄露代码详解">
+                Android内存泄露代码详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/06/RxJava原理解析一/"
+           data-title="RxJava原理解析一" data-url="http://david-wei.github.io/2015/12/06/RxJava原理解析一/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://avatars1.githubusercontent.com/u/5573939?v=3&u=d94096c3cc15d5dca1f60209b818410388134f6a&s=140" alt="david.wei" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">david.wei</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Android技术爱好者，喜欢编程、读书、桌游</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/david-wei" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/huangdiv5" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> twitter
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/huangdiv5" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 微博
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/david.wei" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/6321040dd140/latest_articles" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 简书
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8BA2_u9605_u8DDF_u88AB_u8BA2_u9605_u7684_u5173_u7CFB_uFF1F_u662F_u5982_u4F55_u5B9E_u73B0_u8FD9_u4E00_u673A_u5236_u7684_uFF1F"><span class="nav-number">1.</span> <span class="nav-text">订阅跟被订阅的关系？是如何实现这一机制的？</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">david.wei</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"david-wei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

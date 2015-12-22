@@ -1,0 +1,1004 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Webview," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="在一个带有input tpye=file标签的Html页面，通过WebView，上传android手机上的图片，发现不工作。（在Ios和微信上完全正常工作）所以，需要研究一下Android的WebView，来支持type=file的标签。
+WebView设置WebChromeClient  重写WebChromeClient中关于文件选择的方法，onShowFileChooser和openFile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webview 支持 input type=file">
+<meta property="og:url" content="http://david-wei.github.io/2015/07/07/Webview-支持-input-type-file/index.html">
+<meta property="og:site_name" content="David">
+<meta property="og:description" content="在一个带有input tpye=file标签的Html页面，通过WebView，上传android手机上的图片，发现不工作。（在Ios和微信上完全正常工作）所以，需要研究一下Android的WebView，来支持type=file的标签。
+WebView设置WebChromeClient  重写WebChromeClient中关于文件选择的方法，onShowFileChooser和openFile">
+<meta property="og:updated_time" content="2015-12-22T03:10:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Webview 支持 input type=file">
+<meta name="twitter:description" content="在一个带有input tpye=file标签的Html页面，通过WebView，上传android手机上的图片，发现不工作。（在Ios和微信上完全正常工作）所以，需要研究一下Android的WebView，来支持type=file的标签。
+WebView设置WebChromeClient  重写WebChromeClient中关于文件选择的方法，onShowFileChooser和openFile">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> Webview 支持 input type=file | David </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?dad0835db797349b47cdce72689c86ad";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">David</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">READ THE FUCKING SOURCE CODE</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Webview 支持 input type=file
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-07-07T07:27:44+08:00" content="2015-07-07">
+              2015-07-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/07/07/Webview-支持-input-type-file/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/07/Webview-支持-input-type-file/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>在一个带有input tpye=file标签的Html页面，通过WebView，上传android手机上的图片，发现不工作。（在Ios和微信上完全正常工作）所以，需要研究一下Android的WebView，来支持type=file的标签。</p>
+<h3 id="WebView_u8BBE_u7F6EWebChromeClient"><a href="#WebView_u8BBE_u7F6EWebChromeClient" class="headerlink" title="WebView设置WebChromeClient"></a>WebView设置WebChromeClient</h3><p>  重写WebChromeClient中关于文件选择的方法，onShowFileChooser和openFileChooser。(项目中只需要选择图片，所以加上了图片过滤。)</p>
+<pre><code>public static final int INPUT_FILE_REQUEST_CODE = 1;
+private ValueCallback&lt;Uri&gt; mUploadMessage;
+private final static int FILECHOOSER_RESULTCODE = 2;
+private ValueCallback&lt;Uri[]&gt; mFilePathCallback;
+
+private String mCameraPhotoPath;
+private WebChromeClient mWebChromeClient = new WebChromeClient() {
+
+    // android 5.0
+    public boolean onShowFileChooser(
+            WebView webView, ValueCallback&lt;Uri[]&gt; filePathCallback,
+            WebChromeClient.FileChooserParams fileChooserParams) {
+        if (mFilePathCallback != null) {
+            mFilePathCallback.onReceiveValue(null);
+        }
+        mFilePathCallback = filePathCallback;
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+                takePictureIntent.putExtra(&quot;PhotoPath&quot;, mCameraPhotoPath);
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.e(&quot;WebViewSetting&quot;, &quot;Unable to create Image File&quot;, ex);
+            }
+
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                mCameraPhotoPath = &quot;file:&quot; + photoFile.getAbsolutePath();
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+            } else {
+                takePictureIntent = null;
+            }
+        }
+
+        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        contentSelectionIntent.setType(&quot;image/*&quot;);
+
+        Intent[] intentArray;
+        if (takePictureIntent != null) {
+            intentArray = new Intent[]{takePictureIntent};
+        } else {
+            intentArray = new Intent[0];
+        }
+
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, &quot;Image Chooser&quot;);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+
+        startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
+
+        return true;
+    }
+
+    //The undocumented magic method override
+    //Eclipse will swear at you if you try to put @Override here
+    // For Android 3.0+
+    public void openFileChooser(ValueCallback&lt;Uri&gt; uploadMsg) {
+
+        mUploadMessage = uploadMsg;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType(&quot;image/*&quot;);
+        WebViewActivity.this.startActivityForResult(Intent.createChooser(i, &quot;Image Chooser&quot;), FILECHOOSER_RESULTCODE);
+
+    }
+
+    // For Android 3.0+
+    public void openFileChooser(ValueCallback uploadMsg, String acceptType) {
+        mUploadMessage = uploadMsg;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType(&quot;image/*&quot;);
+        WebViewActivity.this.startActivityForResult(
+                Intent.createChooser(i, &quot;Image Chooser&quot;),
+                FILECHOOSER_RESULTCODE);
+    }
+
+    //For Android 4.1
+    public void openFileChooser(ValueCallback&lt;Uri&gt; uploadMsg, String acceptType, String capture) {
+        mUploadMessage = uploadMsg;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType(&quot;image/*&quot;);
+        WebViewActivity.this.startActivityForResult(Intent.createChooser(i, &quot;Image Chooser&quot;), WebViewActivity.FILECHOOSER_RESULTCODE);
+
+    }
+};
+</code></pre><h3 id="u9009_u62E9_u7ED3_u679C_u7684_u56DE_u8C03"><a href="#u9009_u62E9_u7ED3_u679C_u7684_u56DE_u8C03" class="headerlink" title="选择结果的回调"></a>选择结果的回调</h3><p>  在onActivityResult中获取对应的选取文件的返回结果</p>
+<pre><code>public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == FILECHOOSER_RESULTCODE) {
+        if (null == mUploadMessage) return;
+        Uri result = data == null || resultCode != RESULT_OK ? null
+                : data.getData();
+        if (result != null) {
+            String imagePath = ImageFilePath.getPath(this, result);
+            if (!StrUtils.isEmpty(imagePath)) {
+                result = Uri.parse(&quot;file:///&quot; + imagePath);
+            }
+        }
+        mUploadMessage.onReceiveValue(result);
+        mUploadMessage = null;
+    } else if (requestCode == INPUT_FILE_REQUEST_CODE &amp;&amp; mFilePathCallback != null) {
+        // 5.0的回调
+        Uri[] results = null;
+
+        // Check that the response is a good one
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                // If there is not data, then we may have taken a photo
+                if (mCameraPhotoPath != null) {
+                    Logger.d(&quot;camera_photo_path&quot;, mCameraPhotoPath);
+                    results = new Uri[]{Uri.parse(mCameraPhotoPath)};
+                }
+            } else {
+                String dataString = data.getDataString();
+                Logger.d(&quot;camera_dataString&quot;, dataString);
+                if (dataString != null) {
+                    results = new Uri[]{Uri.parse(dataString)};
+                }
+            }
+        }
+
+        mFilePathCallback.onReceiveValue(results);
+        mFilePathCallback = null;
+    } else {
+        super.onActivityResult(requestCode, resultCode, data);
+        return;
+    }
+}
+</code></pre><h3 id="u6587_u4EF6_u8DEF_u5F84_u7684_u83B7_u53D6"><a href="#u6587_u4EF6_u8DEF_u5F84_u7684_u83B7_u53D6" class="headerlink" title="文件路径的获取"></a>文件路径的获取</h3><p>  返回文件的解析，因为html页面需要的是文件，所以客户端需要返回的是对应文件的路径。这样，就会存在一个问题，在Android 4.4上，通过文件选择返回的结果都是对应以content开头格式的对应的路径。这就得需要咱们来进行判断，最终都需要转回成以file开头对应的格式文件。下面，我封装成了一个ImageFilePath的类，通过调用getPath方法来获取最终的结果。这个类的方法如下：</p>
+<pre><code> /**
+ * Method for return file path of Gallery image
+ *
+ * @param context
+ * @param uri
+ * @return path of the selected image file from gallery
+ */
+ public static String getPath(final Context context, final Uri uri) {
+
+    // check here to KITKAT or new version
+    final boolean isKitKat = Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT;
+
+    // DocumentProvider
+    if (isKitKat &amp;&amp; DocumentsContract.isDocumentUri(context, uri)) {
+
+        // ExternalStorageProvider
+        if (isExternalStorageDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(&quot;:&quot;);
+            final String type = split[0];
+
+            if (&quot;primary&quot;.equalsIgnoreCase(type)) {
+                return Environment.getExternalStorageDirectory() + &quot;/&quot;
+                        + split[1];
+            }
+        }
+        // DownloadsProvider
+        else if (isDownloadsDocument(uri)) {
+
+            final String id = DocumentsContract.getDocumentId(uri);
+            final Uri contentUri = ContentUris.withAppendedId(
+                    Uri.parse(&quot;content://downloads/public_downloads&quot;),
+                    Long.valueOf(id));
+
+            return getDataColumn(context, contentUri, null, null);
+        }
+        // MediaProvider
+        else if (isMediaDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(&quot;:&quot;);
+            final String type = split[0];
+
+            Uri contentUri = null;
+            if (&quot;image&quot;.equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if (&quot;video&quot;.equals(type)) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else if (&quot;audio&quot;.equals(type)) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }
+
+            final String selection = &quot;_id=?&quot;;
+            final String[] selectionArgs = new String[] { split[1] };
+
+            return getDataColumn(context, contentUri, selection,
+                    selectionArgs);
+        }
+    }
+    // MediaStore (and general)
+    else if (&quot;content&quot;.equalsIgnoreCase(uri.getScheme())) {
+
+        // Return the remote address
+        if (isGooglePhotosUri(uri))
+            return uri.getLastPathSegment();
+
+        return getDataColumn(context, uri, null, null);
+    }
+    // File
+    else if (&quot;file&quot;.equalsIgnoreCase(uri.getScheme())) {
+        return uri.getPath();
+    }
+
+    return null;
+}
+
+/**
+ * Get the value of the data column for this Uri. This is useful for
+ * MediaStore Uris, and other file-based ContentProviders.
+ *
+ * @param context
+ *            The context.
+ * @param uri
+ *            The Uri to query.
+ * @param selection
+ *            (Optional) Filter used in the query.
+ * @param selectionArgs
+ *            (Optional) Selection arguments used in the query.
+ * @return The value of the _data column, which is typically a file path.
+ */
+public static String getDataColumn(Context context, Uri uri,
+                                   String selection, String[] selectionArgs) {
+
+    Cursor cursor = null;
+    final String column = &quot;_data&quot;;
+    final String[] projection = { column };
+
+    try {
+        cursor = context.getContentResolver().query(uri, projection,
+                selection, selectionArgs, null);
+        if (cursor != null &amp;&amp; cursor.moveToFirst()) {
+            final int index = cursor.getColumnIndexOrThrow(column);
+            return cursor.getString(index);
+        }
+    } finally {
+        if (cursor != null)
+            cursor.close();
+    }
+    return null;
+}
+
+/**
+ * @param uri
+ *            The Uri to check.
+ * @return Whether the Uri authority is ExternalStorageProvider.
+ */
+public static boolean isExternalStorageDocument(Uri uri) {
+    return &quot;com.android.externalstorage.documents&quot;.equals(uri
+            .getAuthority());
+}
+
+/**
+ * @param uri
+ *            The Uri to check.
+ * @return Whether the Uri authority is DownloadsProvider.
+ */
+public static boolean isDownloadsDocument(Uri uri) {
+    return &quot;com.android.providers.downloads.documents&quot;.equals(uri
+            .getAuthority());
+}
+
+/**
+ * @param uri
+ *            The Uri to check.
+ * @return Whether the Uri authority is MediaProvider.
+ */
+public static boolean isMediaDocument(Uri uri) {
+    return &quot;com.android.providers.media.documents&quot;.equals(uri
+            .getAuthority());
+}
+
+/**
+ * @param uri
+ *            The Uri to check.
+ * @return Whether the Uri authority is Google Photos.
+ */
+public static boolean isGooglePhotosUri(Uri uri) {
+    return &quot;com.google.android.apps.photos.content&quot;.equals(uri
+            .getAuthority());
+}
+</code></pre><h3 id="u53C2_u8003_u8D44_u6599"><a href="#u53C2_u8003_u8D44_u6599" class="headerlink" title="参考资料"></a>参考资料</h3><p> <a href="http://stackoverflow.com/questions/5907369/file-upload-in-webview" target="_blank" rel="external">file-upload-in-webview</a><br> <a href="http://stackoverflow.com/questions/20067508/get-real-path-from-uri-android-kitkat-new-storage-access-framework" target="_blank" rel="external">get-real-path-from-uri-android-kitkat-new-storage-access-framework</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Webview/" rel="tag">#Webview</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/03/hexo-搭建/" rel="next" title="hexo 初步搭建">
+                <i class="fa fa-chevron-left"></i> hexo 初步搭建
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/09/nested-fragments-onAcitivityResult/" rel="prev" title="nested-fragments-onAcitivityResult">
+                nested-fragments-onAcitivityResult <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/07/07/Webview-支持-input-type-file/"
+           data-title="Webview 支持 input type=file" data-url="http://david-wei.github.io/2015/07/07/Webview-支持-input-type-file/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://avatars1.githubusercontent.com/u/5573939?v=3&u=d94096c3cc15d5dca1f60209b818410388134f6a&s=140" alt="david.wei" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">david.wei</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Android技术爱好者，喜欢编程、读书、桌游</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">分类</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/david-wei" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/huangdiv5" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> twitter
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/huangdiv5" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 微博
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/david.wei" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/6321040dd140/latest_articles" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 简书
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#WebView_u8BBE_u7F6EWebChromeClient"><span class="nav-number">1.</span> <span class="nav-text">WebView设置WebChromeClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u9009_u62E9_u7ED3_u679C_u7684_u56DE_u8C03"><span class="nav-number">2.</span> <span class="nav-text">选择结果的回调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6587_u4EF6_u8DEF_u5F84_u7684_u83B7_u53D6"><span class="nav-number">3.</span> <span class="nav-text">文件路径的获取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u53C2_u8003_u8D44_u6599"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2015</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">david.wei</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"david-wei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>
