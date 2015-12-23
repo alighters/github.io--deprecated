@@ -1,308 +1,26 @@
-<!doctype html>
-<html class="theme-next   use-motion ">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-  <link rel="alternate" href="/atom.xml" title="David" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/icon.ico?v=0.4.5.2" />
-
-
-
-
-
-
-<meta name="description" content="Android技术爱好者，喜欢编程、读书、桌游">
-<meta property="og:type" content="website">
-<meta property="og:title" content="David">
-<meta property="og:url" content="http://david-wei.github.io/index.html">
-<meta property="og:site_name" content="David">
-<meta property="og:description" content="Android技术爱好者，喜欢编程、读书、桌游">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="David">
-<meta name="twitter:description" content="Android技术爱好者，喜欢编程、读书、桌游">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var CONFIG = {
-    scheme: 'Mist',
-    sidebar: 'always',
-    motion: true
-  };
-</script>
-
-  <title> David </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  <!--[if lte IE 8]>
-  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
-    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
-           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
-           style='margin-left:auto;margin-right:auto;display: block;'/>
-    </a>
-  </div>
-<![endif]-->
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[David]]></title>
+  <subtitle><![CDATA[READ THE FUCKING SOURCE CODE]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://david-wei.github.io/"/>
+  <updated>2015-12-22T05:50:20.000Z</updated>
+  <id>http://david-wei.github.io/</id>
   
-
-
-
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?dad0835db797349b47cdce72689c86ad";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
-
-
-
-
-  <div class="container one-column 
-   page-home 
-">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">David</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">READ THE FUCKING SOURCE CODE</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu ">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-commonweal">
-          <a href="/404.html" rel="section">
-            
-              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
-            
-            公益404
-          </a>
-        </li>
-      
-
-      
-      
-    </ul>
-  
-
-  
-</nav>
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div id="content" class="content">
-          
-  <section id="posts" class="posts-expand">
-
+  <author>
+    <name><![CDATA[david.wei]]></name>
     
-
-    
-    
-
-    
-      
-
+  </author>
   
+  <generator uri="http://hexo.io/">Hexo</generator>
   
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/22/Android内存泄露代码详解/" itemprop="url">
-                  Android内存泄露代码详解
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-22T13:49:19+08:00" content="2015-12-22">
-              2015-12-22
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/22/Android内存泄露代码详解/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/22/Android内存泄露代码详解/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h1 id="u5185_u5B58_u6CC4_u9732"><a href="#u5185_u5B58_u6CC4_u9732" class="headerlink" title="内存泄露"></a>内存泄露</h1><p>在开发应用的过程中，我们总会遇到内存泄露的问题。现在通过代码列出一些常见的内存泄露的情况以及解决方案。</p>
+  <entry>
+    <title><![CDATA[Android内存泄露代码详解]]></title>
+    <link href="http://david-wei.github.io/2015/12/22/Android%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://david-wei.github.io/2015/12/22/Android内存泄露代码详解/</id>
+    <published>2015-12-22T05:49:19.000Z</published>
+    <updated>2015-12-22T05:50:20.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="u5185_u5B58_u6CC4_u9732"><a href="#u5185_u5B58_u6CC4_u9732" class="headerlink" title="内存泄露"></a>内存泄露</h1><p>在开发应用的过程中，我们总会遇到内存泄露的问题。现在通过代码列出一些常见的内存泄露的情况以及解决方案。</p>
 <p>在安卓中内存泄露常常出现的情况是指组件生命周期已经结束，但是其引用被其他对象持有，得不到释放引起的。常见的内存泄露的情况，主要是有两种：内部类和静态引用的问题。</p>
 <h2 id="u5185_u90E8_u7C7B"><a href="#u5185_u90E8_u7C7B" class="headerlink" title="内部类"></a>内部类</h2><h3 id="u5185_u90E8_u7C7B_u7684_u79CD_u7C7B"><a href="#u5185_u90E8_u7C7B_u7684_u79CD_u7C7B" class="headerlink" title="内部类的种类"></a>内部类的种类</h3><ul>
 <li>成员内部类</li>
@@ -335,109 +53,24 @@
 <p>这里举得例子是比较简单地，当前的StaticReferenceActivity被静态变量mContext所持有，这就要求我们在当前组件生命周期结束时（OnDestory回调）及时释放静态变量所持有的对象。这种常见的情况就是：在做一些静态初始化的过程中，会持有context的引用，譬如好多第三库都要求我们持有的是ApplicationContext的引用。还有就是我们给第三方库或者不知道其内部实现的代码，需要我们对其传入Context对象，这里我们就得小心一二了。</p>
 <p>最后，这里使用到得弱引用并不是万能的，它也有自己的问题，若是当一次GC之后，它就会被回收掉，会导致我们的回调收不到。所以我们需要对使用到的耗时操作时间长短，确定使用WeakReference还是SoftWeakRefernce或者强引用做一些筛选判定。</p>
 <p><strong>PS:</strong>若是还有疑问，则可以针对<a href="https://github.com/david-wei/LightersTest" target="_blank" rel="external">代码</a>进行一些修改来验证自己的猜想。</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<h1 id="u5185_u5B58_u6CC4_u9732"><a href="#u5185_u5B58_u6CC4_u9732" class="headerlink" title="内存泄露"></a>内存泄露</h1><p>在开发应用的过程中，我们总会遇到内存泄露的问题。]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="内存泄露 弱引用" scheme="http://david-wei.github.io/tags/%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2-%E5%BC%B1%E5%BC%95%E7%94%A8/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/06/RxJava原理解析一/" itemprop="url">
-                  RxJava原理解析一
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-12-06T23:53:00+08:00" content="2015-12-06">
-              2015-12-06
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/12/06/RxJava原理解析一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/06/RxJava原理解析一/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>初学RxJava，对其许多的API颇感神奇，所以RxJava的原理充满了兴趣。正好最近教父大头鬼也出了一篇<a href="http://blog.csdn.net/lzyzsd/article/details/50110355" target="_blank" rel="external">RxJava解析的文章</a>，本人也结合源码给出自己的理解。</p>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[RxJava原理解析一]]></title>
+    <link href="http://david-wei.github.io/2015/12/06/RxJava%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90%E4%B8%80/"/>
+    <id>http://david-wei.github.io/2015/12/06/RxJava原理解析一/</id>
+    <published>2015-12-06T15:53:00.000Z</published>
+    <updated>2015-12-22T03:10:23.000Z</updated>
+    <content type="html"><![CDATA[<p>初学RxJava，对其许多的API颇感神奇，所以RxJava的原理充满了兴趣。正好最近教父大头鬼也出了一篇<a href="http://blog.csdn.net/lzyzsd/article/details/50110355" target="_blank" rel="external">RxJava解析的文章</a>，本人也结合源码给出自己的理解。</p>
 <p>这里主要先就一点来讲解。问题如下：</p>
 <h3 id="u8BA2_u9605_u8DDF_u88AB_u8BA2_u9605_u7684_u5173_u7CFB_uFF1F_u662F_u5982_u4F55_u5B9E_u73B0_u8FD9_u4E00_u673A_u5236_u7684_uFF1F"><a href="#u8BA2_u9605_u8DDF_u88AB_u8BA2_u9605_u7684_u5173_u7CFB_uFF1F_u662F_u5982_u4F55_u5B9E_u73B0_u8FD9_u4E00_u673A_u5236_u7684_uFF1F" class="headerlink" title="订阅跟被订阅的关系？是如何实现这一机制的？"></a>订阅跟被订阅的关系？是如何实现这一机制的？</h3><ul>
 <li>首先，理解OnSubscribe的概念</li>
@@ -466,109 +99,24 @@
 <ul>
 <li>TODO:<br>1) onError和onComplete的执行唯一性<br>2）多个观察者是如何处理订阅的？</li>
 </ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>初学RxJava，对其许多的API颇感神奇，所以RxJava的原理充满了兴趣。正好最近教父大头鬼也出了一篇<a href="http://blog.csdn.net/lzyzsd/article/details/50110355" target="_blank" rel="]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="RxJava" scheme="http://david-wei.github.io/tags/RxJava/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/29/Activity之SwipeBack原理解析/" itemprop="url">
-                  Activity之SwipeBack原理解析
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-11-29T23:09:33+08:00" content="2015-11-29">
-              2015-11-29
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/29/Activity之SwipeBack原理解析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/29/Activity之SwipeBack原理解析/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>最近在项目中遇到了使用<a href="https://github.com/ikew0ng/SwipeBackLayout" target="_blank" rel="external">SwipeBackLayout</a>来模拟ios中右滑退出当前界面的效果（<em>万恶的模仿IOS</em>），颇感神奇，然后大致研究了下其代码实现的原理，接下来就一些主要的原理做一些讲解。</p>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Activity之SwipeBack原理解析]]></title>
+    <link href="http://david-wei.github.io/2015/11/29/Activity%E4%B9%8BSwipeBack%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/"/>
+    <id>http://david-wei.github.io/2015/11/29/Activity之SwipeBack原理解析/</id>
+    <published>2015-11-29T15:09:33.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>最近在项目中遇到了使用<a href="https://github.com/ikew0ng/SwipeBackLayout" target="_blank" rel="external">SwipeBackLayout</a>来模拟ios中右滑退出当前界面的效果（<em>万恶的模仿IOS</em>），颇感神奇，然后大致研究了下其代码实现的原理，接下来就一些主要的原理做一些讲解。</p>
 <h3 id="u539F_u7406_u6982_u62EC_uFF1A"><a href="#u539F_u7406_u6982_u62EC_uFF1A" class="headerlink" title="原理概括："></a>原理概括：</h3><p>通过使用SwipeBackLayout作为咱们设置contentView的Parent，之后右滑的操作，则会由咱们的最外层容器SwipeBackLayout来处理，右滑中移动的距离，则将SwipeBackLayout的childView向右移动相应的距离。移动之后左边的间隙，则在draw方法来绘制置透明色，来显示下层的界面（必须在主题中指定windowIsTranslucent为true，这样咱们才可以看到下层的activity）。</p>
 <h3 id="u539F_u7406_u89E3_u6790_uFF1A"><a href="#u539F_u7406_u89E3_u6790_uFF1A" class="headerlink" title="原理解析："></a>原理解析：</h3><p>为了验证咱们的原理是否准确，咱们通过一下几个方面进行验证：</p>
 <ul>
@@ -593,109 +141,24 @@
 <li>在主题中设置windowIsTransluceni为true</li>
 <li>onIntercept跟onTouchEvent事件的重写，进行指定的view的移动操作。</li>
 </ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>最近在项目中遇到了使用<a href="https://github.com/ikew0ng/SwipeBackLayout" target="_blank" rel="external">SwipeBackLayout</a>来模拟ios中右滑退出当前界面的效果（<em>]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="原理讲解" scheme="http://david-wei.github.io/tags/%E5%8E%9F%E7%90%86%E8%AE%B2%E8%A7%A3/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/11/14/ReactNative初体验HelloWorld/" itemprop="url">
-                  ReactNative初体验HelloWorld
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-11-14T00:13:21+08:00" content="2015-11-14">
-              2015-11-14
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/11/14/ReactNative初体验HelloWorld/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/14/ReactNative初体验HelloWorld/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>近来由于ReactNative颇为火爆，所以也尝试了一把ReactNative搭建最初的HelloWorld程序。我是跟着race604大神的<a href="http://www.race604.com/react-native-for-android-start/" target="_blank" rel="external">ReactNative的专题</a>开始一步一步操作的。大家也可以参照官方的文档，下面主要记录一下，在搭建第一个ReactNative项目中遇到的坑。</p>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ReactNative初体验HelloWorld]]></title>
+    <link href="http://david-wei.github.io/2015/11/14/ReactNative%E5%88%9D%E4%BD%93%E9%AA%8CHelloWorld/"/>
+    <id>http://david-wei.github.io/2015/11/14/ReactNative初体验HelloWorld/</id>
+    <published>2015-11-13T16:13:21.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>近来由于ReactNative颇为火爆，所以也尝试了一把ReactNative搭建最初的HelloWorld程序。我是跟着race604大神的<a href="http://www.race604.com/react-native-for-android-start/" target="_blank" rel="external">ReactNative的专题</a>开始一步一步操作的。大家也可以参照官方的文档，下面主要记录一下，在搭建第一个ReactNative项目中遇到的坑。</p>
 <ol>
 <li>使用nvm下载Node4.0之后，系统默认node还一直处于低版本的情况。<br>使用nvm list命令是可以查看到node 4.0是成功安装的。出现系统Node版本还处于较低的情况。只可能是之前通过homebrew安装过Node了，解决办法是使用brew uninstall node，将brew中的Node卸载掉。</li>
 <li><p>在执行brew update 的时候，发现一直失败。（提示缺少参数）<br>找到我的homebrew的目录，发现竟然没有远程仓库，不是git目录，这可叫我怎么升级啊。因为homebrew装的比较早，当时比较懵懂，可能中间误操作过什么。所以怎么办呢？</p>
@@ -708,109 +171,24 @@
 </li>
 </ol>
 <p>额，就遇到这几个问题，由于懂得不是太多，解决问题的办法都比较粗暴，先简单的留下一个记录。</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>近来由于ReactNative颇为火爆，所以也尝试了一把ReactNative搭建最初的HelloWorld程序。我是跟着race604大神的<a href="http://www.race604.com/react-native-for-android-start/" t]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="ReactNative Android" scheme="http://david-wei.github.io/tags/ReactNative-Android/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/26/Viewpager实现循环滚动/" itemprop="url">
-                  Viewpager实现循环滚动
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-10-26T23:41:03+08:00" content="2015-10-26">
-              2015-10-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/26/Viewpager实现循环滚动/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/26/Viewpager实现循环滚动/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>Android中常常也会出现像Web网页上图片轮播的效果，也就是实现图片的循环滚动，这里以<a href="https://github.com/imbryk/LoopingViewPager" target="_blank" rel="external">LoopingViewPager</a>为例，讲解一下如何实现viewPager的无限滚动。</p>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Viewpager实现循环滚动]]></title>
+    <link href="http://david-wei.github.io/2015/10/26/Viewpager%E5%AE%9E%E7%8E%B0%E5%BE%AA%E7%8E%AF%E6%BB%9A%E5%8A%A8/"/>
+    <id>http://david-wei.github.io/2015/10/26/Viewpager实现循环滚动/</id>
+    <published>2015-10-26T15:41:03.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>Android中常常也会出现像Web网页上图片轮播的效果，也就是实现图片的循环滚动，这里以<a href="https://github.com/imbryk/LoopingViewPager" target="_blank" rel="external">LoopingViewPager</a>为例，讲解一下如何实现viewPager的无限滚动。</p>
 <p>###LoopingViewPager原理讲解<br>这里主要有两个类LoopPagerAdapterWrapper和LoopViewPager。主要的思想简单来说就是存在两个数据源，外面的数据源就是我们看到的数据项，内部的数据源，需要在开头和末尾各添加1个数据项（以A、B表示），这样相比外部的count多两项，A显示的内容跟真实数据源最后一项相同，B显示的内容跟真实数据源第一项相同。</p>
 <ul>
 <li>LoopPagerAdapterWrapper<br>通过继承PagerAdapter，实现PagerAdapter的功能，内部引用了一个新的pagerAdpater，实现了一个新的数据源的映射。映射的规则是这样的：<br>原始的数据源[0,1,2,3]，对应内部的数据源则是[0,1,2,3,4,5]，换算的公式则是，realPosition=(position-1)%count 对应的关系：[0-&gt;3, 1-&gt;0, 2-&gt;1, 3-&gt;2, 4-&gt;3, 5-&gt;0]。这样，内部的数据源在调用instantiateItem的时候，则会在生成对应的View的时候，调用对应realPostion位置上的View，具体的代码如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">toRealPosition</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> realCount = getRealCount();</span><br><span class="line">       <span class="keyword">if</span> (realCount == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">int</span> realPosition = (position-<span class="number">1</span>) % realCount;</span><br><span class="line">       <span class="keyword">if</span> (realPosition &lt; <span class="number">0</span>)</span><br><span class="line">           realPosition += realCount;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> realPosition;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> Object <span class="title">instantiateItem</span><span class="params">(ViewGroup container, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> realPosition = (mAdapter <span class="keyword">instanceof</span> FragmentPagerAdapter || mAdapter <span class="keyword">instanceof</span> FragmentStatePagerAdapter)</span><br><span class="line">               ? position</span><br><span class="line">               : toRealPosition(position);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (mBoundaryCaching) &#123;</span><br><span class="line">           ToDestroy toDestroy = mToDestroy.get(position);</span><br><span class="line">           <span class="keyword">if</span> (toDestroy != <span class="keyword">null</span>) &#123;</span><br><span class="line">               mToDestroy.remove(position);</span><br><span class="line">               <span class="keyword">return</span> toDestroy.object;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> mAdapter.instantiateItem(container, realPosition);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
@@ -821,109 +199,24 @@
 <p>综上，可以看出这是个比较简单的方案了，唯一不足的地方就是需要监听pageChangeListener的pageScroll方法，重新设置position的值（具体的方法是调用scrollTo进行重绘一遍，比较浪费性能）。</p>
 <h3 id="u8FDB_u9636_u5B9E_u73B0_u81EA_u52A8_u6EDA_u52A8_u7684_u529F_u80FD"><a href="#u8FDB_u9636_u5B9E_u73B0_u81EA_u52A8_u6EDA_u52A8_u7684_u529F_u80FD" class="headerlink" title="进阶实现自动滚动的功能"></a>进阶实现自动滚动的功能</h3><p>因为Viewpager已经自带了smoothScroll的功能，则我们只需要在固定的间隔时间发送一个让viewPager滚动的message即可，这个还是比较简单而且容易实现的。</p>
 <p>PS:转载请注明来自原文链接。</p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Android中常常也会出现像Web网页上图片轮播的效果，也就是实现图片的循环滚动，这里以<a href="https://github.com/imbryk/LoopingViewPager" target="_blank" rel="external">LoopingV]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="viewPager" scheme="http://david-wei.github.io/tags/viewPager/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/18/ListView滑动性能优化/" itemprop="url">
-                  ListView图片加载讲解
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-10-18T23:24:48+08:00" content="2015-10-18">
-              2015-10-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/18/ListView滑动性能优化/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/18/ListView滑动性能优化/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>在ListView加载图片的时候，我们就会关于这里的图片加载产生一些问题。另外，我们知道针对ListView加载图片常用的优化方案之一就是，在列表的滑动过程中，暂停图片的加载任务，在滑动结束之后，则继续之前的任务。所以我们针对这些问题进行一些探讨研究（以UIL图片加载为例）。</p>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[ListView图片加载讲解]]></title>
+    <link href="http://david-wei.github.io/2015/10/18/ListView%E6%BB%91%E5%8A%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    <id>http://david-wei.github.io/2015/10/18/ListView滑动性能优化/</id>
+    <published>2015-10-18T15:24:48.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>在ListView加载图片的时候，我们就会关于这里的图片加载产生一些问题。另外，我们知道针对ListView加载图片常用的优化方案之一就是，在列表的滑动过程中，暂停图片的加载任务，在滑动结束之后，则继续之前的任务。所以我们针对这些问题进行一些探讨研究（以UIL图片加载为例）。</p>
 <ul>
 <li><p>知识点1：加载图片的线程的控制;<br>我们知道在ListView的adapter的getView方法中，进行图片的获取，这里为执行LoadAndDisplayImageTask，这是一个单独的线程去加载图片。但我们不会对每个View加载图片都去执行一个新的线程，所以这里采用的是一个线程池来控制线程的数目，来避免频繁地创建线程。</p>
 </li>
@@ -942,109 +235,24 @@
 <p>PS:转载请注明来自原文链接。</p>
 </li>
 </ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在ListView加载图片的时候，我们就会关于这里的图片加载产生一些问题。另外，我们知道针对ListView加载图片常用的优化方案之一就是，在列表的滑动过程中，暂停图片的加载任务，在滑动结束之后，则继续之前的任务。所以我们针对这些问题进行一些探讨研究（以UIL图片加载为例）]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="原理讲解" scheme="http://david-wei.github.io/tags/%E5%8E%9F%E7%90%86%E8%AE%B2%E8%A7%A3/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/11/Git进阶命令/" itemprop="url">
-                  Git进阶命令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-10-11T22:28:26+08:00" content="2015-10-11">
-              2015-10-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工具命令/" itemprop="url" rel="index">
-                    <span itemprop="name">工具命令</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/11/Git进阶命令/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/11/Git进阶命令/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <ol>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Git进阶命令]]></title>
+    <link href="http://david-wei.github.io/2015/10/11/Git%E8%BF%9B%E9%98%B6%E5%91%BD%E4%BB%A4/"/>
+    <id>http://david-wei.github.io/2015/10/11/Git进阶命令/</id>
+    <published>2015-10-11T14:28:26.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<ol>
 <li>添加远程仓库<br>git remote add <name> <url></url></name></li>
 <li>修改远程仓库<br>git remote set-url <name> <url></url></name></li>
 <li>git版本恢复<ul>
@@ -1055,109 +263,27 @@
 </li>
 <li>git删除远程分支<br>git branch -r -d origin/branch-name<br>git push origin :branch-name</li>
 </ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<ol>
+<li>添加远程仓库<br>git remote add <name> <url></url></name></li>
+<li>修改远程仓库<br>git remote set-url <name> <url></url></name></li>
+<li>git版本恢复]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="Git命令" scheme="http://david-wei.github.io/tags/Git%E5%91%BD%E4%BB%A4/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/11/常用命令汇总/" itemprop="url">
-                  常用Shell命令汇总
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-10-11T21:31:20+08:00" content="2015-10-11">
-              2015-10-11
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/工具命令/" itemprop="url" rel="index">
-                    <span itemprop="name">工具命令</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/11/常用命令汇总/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/11/常用命令汇总/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="工具命令" scheme="http://david-wei.github.io/categories/%E5%B7%A5%E5%85%B7%E5%91%BD%E4%BB%A4/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <ol>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[常用Shell命令汇总]]></title>
+    <link href="http://david-wei.github.io/2015/10/11/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/"/>
+    <id>http://david-wei.github.io/2015/10/11/常用命令汇总/</id>
+    <published>2015-10-11T13:31:20.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<ol>
 <li>命令结果输出到剪贴板<ul>
 <li>Mac: pwd | pbcopy</li>
 <li>linux: pwd | xsel</li>
@@ -1166,477 +292,443 @@
 </li>
 <li></li>
 </ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<ol>
+<li>命令结果输出到剪贴板<ul>
+<li>Mac: pwd | pbcopy</li>
+<li>linux: pwd | xsel</li>
+<li>windows: echo Hello | clip</li>
+</ul>
+</li>
+<li></li>
+</ol]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="Linux命令" scheme="http://david-wei.github.io/tags/Linux%E5%91%BD%E4%BB%A4/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/09/17/Android进阶汇总一/" itemprop="url">
-                  Android进阶汇总一
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-09-17T00:22:01+08:00" content="2015-09-17">
-              2015-09-17
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/09/17/Android进阶汇总一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/17/Android进阶汇总一/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="工具命令" scheme="http://david-wei.github.io/categories/%E5%B7%A5%E5%85%B7%E5%91%BD%E4%BB%A4/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>针对Android中一些进阶的常用的知识点，做一些汇总：</p>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Android进阶汇总一]]></title>
+    <link href="http://david-wei.github.io/2015/09/17/Android%E8%BF%9B%E9%98%B6%E6%B1%87%E6%80%BB%E4%B8%80/"/>
+    <id>http://david-wei.github.io/2015/09/17/Android进阶汇总一/</id>
+    <published>2015-09-16T16:22:01.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>针对Android中一些进阶的常用的知识点，做一些汇总：</p>
 <h3 id="BaseAdapter_u4E2Dnotifydatachanged_u539F_u7406_2C_u4F1A_u5E26_u6765_u7684_u95EE_u9898_uFF0C_u5982_u4F55_u89E3_u51B3"><a href="#BaseAdapter_u4E2Dnotifydatachanged_u539F_u7406_2C_u4F1A_u5E26_u6765_u7684_u95EE_u9898_uFF0C_u5982_u4F55_u89E3_u51B3" class="headerlink" title="BaseAdapter中notifydatachanged原理,会带来的问题，如何解决"></a>BaseAdapter中notifydatachanged原理,会带来的问题，如何解决</h3><ul>
 <li>问题1：使用notifydatachanged的时候，当数据源发生改变的时候，会导致整个view的重绘（比较消耗资源）。</li>
 <li>解决方案：如果只是修改item的view上一个或几个简单的view时，判断此Item是否当前是否在页面显示，若获取此itemView进行特定view的更新。另外，如果是删除或者增加一个数据源时，这种方案就比较麻烦了，还是直接调用notifyDataChanged吧。</li>
 <li>问题2：针对问题一的解决方案，发现增加或者删除数据源，就没用相应的方法了。这个也可以说是BaseAdapter设计的初衷就不是这样的吧，它的作用只是封装了数据源，只用来提供数据源的显示，没有提供数据源的操作。不过现在大家就可以看到在RecylcerView的adapter就提供了相应的ItemView的插入、删除、以及交换、更新等操作。</li>
 </ul>
 <h3 id="u56FE_u7247_u5217_u8868_u7684ListView_u6ED1_u52A8_u7684_u4F18_u5316"><a href="#u56FE_u7247_u5217_u8868_u7684ListView_u6ED1_u52A8_u7684_u4F18_u5316" class="headerlink" title="图片列表的ListView滑动的优化"></a>图片列表的ListView滑动的优化</h3><h3 id="Fragment_u4E2Dhide_u5230show_u4E4B_u540E_2C_u6240_u6267_u884C_u7684_u751F_u547D_u5468_u671F"><a href="#Fragment_u4E2Dhide_u5230show_u4E4B_u540E_2C_u6240_u6267_u884C_u7684_u751F_u547D_u5468_u671F" class="headerlink" title="Fragment中hide到show之后,所执行的生命周期"></a>Fragment中hide到show之后,所执行的生命周期</h3><p>### </p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>针对Android中一些进阶的常用的知识点，做一些汇总：</p>
+<h3 id="BaseAdapter_u4E2Dnotifydatachanged_u539F_u7406_2C_u4F1A_u5E26_u6765_u7684_u95EE_u9898_uFF0C_u598]]>
+    </summary>
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
+      <category term="Android进阶" scheme="http://david-wei.github.io/tags/Android%E8%BF%9B%E9%98%B6/"/>
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/07/20/MVP在Android中的应用/" itemprop="url">
-                  MVP在Android中的应用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-07-20T23:54:29+08:00" content="2015-07-20">
-              2015-07-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/07/20/MVP在Android中的应用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/20/MVP在Android中的应用/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
     
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>想起之前遇到的一个面试问题，在Activity中你们项目的代码行数有多少行？<br>这便是考虑项目的结构以及架构的问题，在我现在遇到的Android项目代码编写中，由于Android不清晰的MVC结构的思想，在Activity、Fragment中不自觉地会与逻辑代码混杂在一起，不可避免地就会导致其代码结果过大，不利于复杂界面的后期维护修改。</p>
+  </entry>
+  
+  <entry>
+    <title><![CDATA[MVP在Android中的应用]]></title>
+    <link href="http://david-wei.github.io/2015/07/20/MVP%E5%9C%A8Android%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/"/>
+    <id>http://david-wei.github.io/2015/07/20/MVP在Android中的应用/</id>
+    <published>2015-07-20T15:54:29.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>想起之前遇到的一个面试问题，在Activity中你们项目的代码行数有多少行？<br>这便是考虑项目的结构以及架构的问题，在我现在遇到的Android项目代码编写中，由于Android不清晰的MVC结构的思想，在Activity、Fragment中不自觉地会与逻辑代码混杂在一起，不可避免地就会导致其代码结果过大，不利于复杂界面的后期维护修改。</p>
 <h3 id="u89E3_u51B3_u65B9_u68481_uFF1A_u6CE8_u89E3_u65B9_u5F0F_u7684_u8FD0_u7528"><a href="#u89E3_u51B3_u65B9_u68481_uFF1A_u6CE8_u89E3_u65B9_u5F0F_u7684_u8FD0_u7528" class="headerlink" title="解决方案1：注解方式的运用"></a>解决方案1：注解方式的运用</h3><p>   在Android中，这个最常用的就是<a href="http://androidannotations.org/" target="_blank" rel="external">AndroidAnotations</a><br>   带来的好处是避免了输写过程的麻烦程度，但是对于项目的结构程序是没有任何帮助。</p>
 <h3 id="u89E3_u51B3_u65B9_u68482_uFF1AMVP_u8BBE_u8BA1_u601D_u60F3_u7684_u8FD0_u7528"><a href="#u89E3_u51B3_u65B9_u68482_uFF1AMVP_u8BBE_u8BA1_u601D_u60F3_u7684_u8FD0_u7528" class="headerlink" title="解决方案2：MVP设计思想的运用"></a>解决方案2：MVP设计思想的运用</h3><p>   目的：使Model与View解耦，达到复杂的逻辑隔离开来的作用<br>   实现方式：通过Presenter来与二者进行交互，在Actiivty中保持一个对Presenter的调用，将view的调用以及交互效果抽象出来，来交由Presenter来管理，Model的修改又通过Presenter来影响view的更新<br>   <a href="https://github.com/antoniolg/androidmvp" target="_blank" rel="external">一个简单的登陆demo</a></p>
 <h3 id="u89E3_u51B3_u65B9_u68483_uFF1AMVVM_u7684_u5B9E_u73B0"><a href="#u89E3_u51B3_u65B9_u68483_uFF1AMVVM_u7684_u5B9E_u73B0" class="headerlink" title="解决方案3：MVVM的实现"></a>解决方案3：MVVM的实现</h3><p>   目的：1.避免了view的查找与获取<br>         2.view的展示需要的数据，通过viewModel的概念来在xml文件中进行绑定<br>         3.更加清晰的视图结构</p>
 <h3 id="u63A8_u8350_u7684_u4E24_u4E2A_u6846_u67B6_uFF1A"><a href="#u63A8_u8350_u7684_u4E24_u4E2A_u6846_u67B6_uFF1A" class="headerlink" title="推荐的两个框架："></a>推荐的两个框架：</h3><p>   <a href="https://github.com/android10/Android-CleanArchitecture" target="_blank" rel="external">Android-CleanArchitecture</a><br>   <a href="https://github.com/pedrovgs/EffectiveAndroidUI" target="_blank" rel="external">EffectiveAndroidUI</a></p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>想起之前遇到的一个面试问题，在Activity中你们项目的代码行数有多少行？<br>这便是考虑项目的结构以及架构的问题，在我现在遇到的Android项目代码编写中，由于Android不清晰的MVC结构的思想，在Activity、Fragment中不自觉地会与逻辑代码混杂在一]]>
+    </summary>
     
-
-  </section>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
-
-
-        </div>
-
-        
-
-
-        
-
-      </div>
-
-      
-        
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="https://avatars1.githubusercontent.com/u/5573939?v=3&u=d94096c3cc15d5dca1f60209b818410388134f6a&s=140" alt="david.wei" itemprop="image"/>
-          <p class="site-author-name" itemprop="name">david.wei</p>
-        </div>
-        <p class="site-description motion-element" itemprop="description">Android技术爱好者，喜欢编程、读书、桌游</p>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">13</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-
-          <div class="site-state-item site-state-categories">
-            <a href="/categories">
-              <span class="site-state-item-count">2</span>
-              <span class="site-state-item-name">分类</span>
-              </a>
-          </div>
-
-          <div class="site-state-item site-state-tags">
-            <a href="/tags">
-              <span class="site-state-item-count">12</span>
-              <span class="site-state-item-name">标签</span>
-              </a>
-          </div>
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
-        
-
-        <div class="links-of-author motion-element">
-          
-            
-              <span class="links-of-author-item">
-                <a href="https://github.com/david-wei" target="_blank">
-                  
-                    <i class="fa fa-globe"></i> github
-                  
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://twitter.com/huangdiv5" target="_blank">
-                  
-                    <i class="fa fa-globe"></i> twitter
-                  
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://weibo.com/huangdiv5" target="_blank">
-                  
-                    <i class="fa fa-globe"></i> 微博
-                  
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://www.zhihu.com/people/david.wei" target="_blank">
-                  
-                    <i class="fa fa-globe"></i> 知乎
-                  
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="http://www.jianshu.com/users/6321040dd140/latest_articles" target="_blank">
-                  
-                    <i class="fa fa-globe"></i> 简书
-                  
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://medium.com/@lighters_wei" target="_blank">
-                  
-                    <i class="fa fa-globe"></i> medium
-                  
-                </a>
-              </span>
-            
-          
-        </div>
-
-        
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-      </section>
-
-      
-
-    </div>
-  </aside>
-
-
-      
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy;  2013 - 
-  <span itemprop="copyrightYear">2015</span>
-  <span class="with-love">
-    <i class="icon-next-heart fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">david.wei</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
-
-
-
-      </div>
-    </footer>
-
-    <div class="back-to-top"></div>
-  </div>
-
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  
-  
-
-  
+      <category term="MVP" scheme="http://david-wei.github.io/tags/MVP/"/>
     
-
-  
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
     
+  </entry>
   
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"david-wei"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.id = 'duoshuo-script';
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
+  <entry>
+    <title><![CDATA[nested-fragments-onAcitivityResult]]></title>
+    <link href="http://david-wei.github.io/2015/07/09/nested-fragments-onAcitivityResult/"/>
+    <id>http://david-wei.github.io/2015/07/09/nested-fragments-onAcitivityResult/</id>
+    <published>2015-07-09T14:31:59.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>在执行嵌套的fragment(fragment里面嵌套fragment)的onActivityResult，会发现是执行不到的。所以接下来就fragmentActivity和fragment的源码类来分析一下他们具体的逻辑：</p>
+<h3 id="u5173_u952E_u70B9_uFF1AFragmentActivity_u7684startActivityFromFragment_u65B9_u6CD5"><a href="#u5173_u952E_u70B9_uFF1AFragmentActivity_u7684startActivityFromFragment_u65B9_u6CD5" class="headerlink" title="关键点：FragmentActivity的startActivityFromFragment方法"></a>关键点：FragmentActivity的startActivityFromFragment方法</h3><ol>
+<li><p>FragmentActivity的startActivityForResult方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityForResult</span><span class="params">(Intent intent, <span class="keyword">int</span> requestCode)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (requestCode != -<span class="number">1</span> &amp;&amp; (requestCode&amp;<span class="number">0xffff0000</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Can only use lower 16 bits for requestCode"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">super</span>.startActivityForResult(intent, requestCode);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>从上可以看出来，如果是通过调用Activity的这个方法，它只允许使用requestCode的低16为。</p>
+</li>
+<li><p>FragmentAcitivity的startActivityFromFragment方法</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">  * Called by Fragment.startActivityForResult() to implement its behavior.</span><br><span class="line">  */</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startActivityFromFragment</span><span class="params">(Fragment fragment, Intent intent, </span><br><span class="line">         <span class="keyword">int</span> requestCode)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (requestCode == -<span class="number">1</span>) &#123;</span><br><span class="line">         super.startActivityForResult(intent, -<span class="number">1</span>);</span><br><span class="line">         <span class="keyword">return</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> ((requestCode&amp;<span class="number">0xffff0000</span>) != <span class="number">0</span>) &#123;</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Can only use lower 16 bits for requestCode"</span>);</span><br><span class="line">     &#125;</span><br><span class="line">     super.startActivityForResult(intent, ((fragment.mIndex+<span class="number">1</span>)&lt;&lt;<span class="number">16</span>) + (requestCode&amp;<span class="number">0xffff</span>));</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法是当调用fragment的startActivityForResult方法，便会调用到上面这个方法，这里做了一个处理是：将fragment的index(对应fragment在manager中对应的索引)放i在高16位，并保留低16位的requestCode.</p>
+</li>
+<li><p>FragmentActivity的onActivityResult方法</p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">  * Dispatch incoming result to the correct fragment.</span><br><span class="line">  */</span></span><br><span class="line"> @Override</span><br><span class="line"> <span class="keyword">protected</span> <span class="keyword">void</span> onActivityResult(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data) &#123;</span><br><span class="line">     mFragments.noteStateNotSaved();</span><br><span class="line">     <span class="keyword">int</span> <span class="keyword">index</span> = requestCode&gt;&gt;<span class="number">16</span>;</span><br><span class="line">     <span class="keyword">if</span> (<span class="keyword">index</span> != <span class="number">0</span>) &#123;</span><br><span class="line">         <span class="keyword">index</span>--;</span><br><span class="line">         <span class="keyword">if</span> (mFragments.mActive == <span class="keyword">null</span> || <span class="keyword">index</span> &lt; <span class="number">0</span> || <span class="keyword">index</span> &gt;= mFragments.mActive.size()) &#123;</span><br><span class="line">             Log.w(TAG, <span class="string">"Activity result fragment index out of range: 0x"</span></span><br><span class="line">                     + Integer.toHexString(requestCode));</span><br><span class="line">             <span class="keyword">return</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         Fragment frag = mFragments.mActive.get(<span class="keyword">index</span>);</span><br><span class="line">         <span class="keyword">if</span> (frag == <span class="keyword">null</span>) &#123;</span><br><span class="line">             Log.w(TAG, <span class="string">"Activity result no fragment exists for index: 0x"</span></span><br><span class="line">                     + Integer.toHexString(requestCode));</span><br><span class="line">         &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">             frag.onActivityResult(requestCode&amp;<span class="number">0xffff</span>, resultCode, data);</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>根据之前的逻辑，在这里就需要对高16位的数值，进行判断，当不为0时，根据对应的fragment的index值，获取到对应的fragment的onActivityResult方法。若高16位的数值为0，则表示是activity对应的方法。</p>
+</li>
+</ol>
+<h3 id="u89E3_u51B3_u4E4B_u9053"><a href="#u89E3_u51B3_u4E4B_u9053" class="headerlink" title="解决之道"></a>解决之道</h3><ol>
+<li>fragment的层数<ul>
+<li>我们在这里可认为第一层的fragment（放在Activity之中）,由getFragmentManager来管理 </li>
+<li>嵌套的fragment是通过getChildFragmentManager来获取的。</li>
+</ul>
+</li>
+<li>层数和index的存放<br>根据FragmentActivity存放fragment的index的原理，我们可以根据指定位数来存放fragment的层数以及index的相关信息。</li>
+<li>代码（show me the code）<br>找到一篇github上的代码，就不贴我的代码了，思路就是这个思路。<br><a href="https://github.com/shamanland/nested-fragment-issue" target="_blank" rel="external">nested-fragment-issue</a></li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在执行嵌套的fragment(fragment里面嵌套fragment)的onActivityResult，会发现是执行不到的。所以接下来就fragmentActivity和fragment的源码类来分析一下他们具体的逻辑：</p>
+<h3 id="u5173_u952E_]]>
+    </summary>
     
-     
-
-
+      <category term="fragment" scheme="http://david-wei.github.io/tags/fragment/"/>
     
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
+    
+  </entry>
   
+  <entry>
+    <title><![CDATA[Webview 支持 input type=file]]></title>
+    <link href="http://david-wei.github.io/2015/07/07/Webview-%E6%94%AF%E6%8C%81-input-type-file/"/>
+    <id>http://david-wei.github.io/2015/07/07/Webview-支持-input-type-file/</id>
+    <published>2015-07-06T23:27:44.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>在一个带有input tpye=file标签的Html页面，通过WebView，上传android手机上的图片，发现不工作。（在Ios和微信上完全正常工作）所以，需要研究一下Android的WebView，来支持type=file的标签。</p>
+<h3 id="WebView_u8BBE_u7F6EWebChromeClient"><a href="#WebView_u8BBE_u7F6EWebChromeClient" class="headerlink" title="WebView设置WebChromeClient"></a>WebView设置WebChromeClient</h3><p>  重写WebChromeClient中关于文件选择的方法，onShowFileChooser和openFileChooser。(项目中只需要选择图片，所以加上了图片过滤。)</p>
+<pre><code>public static final int INPUT_FILE_REQUEST_CODE = 1;
+private ValueCallback&lt;Uri&gt; mUploadMessage;
+private final static int FILECHOOSER_RESULTCODE = 2;
+private ValueCallback&lt;Uri[]&gt; mFilePathCallback;
 
+private String mCameraPhotoPath;
+private WebChromeClient mWebChromeClient = new WebChromeClient() {
+
+    // android 5.0
+    public boolean onShowFileChooser(
+            WebView webView, ValueCallback&lt;Uri[]&gt; filePathCallback,
+            WebChromeClient.FileChooserParams fileChooserParams) {
+        if (mFilePathCallback != null) {
+            mFilePathCallback.onReceiveValue(null);
+        }
+        mFilePathCallback = filePathCallback;
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+                takePictureIntent.putExtra(&quot;PhotoPath&quot;, mCameraPhotoPath);
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.e(&quot;WebViewSetting&quot;, &quot;Unable to create Image File&quot;, ex);
+            }
+
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                mCameraPhotoPath = &quot;file:&quot; + photoFile.getAbsolutePath();
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+            } else {
+                takePictureIntent = null;
+            }
+        }
+
+        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        contentSelectionIntent.setType(&quot;image/*&quot;);
+
+        Intent[] intentArray;
+        if (takePictureIntent != null) {
+            intentArray = new Intent[]{takePictureIntent};
+        } else {
+            intentArray = new Intent[0];
+        }
+
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, &quot;Image Chooser&quot;);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+
+        startActivityForResult(chooserIntent, INPUT_FILE_REQUEST_CODE);
+
+        return true;
+    }
+
+    //The undocumented magic method override
+    //Eclipse will swear at you if you try to put @Override here
+    // For Android 3.0+
+    public void openFileChooser(ValueCallback&lt;Uri&gt; uploadMsg) {
+
+        mUploadMessage = uploadMsg;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType(&quot;image/*&quot;);
+        WebViewActivity.this.startActivityForResult(Intent.createChooser(i, &quot;Image Chooser&quot;), FILECHOOSER_RESULTCODE);
+
+    }
+
+    // For Android 3.0+
+    public void openFileChooser(ValueCallback uploadMsg, String acceptType) {
+        mUploadMessage = uploadMsg;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType(&quot;image/*&quot;);
+        WebViewActivity.this.startActivityForResult(
+                Intent.createChooser(i, &quot;Image Chooser&quot;),
+                FILECHOOSER_RESULTCODE);
+    }
+
+    //For Android 4.1
+    public void openFileChooser(ValueCallback&lt;Uri&gt; uploadMsg, String acceptType, String capture) {
+        mUploadMessage = uploadMsg;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType(&quot;image/*&quot;);
+        WebViewActivity.this.startActivityForResult(Intent.createChooser(i, &quot;Image Chooser&quot;), WebViewActivity.FILECHOOSER_RESULTCODE);
+
+    }
+};
+</code></pre><h3 id="u9009_u62E9_u7ED3_u679C_u7684_u56DE_u8C03"><a href="#u9009_u62E9_u7ED3_u679C_u7684_u56DE_u8C03" class="headerlink" title="选择结果的回调"></a>选择结果的回调</h3><p>  在onActivityResult中获取对应的选取文件的返回结果</p>
+<pre><code>public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == FILECHOOSER_RESULTCODE) {
+        if (null == mUploadMessage) return;
+        Uri result = data == null || resultCode != RESULT_OK ? null
+                : data.getData();
+        if (result != null) {
+            String imagePath = ImageFilePath.getPath(this, result);
+            if (!StrUtils.isEmpty(imagePath)) {
+                result = Uri.parse(&quot;file:///&quot; + imagePath);
+            }
+        }
+        mUploadMessage.onReceiveValue(result);
+        mUploadMessage = null;
+    } else if (requestCode == INPUT_FILE_REQUEST_CODE &amp;&amp; mFilePathCallback != null) {
+        // 5.0的回调
+        Uri[] results = null;
+
+        // Check that the response is a good one
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                // If there is not data, then we may have taken a photo
+                if (mCameraPhotoPath != null) {
+                    Logger.d(&quot;camera_photo_path&quot;, mCameraPhotoPath);
+                    results = new Uri[]{Uri.parse(mCameraPhotoPath)};
+                }
+            } else {
+                String dataString = data.getDataString();
+                Logger.d(&quot;camera_dataString&quot;, dataString);
+                if (dataString != null) {
+                    results = new Uri[]{Uri.parse(dataString)};
+                }
+            }
+        }
+
+        mFilePathCallback.onReceiveValue(results);
+        mFilePathCallback = null;
+    } else {
+        super.onActivityResult(requestCode, resultCode, data);
+        return;
+    }
+}
+</code></pre><h3 id="u6587_u4EF6_u8DEF_u5F84_u7684_u83B7_u53D6"><a href="#u6587_u4EF6_u8DEF_u5F84_u7684_u83B7_u53D6" class="headerlink" title="文件路径的获取"></a>文件路径的获取</h3><p>  返回文件的解析，因为html页面需要的是文件，所以客户端需要返回的是对应文件的路径。这样，就会存在一个问题，在Android 4.4上，通过文件选择返回的结果都是对应以content开头格式的对应的路径。这就得需要咱们来进行判断，最终都需要转回成以file开头对应的格式文件。下面，我封装成了一个ImageFilePath的类，通过调用getPath方法来获取最终的结果。这个类的方法如下：</p>
+<pre><code> /**
+ * Method for return file path of Gallery image
+ *
+ * @param context
+ * @param uri
+ * @return path of the selected image file from gallery
+ */
+ public static String getPath(final Context context, final Uri uri) {
+
+    // check here to KITKAT or new version
+    final boolean isKitKat = Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.KITKAT;
+
+    // DocumentProvider
+    if (isKitKat &amp;&amp; DocumentsContract.isDocumentUri(context, uri)) {
+
+        // ExternalStorageProvider
+        if (isExternalStorageDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(&quot;:&quot;);
+            final String type = split[0];
+
+            if (&quot;primary&quot;.equalsIgnoreCase(type)) {
+                return Environment.getExternalStorageDirectory() + &quot;/&quot;
+                        + split[1];
+            }
+        }
+        // DownloadsProvider
+        else if (isDownloadsDocument(uri)) {
+
+            final String id = DocumentsContract.getDocumentId(uri);
+            final Uri contentUri = ContentUris.withAppendedId(
+                    Uri.parse(&quot;content://downloads/public_downloads&quot;),
+                    Long.valueOf(id));
+
+            return getDataColumn(context, contentUri, null, null);
+        }
+        // MediaProvider
+        else if (isMediaDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(&quot;:&quot;);
+            final String type = split[0];
+
+            Uri contentUri = null;
+            if (&quot;image&quot;.equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if (&quot;video&quot;.equals(type)) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else if (&quot;audio&quot;.equals(type)) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            }
+
+            final String selection = &quot;_id=?&quot;;
+            final String[] selectionArgs = new String[] { split[1] };
+
+            return getDataColumn(context, contentUri, selection,
+                    selectionArgs);
+        }
+    }
+    // MediaStore (and general)
+    else if (&quot;content&quot;.equalsIgnoreCase(uri.getScheme())) {
+
+        // Return the remote address
+        if (isGooglePhotosUri(uri))
+            return uri.getLastPathSegment();
+
+        return getDataColumn(context, uri, null, null);
+    }
+    // File
+    else if (&quot;file&quot;.equalsIgnoreCase(uri.getScheme())) {
+        return uri.getPath();
+    }
+
+    return null;
+}
+
+/**
+ * Get the value of the data column for this Uri. This is useful for
+ * MediaStore Uris, and other file-based ContentProviders.
+ *
+ * @param context
+ *            The context.
+ * @param uri
+ *            The Uri to query.
+ * @param selection
+ *            (Optional) Filter used in the query.
+ * @param selectionArgs
+ *            (Optional) Selection arguments used in the query.
+ * @return The value of the _data column, which is typically a file path.
+ */
+public static String getDataColumn(Context context, Uri uri,
+                                   String selection, String[] selectionArgs) {
+
+    Cursor cursor = null;
+    final String column = &quot;_data&quot;;
+    final String[] projection = { column };
+
+    try {
+        cursor = context.getContentResolver().query(uri, projection,
+                selection, selectionArgs, null);
+        if (cursor != null &amp;&amp; cursor.moveToFirst()) {
+            final int index = cursor.getColumnIndexOrThrow(column);
+            return cursor.getString(index);
+        }
+    } finally {
+        if (cursor != null)
+            cursor.close();
+    }
+    return null;
+}
+
+/**
+ * @param uri
+ *            The Uri to check.
+ * @return Whether the Uri authority is ExternalStorageProvider.
+ */
+public static boolean isExternalStorageDocument(Uri uri) {
+    return &quot;com.android.externalstorage.documents&quot;.equals(uri
+            .getAuthority());
+}
+
+/**
+ * @param uri
+ *            The Uri to check.
+ * @return Whether the Uri authority is DownloadsProvider.
+ */
+public static boolean isDownloadsDocument(Uri uri) {
+    return &quot;com.android.providers.downloads.documents&quot;.equals(uri
+            .getAuthority());
+}
+
+/**
+ * @param uri
+ *            The Uri to check.
+ * @return Whether the Uri authority is MediaProvider.
+ */
+public static boolean isMediaDocument(Uri uri) {
+    return &quot;com.android.providers.media.documents&quot;.equals(uri
+            .getAuthority());
+}
+
+/**
+ * @param uri
+ *            The Uri to check.
+ * @return Whether the Uri authority is Google Photos.
+ */
+public static boolean isGooglePhotosUri(Uri uri) {
+    return &quot;com.google.android.apps.photos.content&quot;.equals(uri
+            .getAuthority());
+}
+</code></pre><h3 id="u53C2_u8003_u8D44_u6599"><a href="#u53C2_u8003_u8D44_u6599" class="headerlink" title="参考资料"></a>参考资料</h3><p> <a href="http://stackoverflow.com/questions/5907369/file-upload-in-webview" target="_blank" rel="external">file-upload-in-webview</a><br> <a href="http://stackoverflow.com/questions/20067508/get-real-path-from-uri-android-kitkat-new-storage-access-framework" target="_blank" rel="external">get-real-path-from-uri-android-kitkat-new-storage-access-framework</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在一个带有input tpye=file标签的Html页面，通过WebView，上传android手机上的图片，发现不工作。（在Ios和微信上完全正常工作）所以，需要研究一下Android的WebView，来支持type=file的标签。</p>
+<h3 id="WebVi]]>
+    </summary>
+    
+      <category term="Webview" scheme="http://david-wei.github.io/tags/Webview/"/>
+    
+      <category term="Android" scheme="http://david-wei.github.io/categories/Android/"/>
+    
+  </entry>
   
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
-
-
-  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
-
-
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
+  <entry>
+    <title><![CDATA[hexo 初步搭建]]></title>
+    <link href="http://david-wei.github.io/2015/07/03/hexo-%E6%90%AD%E5%BB%BA/"/>
+    <id>http://david-wei.github.io/2015/07/03/hexo-搭建/</id>
+    <published>2015-07-02T19:00:00.000Z</published>
+    <updated>2015-12-22T03:10:20.000Z</updated>
+    <content type="html"><![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick_Start"><a href="#Quick_Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create_a_new_post"><a href="#Create_a_new_post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run_server"><a href="#Run_server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate_static_files"><a href="#Generate_static_files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy_to_remote_sites"><a href="#Deploy_to_remote_sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io]]>
+    </summary>
+    
+      <category term="hexo" scheme="http://david-wei.github.io/tags/hexo/"/>
+    
+  </entry>
   
-
-  <script type="text/javascript" src="/js/bootstrap.js"></script>
-
-  
-  
-
-  
-  
-
-</body>
-</html>
+</feed>

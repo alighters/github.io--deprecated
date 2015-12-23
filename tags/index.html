@@ -41,10 +41,12 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="David" type="application/atom+xml" />
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.ico?v=0.4.5.2" />
 
 
 
@@ -66,8 +68,8 @@
 
 <script type="text/javascript" id="hexo.configuration">
   var CONFIG = {
-    scheme: '',
-    sidebar: 'post',
+    scheme: 'Mist',
+    sidebar: 'always',
     motion: true
   };
 </script>
@@ -151,6 +153,26 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -167,6 +189,16 @@
               <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
             
             标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
           </a>
         </li>
       
@@ -198,6 +230,8 @@
           <a href="/tags/Android进阶/" style="font-size: 12px; color: #ccc">Android进阶</a> <a href="/tags/Git命令/" style="font-size: 12px; color: #ccc">Git命令</a> <a href="/tags/Linux命令/" style="font-size: 12px; color: #ccc">Linux命令</a> <a href="/tags/MVP/" style="font-size: 12px; color: #ccc">MVP</a> <a href="/tags/ReactNative-Android/" style="font-size: 12px; color: #ccc">ReactNative Android</a> <a href="/tags/RxJava/" style="font-size: 12px; color: #ccc">RxJava</a> <a href="/tags/Webview/" style="font-size: 12px; color: #ccc">Webview</a> <a href="/tags/fragment/" style="font-size: 12px; color: #ccc">fragment</a> <a href="/tags/hexo/" style="font-size: 12px; color: #ccc">hexo</a> <a href="/tags/viewPager/" style="font-size: 12px; color: #ccc">viewPager</a> <a href="/tags/内存泄露-弱引用/" style="font-size: 12px; color: #ccc">内存泄露 弱引用</a> <a href="/tags/原理讲解/" style="font-size: 30px; color: #111">原理讲解</a>
         </div>
       </div>
+    
+
     
   </div>
 
@@ -244,10 +278,10 @@
           </div>
 
           <div class="site-state-item site-state-categories">
-            
+            <a href="/categories">
               <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">分类</span>
-              
+              </a>
           </div>
 
           <div class="site-state-item site-state-tags">
@@ -259,6 +293,13 @@
 
         </nav>
 
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
         
 
         <div class="links-of-author motion-element">
@@ -304,6 +345,14 @@
                 </a>
               </span>
             
+              <span class="links-of-author-item">
+                <a href="https://medium.com/@lighters_wei" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> medium
+                  
+                </a>
+              </span>
+            
           
         </div>
 
@@ -344,7 +393,7 @@
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT
+    NexT.Mist
   </a>
 </div>
 
@@ -362,7 +411,7 @@
   
 
   
-    
+  
 
   
     
@@ -384,8 +433,8 @@
      
 
 
-    
   
+
 
   
   <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
@@ -410,6 +459,30 @@
   
 
   
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"david-wei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+  
+
   
 
 </body>
