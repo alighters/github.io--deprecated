@@ -219,6 +219,118 @@
 
     
     
+      
+      
+
+      
+    
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/07/20/MVP在Android中的应用/" itemprop="url">
+                  MVP在Android中的应用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-07-20T23:54:29+08:00" content="2015-07-20">
+              2015-07-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/07/20/MVP在Android中的应用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/20/MVP在Android中的应用/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>想起之前遇到的一个面试问题，在Activity中你们项目的代码行数有多少行？<br>这便是考虑项目的结构以及架构的问题，在我现在遇到的Android项目代码编写中，由于Android不清晰的MVC结构的思想，在Activity、Fragment中不自觉地会与逻辑代码混杂在一起，不可避免地就会导致其代码结果过大，不利于复杂界面的后期维护修改。</p>
+<h3 id="u89E3_u51B3_u65B9_u68481_uFF1A_u6CE8_u89E3_u65B9_u5F0F_u7684_u8FD0_u7528"><a href="#u89E3_u51B3_u65B9_u68481_uFF1A_u6CE8_u89E3_u65B9_u5F0F_u7684_u8FD0_u7528" class="headerlink" title="解决方案1：注解方式的运用"></a>解决方案1：注解方式的运用</h3><p>   在Android中，这个最常用的就是<a href="http://androidannotations.org/" target="_blank" rel="external">AndroidAnotations</a><br>   带来的好处是避免了输写过程的麻烦程度，但是对于项目的结构程序是没有任何帮助。</p>
+<h3 id="u89E3_u51B3_u65B9_u68482_uFF1AMVP_u8BBE_u8BA1_u601D_u60F3_u7684_u8FD0_u7528"><a href="#u89E3_u51B3_u65B9_u68482_uFF1AMVP_u8BBE_u8BA1_u601D_u60F3_u7684_u8FD0_u7528" class="headerlink" title="解决方案2：MVP设计思想的运用"></a>解决方案2：MVP设计思想的运用</h3><p>   目的：使Model与View解耦，达到复杂的逻辑隔离开来的作用<br>   实现方式：通过Presenter来与二者进行交互，在Actiivty中保持一个对Presenter的调用，将view的调用以及交互效果抽象出来，来交由Presenter来管理，Model的修改又通过Presenter来影响view的更新<br>   <a href="https://github.com/antoniolg/androidmvp" target="_blank" rel="external">一个简单的登陆demo</a></p>
+<h3 id="u89E3_u51B3_u65B9_u68483_uFF1AMVVM_u7684_u5B9E_u73B0"><a href="#u89E3_u51B3_u65B9_u68483_uFF1AMVVM_u7684_u5B9E_u73B0" class="headerlink" title="解决方案3：MVVM的实现"></a>解决方案3：MVVM的实现</h3><p>   目的：1.避免了view的查找与获取<br>         2.view的展示需要的数据，通过viewModel的概念来在xml文件中进行绑定<br>         3.更加清晰的视图结构</p>
+<h3 id="u63A8_u8350_u7684_u4E24_u4E2A_u6846_u67B6_uFF1A"><a href="#u63A8_u8350_u7684_u4E24_u4E2A_u6846_u67B6_uFF1A" class="headerlink" title="推荐的两个框架："></a>推荐的两个框架：</h3><p>   <a href="https://github.com/android10/Android-CleanArchitecture" target="_blank" rel="external">Android-CleanArchitecture</a><br>   <a href="https://github.com/pedrovgs/EffectiveAndroidUI" target="_blank" rel="external">EffectiveAndroidUI</a></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -880,21 +992,21 @@ public static boolean isGooglePhotosUri(Uri uri) {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -987,7 +1099,7 @@ public static boolean isGooglePhotosUri(Uri uri) {
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2015</span>
+  <span itemprop="copyrightYear">2016</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>
