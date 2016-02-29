@@ -219,11 +219,115 @@
 
     
     
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/09/17/Android进阶汇总一/" itemprop="url">
+                  Android进阶汇总一
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-09-17T00:22:01+08:00" content="2015-09-17">
+              2015-09-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/09/17/Android进阶汇总一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/17/Android进阶汇总一/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <p>针对Android中一些进阶的常用的知识点，做一些汇总：</p>
+<h3 id="BaseAdapter_u4E2Dnotifydatachanged_u539F_u7406_2C_u4F1A_u5E26_u6765_u7684_u95EE_u9898_uFF0C_u5982_u4F55_u89E3_u51B3"><a href="#BaseAdapter_u4E2Dnotifydatachanged_u539F_u7406_2C_u4F1A_u5E26_u6765_u7684_u95EE_u9898_uFF0C_u5982_u4F55_u89E3_u51B3" class="headerlink" title="BaseAdapter中notifydatachanged原理,会带来的问题，如何解决"></a>BaseAdapter中notifydatachanged原理,会带来的问题，如何解决</h3><ul>
+<li>问题1：使用notifydatachanged的时候，当数据源发生改变的时候，会导致整个view的重绘（比较消耗资源）。</li>
+<li>解决方案：如果只是修改item的view上一个或几个简单的view时，判断此Item是否当前是否在页面显示，若获取此itemView进行特定view的更新。另外，如果是删除或者增加一个数据源时，这种方案就比较麻烦了，还是直接调用notifyDataChanged吧。</li>
+<li>问题2：针对问题一的解决方案，发现增加或者删除数据源，就没用相应的方法了。这个也可以说是BaseAdapter设计的初衷就不是这样的吧，它的作用只是封装了数据源，只用来提供数据源的显示，没有提供数据源的操作。不过现在大家就可以看到在RecylcerView的adapter就提供了相应的ItemView的插入、删除、以及交换、更新等操作。</li>
+</ul>
+<h3 id="u56FE_u7247_u5217_u8868_u7684ListView_u6ED1_u52A8_u7684_u4F18_u5316"><a href="#u56FE_u7247_u5217_u8868_u7684ListView_u6ED1_u52A8_u7684_u4F18_u5316" class="headerlink" title="图片列表的ListView滑动的优化"></a>图片列表的ListView滑动的优化</h3><h3 id="Fragment_u4E2Dhide_u5230show_u4E4B_u540E_2C_u6240_u6267_u884C_u7684_u751F_u547D_u5468_u671F"><a href="#Fragment_u4E2Dhide_u5230show_u4E4B_u540E_2C_u6240_u6267_u884C_u7684_u751F_u547D_u5468_u671F" class="headerlink" title="Fragment中hide到show之后,所执行的生命周期"></a>Fragment中hide到show之后,所执行的生命周期</h3><p>### </p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -992,21 +1096,21 @@ public static boolean isGooglePhotosUri(Uri uri) {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

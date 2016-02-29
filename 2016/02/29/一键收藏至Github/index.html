@@ -1,0 +1,790 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ruby Rails," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="David" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/icon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。
+简单需求  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一键收藏至Github">
+<meta property="og:url" content="http://david-wei.github.io/2016/02/29/一键收藏至Github/index.html">
+<meta property="og:site_name" content="David">
+<meta property="og:description" content="因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。
+简单需求  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体">
+<meta property="og:updated_time" content="2016-02-29T14:35:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一键收藏至Github">
+<meta name="twitter:description" content="因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。
+简单需求  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'always',
+    motion: true
+  };
+</script>
+
+  <title> 一键收藏至Github | David </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?dad0835db797349b47cdce72689c86ad";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">David</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">READ THE FUCKING SOURCE CODE</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一键收藏至Github
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-29T22:33:04+08:00" content="2016-02-29">
+              2016-02-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Ruby/" itemprop="url" rel="index">
+                    <span itemprop="name">Ruby</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/29/一键收藏至Github/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/29/一键收藏至Github/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><p>因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。</p>
+<h3 id="u7B80_u5355_u9700_u6C42"><a href="#u7B80_u5355_u9700_u6C42" class="headerlink" title="简单需求"></a>简单需求</h3><p>  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体的文章输出结果显示如<a href="http://www.jianshu.com/p/7f5295eed909" target="_blank" rel="external">2016.01阅读文章</a>。</p>
+<h3 id="u6280_u672F_u642D_u5EFA"><a href="#u6280_u672F_u642D_u5EFA" class="headerlink" title="技术搭建"></a>技术搭建</h3><p>  这里主要的技术主要两个难点：</p>
+<ul>
+<li>一键点击插件的生成</li>
+<li>脚本编写生成对应的markdown</li>
+</ul>
+<h3 id="u6280_u672F_u5B9E_u73B0"><a href="#u6280_u672F_u5B9E_u73B0" class="headerlink" title="技术实现"></a>技术实现</h3><ol>
+<li>JS来获取当前文章的标题以及链接<br>这里参照百度首页链接的添加，通过JS先获取到document以及location对象，然后通过它俩来拿到当前窗口的链接以及标题，然后调用本地服务的一个请求，传递给本地服务，来进行当前网址的记录。主要的代码如下：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">javascript: ((<span class="function"><span class="keyword">function</span>(<span class="params">s, d, e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> u = location;</span><br><span class="line">    <span class="keyword">var</span> f = <span class="string">'http://localhost:3000/create?link='</span> + e(u.href) + <span class="string">'&amp;title='</span> + e(d.title) + <span class="string">'&amp;_t='</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">window</span>.open(f, <span class="string">''</span>, <span class="string">'toolbar=0,status=0,resizable=1,width=700,height=450,left='</span> + (s.width - <span class="number">700</span>) / <span class="number">2</span> + <span class="string">',top='</span> + (s.height - <span class="number">650</span>) / <span class="number">2</span>)) u.href = f</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/Firefox/</span>.test(navigator.userAgent)) setTimeout(a, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">else</span> a()</span><br><span class="line">&#125;)(screen, <span class="built_in">document</span>, <span class="built_in">encodeURIComponent</span>));</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>从上述的代码可以看到，最主要的代码就是通过window对象来打开一个新的窗口，指定窗口就是咱们本地的一个API请求，链接格式为<em><a href="http://localhost:3000/create" target="_blank" rel="external">http://localhost:3000/create</a></em>, 以及两个参数link和title，对应咱们生成markdown的内容。</p>
+<blockquote>
+<p>这里如何使用呢？在app/views/welcome/index.html.erb中，将上述的Js代码放置在一个a标签中，将代码作为链接href属性的值。启动rails的服务器，输入<a href="http://localhost:3000就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。" target="_blank" rel="external">http://localhost:3000就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。</a></p>
+<ol>
+<li>搭建获取链接的API<br>这里主要使用Ruby on Rails来搭建一个本地的服务器，毕竟是号称10分钟创建一个完整的Web应用程序的语言。<br>对应的主要代码目录在app/controllers/article_controller.rb文件中，通过api请求<em><a href="http://localhost:3000/create?link={0}&amp;title&amp;{1}" target="_blank" rel="external">http://localhost:3000/create?link={0}&amp;title&amp;{1}</a></em> 来获取需要保存的链接，主要代码如下：</li>
+</ol>
+</blockquote>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArticleController</span> <span class="inheritance">&lt; <span class="parent">ApplicationController</span></span></span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">create</span></span></span><br><span class="line">    title = params[<span class="symbol">:title</span>]</span><br><span class="line">    link = params[<span class="symbol">:link</span>]</span><br><span class="line">    data = []</span><br><span class="line">    file_name = <span class="constant">Rails</span>.root.to_s + <span class="string">'/README.md'</span></span><br><span class="line">    status = <span class="string">'ok'</span></span><br><span class="line">    <span class="keyword">if</span> title.<span class="keyword">nil</span>? <span class="keyword">or</span> link.<span class="keyword">nil</span>?</span><br><span class="line">      status = <span class="string">'error'</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">if</span>(<span class="constant">Date</span>.today.mday == <span class="number">1</span>)</span><br><span class="line">        new_file_name = <span class="string">"<span class="subst">#&#123;<span class="constant">Rails</span>.root.to_s&#125;</span>/<span class="subst">#&#123;<span class="constant">Date</span>.today.prev_day.strftime(<span class="string">'%Y-%m'</span>).to_s&#125;</span>.md"</span></span><br><span class="line">        <span class="constant">File</span>.rename(file_name, new_file_name)</span><br><span class="line">        <span class="constant">File</span>.new(file_name, <span class="string">'w+'</span>)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      data = <span class="constant">DataHelper</span>.append_to(file_name, title, link)</span><br><span class="line">      <span class="keyword">if</span> !data.<span class="keyword">nil</span>?</span><br><span class="line">        <span class="constant">DataHelper</span>.write_to(file_name, data)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="constant">GitHelper</span>.commit(title)</span><br><span class="line">    render <span class="symbol">json:</span> &#123;<span class="string">'status'</span> =&gt; status, <span class="string">'data'</span> =&gt; data&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>上述代码中，主要的逻辑有三处：</p>
+<ul>
+<li>判断当天是否为当月的第一天，若是的话，则需要重命名README.md文件为上个月的文件，形如‘2016-01.md’格式的文件。主要的目的是将咱们的文章按每个月份来分类。</li>
+<li>通过DataHelper类来添加链接及其对应的标题，可以看到主要通过DataHelper的append_to和write_to方法来实现链接标题的添加。代码如下：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">module DataHelper</span><br><span class="line"></span><br><span class="line">  # 根据文件获取添入标题和链接之后的最新文本内容</span><br><span class="line">  def self.append_to(file_name, title, link)</span><br><span class="line">    data = []</span><br><span class="line">    changed = false</span><br><span class="line">    inserted = false</span><br><span class="line"></span><br><span class="line">    File.open(file_name).each <span class="operator"><span class="keyword">do</span> |line|</span><br><span class="line">      <span class="keyword">if</span> !inserted <span class="keyword">and</span> line.start_with?(<span class="string">'###'</span>) </span><br><span class="line">        # 当前行为具体的日期</span><br><span class="line">        date_str = line.slice(<span class="number">3</span>, <span class="number">3</span> + <span class="number">10</span>).squish</span><br><span class="line">        <span class="keyword">if</span>(is_date(date_str))</span><br><span class="line">          # 当前日期为今天，则在当前天下添加新的一行数据</span><br><span class="line">          <span class="keyword">if</span>(<span class="built_in">Date</span>.<span class="keyword">parse</span>(date_str) == <span class="built_in">Date</span>.today)</span><br><span class="line">            <span class="keyword">data</span>.push line</span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">changed</span> = <span class="literal">true</span></span><br><span class="line">            inserted = <span class="literal">true</span></span><br><span class="line">          # 当前日期小于今天，则新建今天的数据</span><br><span class="line">          <span class="keyword">elsif</span>(<span class="built_in">Date</span>.<span class="keyword">parse</span>(date_str) &lt; <span class="built_in">Date</span>.today)</span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"### #&#123;Date.today&#125;&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"\r\n"</span></span><br><span class="line">            inserted = <span class="literal">true</span></span><br><span class="line">          <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">if</span> !<span class="keyword">changed</span></span><br><span class="line">        <span class="keyword">data</span>.push line</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">changed</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    # 若没有添加，则表示是个新建的文件，直接添加今天的数据</span><br><span class="line">    <span class="keyword">if</span>(!inserted)</span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"### #&#123;Date.today&#125;&lt;br&gt;\n"</span></span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"\r\n"</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">data</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  # 向文件中写入<span class="keyword">data</span></span><br><span class="line">  <span class="keyword">def</span> <span class="keyword">self</span>.write_to(file_name, <span class="keyword">data</span>)</span><br><span class="line">    <span class="keyword">file</span> = <span class="keyword">File</span>.<span class="keyword">new</span>(file_name, <span class="string">'w+'</span>)</span><br><span class="line">    <span class="keyword">data</span>.<span class="keyword">each</span> <span class="keyword">do</span> |line|</span><br><span class="line">      <span class="keyword">file</span>.write line</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">file</span>.<span class="keyword">close</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  # 判断字符是否为一个日期</span><br><span class="line">  <span class="keyword">def</span> <span class="keyword">self</span>.is_date(<span class="keyword">str</span>)</span><br><span class="line">    <span class="keyword">result</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      <span class="built_in">Date</span>.<span class="keyword">parse</span>(<span class="keyword">str</span>)</span><br><span class="line">      <span class="keyword">result</span> = <span class="literal">true</span></span><br><span class="line">    rescue ArgumentError</span><br><span class="line">      <span class="keyword">result</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">result</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span></span><br></pre></td></tr></table></figure>
+<p>在Datahelper的append_to方法中，是通过逐行读取文件，根据文件对应的日期标题，获取到相应的日期，判断当前日期是否大于获取的日期，大于的时候则可直接添加，等于的时候则可在日期下面的第一行中插入，最后我们获取的将是一个data的数组。另外，使用write_to将data中的数据，逐行写入文件中。</p>
+<ul>
+<li>Git的自动提交，这里实现的主要的代码在GitHelper中，其中的代码呈上：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">module GitHelper</span><br><span class="line"></span><br><span class="line">  def self.commit(title)</span><br><span class="line">    t = fork <span class="operator"><span class="keyword">do</span></span><br><span class="line">      Signal.trap(<span class="string">"HUP"</span>) &#123;</span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git status'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git add .'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">"git commit -am 'add #&#123;title&#125;'"</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git pull --rebase'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git push'</span></span><br><span class="line">      &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    Process.<span class="keyword">kill</span>(<span class="string">"HUP"</span>, <span class="keyword">t</span>) </span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span></span><br></pre></td></tr></table></figure>
+<p>我们知道Git提交是件耗时的操作，所以为了提高API的响应速度，这里通过使用异步来提交Git请求，可以看到使用rebase来提交请求，所以出现冲突的时候，我们得自己手动解决了。</p>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>这样，我们一个很简单的文章记录加自动提交的功能就完成了。当然还有许多功能可以做一些扩展，例如，可以支持不同的GitHub的仓库；做成chrome的插件来方便使用。最后，放上代码地址：<a href="https://github.com/david-wei/MediumArticles" target="_blank" rel="external">代码地址</a></p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ruby-Rails/" rel="tag">#Ruby Rails</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/10/2015年终总结/" rel="next" title="2015年终总结">
+                <i class="fa fa-chevron-left"></i> 2015年终总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/02/29/一键收藏至Github/"
+           data-title="一键收藏至Github" data-url="http://david-wei.github.io/2016/02/29/一键收藏至Github/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="https://avatars1.githubusercontent.com/u/5573939?v=3&u=d94096c3cc15d5dca1f60209b818410388134f6a&s=140" alt="david.wei" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">david.wei</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">Android技术爱好者，喜欢编程、读书、桌游</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/david-wei" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/huangdiv5" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> twitter
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/huangdiv5" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 微博
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/david.wei" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 知乎
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/users/6321040dd140/latest_articles" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> 简书
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://medium.com/@lighters_wei" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> medium
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u7B80_u5355_u9700_u6C42"><span class="nav-number">1.</span> <span class="nav-text">简单需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6280_u672F_u642D_u5EFA"><span class="nav-number">2.</span> <span class="nav-text">技术搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6280_u672F_u5B9E_u73B0"><span class="nav-number">3.</span> <span class="nav-text">技术实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">david.wei</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"david-wei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+
+  
+  
+
+</body>
+</html>

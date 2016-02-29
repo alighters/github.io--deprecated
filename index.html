@@ -219,15 +219,140 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/02/29/一键收藏至Github/" itemprop="url">
+                  一键收藏至Github
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-29T22:33:04+08:00" content="2016-02-29">
+              2016-02-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Ruby/" itemprop="url" rel="index">
+                    <span itemprop="name">Ruby</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/29/一键收藏至Github/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/29/一键收藏至Github/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <p>因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。</p>
+<h3 id="u7B80_u5355_u9700_u6C42"><a href="#u7B80_u5355_u9700_u6C42" class="headerlink" title="简单需求"></a>简单需求</h3><p>  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体的文章输出结果显示如<a href="http://www.jianshu.com/p/7f5295eed909" target="_blank" rel="external">2016.01阅读文章</a>。</p>
+<h3 id="u6280_u672F_u642D_u5EFA"><a href="#u6280_u672F_u642D_u5EFA" class="headerlink" title="技术搭建"></a>技术搭建</h3><p>  这里主要的技术主要两个难点：</p>
+<ul>
+<li>一键点击插件的生成</li>
+<li>脚本编写生成对应的markdown</li>
+</ul>
+<h3 id="u6280_u672F_u5B9E_u73B0"><a href="#u6280_u672F_u5B9E_u73B0" class="headerlink" title="技术实现"></a>技术实现</h3><ol>
+<li>JS来获取当前文章的标题以及链接<br>这里参照百度首页链接的添加，通过JS先获取到document以及location对象，然后通过它俩来拿到当前窗口的链接以及标题，然后调用本地服务的一个请求，传递给本地服务，来进行当前网址的记录。主要的代码如下：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">javascript: ((<span class="function"><span class="keyword">function</span>(<span class="params">s, d, e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> u = location;</span><br><span class="line">    <span class="keyword">var</span> f = <span class="string">'http://localhost:3000/create?link='</span> + e(u.href) + <span class="string">'&amp;title='</span> + e(d.title) + <span class="string">'&amp;_t='</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">window</span>.open(f, <span class="string">''</span>, <span class="string">'toolbar=0,status=0,resizable=1,width=700,height=450,left='</span> + (s.width - <span class="number">700</span>) / <span class="number">2</span> + <span class="string">',top='</span> + (s.height - <span class="number">650</span>) / <span class="number">2</span>)) u.href = f</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/Firefox/</span>.test(navigator.userAgent)) setTimeout(a, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">else</span> a()</span><br><span class="line">&#125;)(screen, <span class="built_in">document</span>, <span class="built_in">encodeURIComponent</span>));</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>从上述的代码可以看到，最主要的代码就是通过window对象来打开一个新的窗口，指定窗口就是咱们本地的一个API请求，链接格式为<em><a href="http://localhost:3000/create" target="_blank" rel="external">http://localhost:3000/create</a></em>, 以及两个参数link和title，对应咱们生成markdown的内容。</p>
+<blockquote>
+<p>这里如何使用呢？在app/views/welcome/index.html.erb中，将上述的Js代码放置在一个a标签中，将代码作为链接href属性的值。启动rails的服务器，输入<a href="http://localhost:3000就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。" target="_blank" rel="external">http://localhost:3000就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。</a></p>
+<ol>
+<li>搭建获取链接的API<br>这里主要使用Ruby on Rails来搭建一个本地的服务器，毕竟是号称10分钟创建一个完整的Web应用程序的语言。<br>对应的主要代码目录在app/controllers/article_controller.rb文件中，通过api请求<em><a href="http://localhost:3000/create?link={0}&amp;title&amp;{1}" target="_blank" rel="external">http://localhost:3000/create?link={0}&amp;title&amp;{1}</a></em> 来获取需要保存的链接，主要代码如下：</li>
+</ol>
+</blockquote>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArticleController</span> <span class="inheritance">&lt; <span class="parent">ApplicationController</span></span></span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">create</span></span></span><br><span class="line">    title = params[<span class="symbol">:title</span>]</span><br><span class="line">    link = params[<span class="symbol">:link</span>]</span><br><span class="line">    data = []</span><br><span class="line">    file_name = <span class="constant">Rails</span>.root.to_s + <span class="string">'/README.md'</span></span><br><span class="line">    status = <span class="string">'ok'</span></span><br><span class="line">    <span class="keyword">if</span> title.<span class="keyword">nil</span>? <span class="keyword">or</span> link.<span class="keyword">nil</span>?</span><br><span class="line">      status = <span class="string">'error'</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">if</span>(<span class="constant">Date</span>.today.mday == <span class="number">1</span>)</span><br><span class="line">        new_file_name = <span class="string">"<span class="subst">#&#123;<span class="constant">Rails</span>.root.to_s&#125;</span>/<span class="subst">#&#123;<span class="constant">Date</span>.today.prev_day.strftime(<span class="string">'%Y-%m'</span>).to_s&#125;</span>.md"</span></span><br><span class="line">        <span class="constant">File</span>.rename(file_name, new_file_name)</span><br><span class="line">        <span class="constant">File</span>.new(file_name, <span class="string">'w+'</span>)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      data = <span class="constant">DataHelper</span>.append_to(file_name, title, link)</span><br><span class="line">      <span class="keyword">if</span> !data.<span class="keyword">nil</span>?</span><br><span class="line">        <span class="constant">DataHelper</span>.write_to(file_name, data)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="constant">GitHelper</span>.commit(title)</span><br><span class="line">    render <span class="symbol">json:</span> &#123;<span class="string">'status'</span> =&gt; status, <span class="string">'data'</span> =&gt; data&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>上述代码中，主要的逻辑有三处：</p>
+<ul>
+<li>判断当天是否为当月的第一天，若是的话，则需要重命名README.md文件为上个月的文件，形如‘2016-01.md’格式的文件。主要的目的是将咱们的文章按每个月份来分类。</li>
+<li>通过DataHelper类来添加链接及其对应的标题，可以看到主要通过DataHelper的append_to和write_to方法来实现链接标题的添加。代码如下：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">module DataHelper</span><br><span class="line"></span><br><span class="line">  # 根据文件获取添入标题和链接之后的最新文本内容</span><br><span class="line">  def self.append_to(file_name, title, link)</span><br><span class="line">    data = []</span><br><span class="line">    changed = false</span><br><span class="line">    inserted = false</span><br><span class="line"></span><br><span class="line">    File.open(file_name).each <span class="operator"><span class="keyword">do</span> |line|</span><br><span class="line">      <span class="keyword">if</span> !inserted <span class="keyword">and</span> line.start_with?(<span class="string">'###'</span>) </span><br><span class="line">        # 当前行为具体的日期</span><br><span class="line">        date_str = line.slice(<span class="number">3</span>, <span class="number">3</span> + <span class="number">10</span>).squish</span><br><span class="line">        <span class="keyword">if</span>(is_date(date_str))</span><br><span class="line">          # 当前日期为今天，则在当前天下添加新的一行数据</span><br><span class="line">          <span class="keyword">if</span>(<span class="built_in">Date</span>.<span class="keyword">parse</span>(date_str) == <span class="built_in">Date</span>.today)</span><br><span class="line">            <span class="keyword">data</span>.push line</span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">changed</span> = <span class="literal">true</span></span><br><span class="line">            inserted = <span class="literal">true</span></span><br><span class="line">          # 当前日期小于今天，则新建今天的数据</span><br><span class="line">          <span class="keyword">elsif</span>(<span class="built_in">Date</span>.<span class="keyword">parse</span>(date_str) &lt; <span class="built_in">Date</span>.today)</span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"### #&#123;Date.today&#125;&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"\r\n"</span></span><br><span class="line">            inserted = <span class="literal">true</span></span><br><span class="line">          <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">if</span> !<span class="keyword">changed</span></span><br><span class="line">        <span class="keyword">data</span>.push line</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">changed</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    # 若没有添加，则表示是个新建的文件，直接添加今天的数据</span><br><span class="line">    <span class="keyword">if</span>(!inserted)</span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"### #&#123;Date.today&#125;&lt;br&gt;\n"</span></span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"\r\n"</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">data</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  # 向文件中写入<span class="keyword">data</span></span><br><span class="line">  <span class="keyword">def</span> <span class="keyword">self</span>.write_to(file_name, <span class="keyword">data</span>)</span><br><span class="line">    <span class="keyword">file</span> = <span class="keyword">File</span>.<span class="keyword">new</span>(file_name, <span class="string">'w+'</span>)</span><br><span class="line">    <span class="keyword">data</span>.<span class="keyword">each</span> <span class="keyword">do</span> |line|</span><br><span class="line">      <span class="keyword">file</span>.write line</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">file</span>.<span class="keyword">close</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  # 判断字符是否为一个日期</span><br><span class="line">  <span class="keyword">def</span> <span class="keyword">self</span>.is_date(<span class="keyword">str</span>)</span><br><span class="line">    <span class="keyword">result</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      <span class="built_in">Date</span>.<span class="keyword">parse</span>(<span class="keyword">str</span>)</span><br><span class="line">      <span class="keyword">result</span> = <span class="literal">true</span></span><br><span class="line">    rescue ArgumentError</span><br><span class="line">      <span class="keyword">result</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">result</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span></span><br></pre></td></tr></table></figure>
+<p>在Datahelper的append_to方法中，是通过逐行读取文件，根据文件对应的日期标题，获取到相应的日期，判断当前日期是否大于获取的日期，大于的时候则可直接添加，等于的时候则可在日期下面的第一行中插入，最后我们获取的将是一个data的数组。另外，使用write_to将data中的数据，逐行写入文件中。</p>
+<ul>
+<li>Git的自动提交，这里实现的主要的代码在GitHelper中，其中的代码呈上：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">module GitHelper</span><br><span class="line"></span><br><span class="line">  def self.commit(title)</span><br><span class="line">    t = fork <span class="operator"><span class="keyword">do</span></span><br><span class="line">      Signal.trap(<span class="string">"HUP"</span>) &#123;</span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git status'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git add .'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">"git commit -am 'add #&#123;title&#125;'"</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git pull --rebase'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git push'</span></span><br><span class="line">      &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    Process.<span class="keyword">kill</span>(<span class="string">"HUP"</span>, <span class="keyword">t</span>) </span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span></span><br></pre></td></tr></table></figure>
+<p>我们知道Git提交是件耗时的操作，所以为了提高API的响应速度，这里通过使用异步来提交Git请求，可以看到使用rebase来提交请求，所以出现冲突的时候，我们得自己手动解决了。</p>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>这样，我们一个很简单的文章记录加自动提交的功能就完成了。当然还有许多功能可以做一些扩展，例如，可以支持不同的GitHub的仓库；做成chrome的插件来方便使用。最后，放上代码地址：<a href="https://github.com/david-wei/MediumArticles" target="_blank" rel="external">代码地址</a></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1333,115 +1458,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/09/17/Android进阶汇总一/" itemprop="url">
-                  Android进阶汇总一
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-09-17T00:22:01+08:00" content="2015-09-17">
-              2015-09-17
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/09/17/Android进阶汇总一/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/17/Android进阶汇总一/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>针对Android中一些进阶的常用的知识点，做一些汇总：</p>
-<h3 id="BaseAdapter_u4E2Dnotifydatachanged_u539F_u7406_2C_u4F1A_u5E26_u6765_u7684_u95EE_u9898_uFF0C_u5982_u4F55_u89E3_u51B3"><a href="#BaseAdapter_u4E2Dnotifydatachanged_u539F_u7406_2C_u4F1A_u5E26_u6765_u7684_u95EE_u9898_uFF0C_u5982_u4F55_u89E3_u51B3" class="headerlink" title="BaseAdapter中notifydatachanged原理,会带来的问题，如何解决"></a>BaseAdapter中notifydatachanged原理,会带来的问题，如何解决</h3><ul>
-<li>问题1：使用notifydatachanged的时候，当数据源发生改变的时候，会导致整个view的重绘（比较消耗资源）。</li>
-<li>解决方案：如果只是修改item的view上一个或几个简单的view时，判断此Item是否当前是否在页面显示，若获取此itemView进行特定view的更新。另外，如果是删除或者增加一个数据源时，这种方案就比较麻烦了，还是直接调用notifyDataChanged吧。</li>
-<li>问题2：针对问题一的解决方案，发现增加或者删除数据源，就没用相应的方法了。这个也可以说是BaseAdapter设计的初衷就不是这样的吧，它的作用只是封装了数据源，只用来提供数据源的显示，没有提供数据源的操作。不过现在大家就可以看到在RecylcerView的adapter就提供了相应的ItemView的插入、删除、以及交换、更新等操作。</li>
-</ul>
-<h3 id="u56FE_u7247_u5217_u8868_u7684ListView_u6ED1_u52A8_u7684_u4F18_u5316"><a href="#u56FE_u7247_u5217_u8868_u7684ListView_u6ED1_u52A8_u7684_u4F18_u5316" class="headerlink" title="图片列表的ListView滑动的优化"></a>图片列表的ListView滑动的优化</h3><h3 id="Fragment_u4E2Dhide_u5230show_u4E4B_u540E_2C_u6240_u6267_u884C_u7684_u751F_u547D_u5468_u671F"><a href="#Fragment_u4E2Dhide_u5230show_u4E4B_u540E_2C_u6240_u6267_u884C_u7684_u751F_u547D_u5468_u671F" class="headerlink" title="Fragment中hide到show之后,所执行的生命周期"></a>Fragment中hide到show之后,所执行的生命周期</h3><p>### </p>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1488,21 +1504,21 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
