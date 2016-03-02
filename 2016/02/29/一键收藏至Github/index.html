@@ -61,7 +61,9 @@
 <meta property="og:site_name" content="David">
 <meta property="og:description" content="因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。
 简单需求  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体">
-<meta property="og:updated_time" content="2016-02-29T14:35:27.000Z">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/656559-e9ae2afa571f8fff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/656559-abb43fe9a339d4f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2016-03-02T15:35:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一键收藏至Github">
 <meta name="twitter:description" content="因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。
@@ -303,9 +305,9 @@
 <li>JS来获取当前文章的标题以及链接<br>这里参照百度首页链接的添加，通过JS先获取到document以及location对象，然后通过它俩来拿到当前窗口的链接以及标题，然后调用本地服务的一个请求，传递给本地服务，来进行当前网址的记录。主要的代码如下：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">javascript: ((<span class="function"><span class="keyword">function</span>(<span class="params">s, d, e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> u = location;</span><br><span class="line">    <span class="keyword">var</span> f = <span class="string">'http://localhost:3000/create?link='</span> + e(u.href) + <span class="string">'&amp;title='</span> + e(d.title) + <span class="string">'&amp;_t='</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">window</span>.open(f, <span class="string">''</span>, <span class="string">'toolbar=0,status=0,resizable=1,width=700,height=450,left='</span> + (s.width - <span class="number">700</span>) / <span class="number">2</span> + <span class="string">',top='</span> + (s.height - <span class="number">650</span>) / <span class="number">2</span>)) u.href = f</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/Firefox/</span>.test(navigator.userAgent)) setTimeout(a, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">else</span> a()</span><br><span class="line">&#125;)(screen, <span class="built_in">document</span>, <span class="built_in">encodeURIComponent</span>));</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>从上述的代码可以看到，最主要的代码就是通过window对象来打开一个新的窗口，指定窗口就是咱们本地的一个API请求，链接格式为<em><a href="http://localhost:3000/create" target="_blank" rel="external">http://localhost:3000/create</a></em>, 以及两个参数link和title，对应咱们生成markdown的内容。</p>
+<p>从上述的代码可以看到，最主要的代码就是通过window对象来打开一个新的窗口，指定窗口就是咱们本地的一个API请求，链接格式为<a href="http://localhost:3000/create" target="_blank" rel="external">http://localhost:3000/create</a>, 以及两个参数link和title，对应咱们生成markdown的内容。</p>
 <blockquote>
-<p>这里如何使用呢？在app/views/welcome/index.html.erb中，将上述的Js代码放置在一个a标签中，将代码作为链接href属性的值。启动rails的服务器，输入<a href="http://localhost:3000就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。" target="_blank" rel="external">http://localhost:3000就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。</a></p>
+<p>这里如何使用呢？在app/views/welcome/index.html.erb中，将上述的Js代码放置在一个a标签中，将代码作为链接href属性的值。启动rails的服务器，输入<a href="http://localhost:3000/index" target="_blank" rel="external">http://localhost:3000/index</a> 就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。</p>
 <ol>
 <li>搭建获取链接的API<br>这里主要使用Ruby on Rails来搭建一个本地的服务器，毕竟是号称10分钟创建一个完整的Web应用程序的语言。<br>对应的主要代码目录在app/controllers/article_controller.rb文件中，通过api请求<em><a href="http://localhost:3000/create?link={0}&amp;title&amp;{1}" target="_blank" rel="external">http://localhost:3000/create?link={0}&amp;title&amp;{1}</a></em> 来获取需要保存的链接，主要代码如下：</li>
 </ol>
@@ -323,6 +325,18 @@
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">module GitHelper</span><br><span class="line"></span><br><span class="line">  def self.commit(title)</span><br><span class="line">    t = fork <span class="operator"><span class="keyword">do</span></span><br><span class="line">      Signal.trap(<span class="string">"HUP"</span>) &#123;</span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git status'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git add .'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">"git commit -am 'add #&#123;title&#125;'"</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git pull --rebase'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git push'</span></span><br><span class="line">      &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    Process.<span class="keyword">kill</span>(<span class="string">"HUP"</span>, <span class="keyword">t</span>) </span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span></span><br></pre></td></tr></table></figure>
 <p>我们知道Git提交是件耗时的操作，所以为了提高API的响应速度，这里通过使用异步来提交Git请求，可以看到使用rebase来提交请求，所以出现冲突的时候，我们得自己手动解决了。</p>
+<h3 id="u4F7F_u7528"><a href="#u4F7F_u7528" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>打开项目所在的目录，使用<strong> rails s</strong>来启动服务</li>
+<li>在浏览器中输入 <a href="http://localhost:3000/index" target="_blank" rel="external">http://localhost:3000/index</a> 来显示我们需要的书签链接，如图所示；</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/656559-e9ae2afa571f8fff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="书签链接.png"></p>
+<ul>
+<li>将上图中的链接拖拽至chrome的书签栏中，如图：</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/656559-abb43fe9a339d4f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="书签.png"></p>
+<ul>
+<li>点击<strong>fav</strong>书签，就可保存当前的页面了，并自动提交了。</li>
+</ul>
 <h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>这样，我们一个很简单的文章记录加自动提交的功能就完成了。当然还有许多功能可以做一些扩展，例如，可以支持不同的GitHub的仓库；做成chrome的插件来方便使用。最后，放上代码地址：<a href="https://github.com/david-wei/MediumArticles" target="_blank" rel="external">代码地址</a></p>
 </span>
       
@@ -348,6 +362,10 @@
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/02/程序猿看产品开发/" rel="prev" title="程序猿看产品开发">
+                程序猿看产品开发 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -419,7 +437,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -433,7 +451,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -522,7 +540,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u7B80_u5355_u9700_u6C42"><span class="nav-number">1.</span> <span class="nav-text">简单需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6280_u672F_u642D_u5EFA"><span class="nav-number">2.</span> <span class="nav-text">技术搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6280_u672F_u5B9E_u73B0"><span class="nav-number">3.</span> <span class="nav-text">技术实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u7B80_u5355_u9700_u6C42"><span class="nav-number">1.</span> <span class="nav-text">简单需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6280_u672F_u642D_u5EFA"><span class="nav-number">2.</span> <span class="nav-text">技术搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6280_u672F_u5B9E_u73B0"><span class="nav-number">3.</span> <span class="nav-text">技术实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4F7F_u7528"><span class="nav-number">4.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[READ THE FUCKING SOURCE CODE]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://david-wei.github.io/"/>
-  <updated>2016-02-29T14:35:27.000Z</updated>
+  <updated>2016-03-02T15:37:12.000Z</updated>
   <id>http://david-wei.github.io/</id>
   
   <author>
@@ -15,11 +15,47 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[程序猿看产品开发]]></title>
+    <link href="http://david-wei.github.io/2016/03/02/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E7%9C%8B%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91/"/>
+    <id>http://david-wei.github.io/2016/03/02/程序猿看产品开发/</id>
+    <published>2016-03-02T15:36:10.000Z</published>
+    <updated>2016-03-02T15:37:12.000Z</updated>
+    <content type="html"><![CDATA[<p><img src="http://upload-images.jianshu.io/upload_images/656559-463aca2dd8c01203.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Paste_Image.png"><br>在接近三年的开发生涯中，做过了不少项目，但发现个人能力的成长上确没有达到自己所期望的程度。不能说自己不够努力，细细想来，每天都处于忙碌的状态。但是是否处于一个高效的工作状态，在开发中处于良性的循环？在产品开发的过程中，注重的仅仅是完成开发任务，还是关注产品的性能、架构以及代码的质量？在这些方面，就做的相当差劲了。</p>
+<p>当然，作为程序员，这些方面都是我们应该关注的，毕竟这对个人的职业发展是相当重要的。但这只是个空口的希望（这句有点奇怪），现在的互联网行业中，产品的开发是处于快速迭代的时期，需求的不断改动对开发工作带来很大的影响，使我们的效率大打折扣。<strong>怎样使产品开发更加高效，质量更高，同时保证程序员对产品实现有着更深入的思考？</strong> 这便是作者思考尝试解决的问题，应该从以下几个方面做起：</p>
+<h3 id="1-__u6D41_u7A0B_u5212_u5206"><a href="#1-__u6D41_u7A0B_u5212_u5206" class="headerlink" title="1. 流程划分"></a>1. 流程划分</h3><p>  <strong>清晰流程</strong>，详细的交互设计文档以及后台接口基本提供完善，才可进入App开发的阶段。我们在App开发的开始，是需要针对设计交互文档确认过，细至每个细节的交互都了解；开发过程中，可能产生的一些交互问题，都应该在交互文档详细地体现出来，做到一切有迹可循。程序员在开发过程中不再有模糊的交互，不再有口头上的交流，是我们在文档最终定稿应该达到的理想效果。需明白，在开发过程中，口头交流来确定交互的实现，对开发效率都是大打折扣的，出了问题，我们都是没法责任到人的。</p>
+<p>  这样，就要求在前期设计交互文档的人员的责任比较重，需要针对每个细节的实现都要考虑清楚，产品经理在对一个新的迭代的开发的同时，需要明确提及到这个迭代中的会涉及到的交互的实现。人无完人，不能各个层面都涉及到，所以在这个期间，可以让程序员加入来讨论，毕竟最后的实现是需要程序员来完成的嘛，有问题的过程再确定重新形成方案，必要的时候，可以给与程序员一定的调研时间，当然考虑地越多，意味着我们的工作将能够更加地明确。</p>
+<p>  清晰地可以看出一个版本的开发将会有两个阶段，<em>阶段一</em> <strong>需求的定义形成设计文档，主要角色有产品经理、产品设计、产品交互；</strong> <em>阶段二 </em> <strong>程序员进入开发阶段最后交付完整的产品。</strong>此时，我们可以让下一个版本跟当前版本做一个简单的交错，即在阶段二中，产品进入下一个版本的的需求设计阶段，借此来并行地保证各个部门的高效工作。</p>
+<p>  虽然看起来在操作过程中，可能会遇到不可料想的麻烦，毕竟没有一成不变地需求，这样就需要产品经理权衡，尽量将这些需求放在下个版本中，将是最好的方式。不然交错地流程开发，带来更多的是开发成本的上升，产品的迭代周期的延长。</p>
+<h3 id="2-__u89C4_u8303_u5B9A_u4E49"><a href="#2-__u89C4_u8303_u5B9A_u4E49" class="headerlink" title="2. 规范定义"></a>2. 规范定义</h3><p>  <strong>界面设计、接口设计、App设计定义一些通用的规范。</strong></p>
+<ul>
+<li>接口设计需要对返回的数据进行统一格式。譬如：统一返回的是 JsonObject，其中包装成功状态result 以及错误的信息，真正的数据则统一放置在 data 字段中进行处理。</li>
+<li>界面设计遵循设计规范。 Android 可以选择 Material Design，苹果也有自己的设计规范。若是不采用这些，则需要对一些通用的样式，做些统一定义，譬如常有的间距，弹出框样式，常用的颜色值，字体大小等等。这样客户端也可针对这些定义，遇到的时候则可直接使用。</li>
+<li>App开发的规范。统一的命名、格式化文件标准、尽量清晰的处理逻辑、类文件编写。</li>
+</ul>
+<p>定义规范，即多做约定，最直接的好处就是：多人员协作能够有一套的标准，不至于杂乱无章。</p>
+<h3 id="3-__u89D2_u8272_u660E_u786E"><a href="#3-__u89D2_u8272_u660E_u786E" class="headerlink" title="3. 角色明确"></a>3. 角色明确</h3><p>  这一点在小公司可能不太清晰，经常出现一人兼多职的情况，不太好定义。在成熟公司，这一点是相当重要的，因为角色到人，使得我们可以精确到单一问题该有何人负责。若是一个团队中出现职责不清晰的情况，使得我们解决一个问题便会出现踢雪球的情况，问题得不到解决，雪球还有变大的可能。</p>
+<h3 id="4-__u4EA7_u54C1_u81F3_u4E0A"><a href="#4-__u4EA7_u54C1_u81F3_u4E0A" class="headerlink" title="4. 产品至上"></a>4. 产品至上</h3><p>  产品是最最最重要的。最终的成果都是拿产品来说话的，即使再牛逼的销售团队，再漂亮的设计到产品上，也经不住产品的不断闪退，卡顿，高耗电，不人性化。而这最终的成果的展示都是在程序员身上，产品的优化又是一个任重道远的过程，毕竟你产品经理还要加功能。所以应该以程序员的工作为主，API设计以及UI团队应配合甚至服务于程序员的工作，尽量保证程序员能够高效地工作。遇到过App展示一个界面，要发送三个甚至更多的API请求，只想说真是够了。所以这里应当简化App端的工作，能尽量少在客户端做的就少做，服务器端的改动肯定比客户端来的容易些。</p>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>作者是站在一个程序员的角度上，以及要不断迭代地去开发一款长周期的产品，来看待产品开发应该具有一个怎样正确的姿势的，欢迎来拍砖讨论。当然，如果你就只是想快速开发出一款产品，那我上面的都是瞎扯淡了。。</p>
+<h3 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h3><blockquote>
+<p>这里感谢<a href="https://github.com/laobie" target="_blank" rel="external">Jaeger</a>大神的审阅，并提出的修改。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><img src="http://upload-images.jianshu.io/upload_images/656559-463aca2dd8c01203.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" a]]>
+    </summary>
+    
+      <category term="产品开发" scheme="http://david-wei.github.io/tags/%E4%BA%A7%E5%93%81%E5%BC%80%E5%8F%91/"/>
+    
+      <category term="随笔" scheme="http://david-wei.github.io/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[一键收藏至Github]]></title>
     <link href="http://david-wei.github.io/2016/02/29/%E4%B8%80%E9%94%AE%E6%94%B6%E8%97%8F%E8%87%B3Github/"/>
     <id>http://david-wei.github.io/2016/02/29/一键收藏至Github/</id>
     <published>2016-02-29T14:33:04.000Z</published>
-    <updated>2016-02-29T14:35:27.000Z</updated>
+    <updated>2016-03-02T15:35:22.000Z</updated>
     <content type="html"><![CDATA[<p>因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。</p>
 <h3 id="u7B80_u5355_u9700_u6C42"><a href="#u7B80_u5355_u9700_u6C42" class="headerlink" title="简单需求"></a>简单需求</h3><p>  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体的文章输出结果显示如<a href="http://www.jianshu.com/p/7f5295eed909" target="_blank" rel="external">2016.01阅读文章</a>。</p>
 <h3 id="u6280_u672F_u642D_u5EFA"><a href="#u6280_u672F_u642D_u5EFA" class="headerlink" title="技术搭建"></a>技术搭建</h3><p>  这里主要的技术主要两个难点：</p>
@@ -31,9 +67,9 @@
 <li>JS来获取当前文章的标题以及链接<br>这里参照百度首页链接的添加，通过JS先获取到document以及location对象，然后通过它俩来拿到当前窗口的链接以及标题，然后调用本地服务的一个请求，传递给本地服务，来进行当前网址的记录。主要的代码如下：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">javascript: ((<span class="function"><span class="keyword">function</span>(<span class="params">s, d, e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> u = location;</span><br><span class="line">    <span class="keyword">var</span> f = <span class="string">'http://localhost:3000/create?link='</span> + e(u.href) + <span class="string">'&amp;title='</span> + e(d.title) + <span class="string">'&amp;_t='</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">window</span>.open(f, <span class="string">''</span>, <span class="string">'toolbar=0,status=0,resizable=1,width=700,height=450,left='</span> + (s.width - <span class="number">700</span>) / <span class="number">2</span> + <span class="string">',top='</span> + (s.height - <span class="number">650</span>) / <span class="number">2</span>)) u.href = f</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/Firefox/</span>.test(navigator.userAgent)) setTimeout(a, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">else</span> a()</span><br><span class="line">&#125;)(screen, <span class="built_in">document</span>, <span class="built_in">encodeURIComponent</span>));</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>从上述的代码可以看到，最主要的代码就是通过window对象来打开一个新的窗口，指定窗口就是咱们本地的一个API请求，链接格式为<em><a href="http://localhost:3000/create" target="_blank" rel="external">http://localhost:3000/create</a></em>, 以及两个参数link和title，对应咱们生成markdown的内容。</p>
+<p>从上述的代码可以看到，最主要的代码就是通过window对象来打开一个新的窗口，指定窗口就是咱们本地的一个API请求，链接格式为<a href="http://localhost:3000/create" target="_blank" rel="external">http://localhost:3000/create</a>, 以及两个参数link和title，对应咱们生成markdown的内容。</p>
 <blockquote>
-<p>这里如何使用呢？在app/views/welcome/index.html.erb中，将上述的Js代码放置在一个a标签中，将代码作为链接href属性的值。启动rails的服务器，输入<a href="http://localhost:3000就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。" target="_blank" rel="external">http://localhost:3000就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。</a></p>
+<p>这里如何使用呢？在app/views/welcome/index.html.erb中，将上述的Js代码放置在一个a标签中，将代码作为链接href属性的值。启动rails的服务器，输入<a href="http://localhost:3000/index" target="_blank" rel="external">http://localhost:3000/index</a> 就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。</p>
 <ol>
 <li>搭建获取链接的API<br>这里主要使用Ruby on Rails来搭建一个本地的服务器，毕竟是号称10分钟创建一个完整的Web应用程序的语言。<br>对应的主要代码目录在app/controllers/article_controller.rb文件中，通过api请求<em><a href="http://localhost:3000/create?link={0}&amp;title&amp;{1}" target="_blank" rel="external">http://localhost:3000/create?link={0}&amp;title&amp;{1}</a></em> 来获取需要保存的链接，主要代码如下：</li>
 </ol>
@@ -51,6 +87,18 @@
 </ul>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">module GitHelper</span><br><span class="line"></span><br><span class="line">  def self.commit(title)</span><br><span class="line">    t = fork <span class="operator"><span class="keyword">do</span></span><br><span class="line">      Signal.trap(<span class="string">"HUP"</span>) &#123;</span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git status'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git add .'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">"git commit -am 'add #&#123;title&#125;'"</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git pull --rebase'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git push'</span></span><br><span class="line">      &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    Process.<span class="keyword">kill</span>(<span class="string">"HUP"</span>, <span class="keyword">t</span>) </span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span></span><br></pre></td></tr></table></figure>
 <p>我们知道Git提交是件耗时的操作，所以为了提高API的响应速度，这里通过使用异步来提交Git请求，可以看到使用rebase来提交请求，所以出现冲突的时候，我们得自己手动解决了。</p>
+<h3 id="u4F7F_u7528"><a href="#u4F7F_u7528" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>打开项目所在的目录，使用<strong> rails s</strong>来启动服务</li>
+<li>在浏览器中输入 <a href="http://localhost:3000/index" target="_blank" rel="external">http://localhost:3000/index</a> 来显示我们需要的书签链接，如图所示；</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/656559-e9ae2afa571f8fff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="书签链接.png"></p>
+<ul>
+<li>将上图中的链接拖拽至chrome的书签栏中，如图：</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/656559-abb43fe9a339d4f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="书签.png"></p>
+<ul>
+<li>点击<strong>fav</strong>书签，就可保存当前的页面了，并自动提交了。</li>
+</ul>
 <h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>这样，我们一个很简单的文章记录加自动提交的功能就完成了。当然还有许多功能可以做一些扩展，例如，可以支持不同的GitHub的仓库；做成chrome的插件来方便使用。最后，放上代码地址：<a href="https://github.com/david-wei/MediumArticles" target="_blank" rel="external">代码地址</a></p>
 ]]></content>
     <summary type="html">
