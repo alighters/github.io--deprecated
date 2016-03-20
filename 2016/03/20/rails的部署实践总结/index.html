@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="总结," />
+  <meta name="keywords" content="rails部署," />
 
 
 
@@ -53,19 +53,19 @@
 
 
 
-<meta name="description" content="在这一年里，一大半的时间都在创业公司度过，10月中旬开始跳槽换公司，12月临时决定了去一家氛围比较满意的公司。这期间有着好多波折，同时也是自己一个思考的过程，为自己将来的目标与计划做一个比较好的筛选。所以，以后在面试找工作的过程中，一定要慎重，不要着急，结合自己的兴趣与想要的环境、氛围来确定自己的去处。接下来，主要从自己收获、不足、展望来进行一番总结。接下来，从自己感触最深的几个方面谈起。
-收获与">
+<meta name="description" content="最近刚刚实践了一把Rails的自动部署，由于自己对这个一知半解，期间遇到了不少实践性的问题以及概念性的问题，在这里把这些问题都记录下来，以防以后再遇到。文中主要参照capstrano半自动部署rails程序这篇文章，来按步骤部署。
+###先说一下capstrano能帮我们做什么？###在我们使用rails建一个简单的服务器的时候，最后我们需要也同样把它建立在我们自己的服务器上去。capstrano">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2015年终总结">
-<meta property="og:url" content="http://david-wei.github.io/2016/02/10/2015年终总结/index.html">
+<meta property="og:title" content="rails的部署实践总结">
+<meta property="og:url" content="http://david-wei.github.io/2016/03/20/rails的部署实践总结/index.html">
 <meta property="og:site_name" content="David">
-<meta property="og:description" content="在这一年里，一大半的时间都在创业公司度过，10月中旬开始跳槽换公司，12月临时决定了去一家氛围比较满意的公司。这期间有着好多波折，同时也是自己一个思考的过程，为自己将来的目标与计划做一个比较好的筛选。所以，以后在面试找工作的过程中，一定要慎重，不要着急，结合自己的兴趣与想要的环境、氛围来确定自己的去处。接下来，主要从自己收获、不足、展望来进行一番总结。接下来，从自己感触最深的几个方面谈起。
-收获与">
-<meta property="og:updated_time" content="2016-02-10T01:21:31.000Z">
+<meta property="og:description" content="最近刚刚实践了一把Rails的自动部署，由于自己对这个一知半解，期间遇到了不少实践性的问题以及概念性的问题，在这里把这些问题都记录下来，以防以后再遇到。文中主要参照capstrano半自动部署rails程序这篇文章，来按步骤部署。
+###先说一下capstrano能帮我们做什么？###在我们使用rails建一个简单的服务器的时候，最后我们需要也同样把它建立在我们自己的服务器上去。capstrano">
+<meta property="og:updated_time" content="2016-03-20T15:11:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2015年终总结">
-<meta name="twitter:description" content="在这一年里，一大半的时间都在创业公司度过，10月中旬开始跳槽换公司，12月临时决定了去一家氛围比较满意的公司。这期间有着好多波折，同时也是自己一个思考的过程，为自己将来的目标与计划做一个比较好的筛选。所以，以后在面试找工作的过程中，一定要慎重，不要着急，结合自己的兴趣与想要的环境、氛围来确定自己的去处。接下来，主要从自己收获、不足、展望来进行一番总结。接下来，从自己感触最深的几个方面谈起。
-收获与">
+<meta name="twitter:title" content="rails的部署实践总结">
+<meta name="twitter:description" content="最近刚刚实践了一把Rails的自动部署，由于自己对这个一知半解，期间遇到了不少实践性的问题以及概念性的问题，在这里把这些问题都记录下来，以防以后再遇到。文中主要参照capstrano半自动部署rails程序这篇文章，来按步骤部署。
+###先说一下capstrano能帮我们做什么？###在我们使用rails建一个简单的服务器的时候，最后我们需要也同样把它建立在我们自己的服务器上去。capstrano">
 
 
 
@@ -77,7 +77,7 @@
   };
 </script>
 
-  <title> 2015年终总结 | David </title>
+  <title> rails的部署实践总结 | David </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -237,7 +237,7 @@
             
             
               
-                2015年终总结
+                rails的部署实践总结
               
             
           </h1>
@@ -246,8 +246,8 @@
         <div class="post-meta">
           <span class="post-time">
             发表于
-            <time itemprop="dateCreated" datetime="2016-02-10T09:18:56+08:00" content="2016-02-10">
-              2016-02-10
+            <time itemprop="dateCreated" datetime="2016-03-20T23:05:55+08:00" content="2016-03-20">
+              2016-03-20
             </time>
           </span>
 
@@ -256,8 +256,8 @@
               &nbsp; | &nbsp; 分类于
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
+                  <a href="/categories/Ruby/" itemprop="url" rel="index">
+                    <span itemprop="name">Ruby</span>
                   </a>
                 </span>
 
@@ -272,8 +272,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/02/10/2015年终总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/10/2015年终总结/" itemprop="commentsCount"></span>
+                <a href="/2016/03/20/rails的部署实践总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/20/rails的部署实践总结/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -292,41 +292,41 @@
       
 
       
-        <span itemprop="articleBody"><p>在这一年里，一大半的时间都在创业公司度过，10月中旬开始跳槽换公司，12月临时决定了去一家氛围比较满意的公司。这期间有着好多波折，同时也是自己一个思考的过程，为自己将来的目标与计划做一个比较好的筛选。所以，以后在面试找工作的过程中，一定要慎重，不要着急，结合自己的兴趣与想要的环境、氛围来确定自己的去处。接下来，主要从自己收获、不足、展望来进行一番总结。接下来，从自己感触最深的几个方面谈起。</p>
-<h3 id="u6536_u83B7_u4E0E_u4E0D_u8DB3"><a href="#u6536_u83B7_u4E0E_u4E0D_u8DB3" class="headerlink" title="收获与不足"></a>收获与不足</h3><ol>
-<li><strong>不足一：创业公司压力大的问题</strong><br>这一点感触最深的就是，在创业公司度过的一年多时间里面，是加班加点地迭代产品，没有太多的时间去深入学习，也没有太多的时间去进行代码的重构。另一方面，创业公司想要获取成功，就要拥有用户数，这里就需要有用户数目的积累，一是要有保证产品的质量，另一个就是要有一条独特的销售途径。创业公司要想找到一个靠谱的推广产品的点子，还得顾及成本问题，往往就是比较艰难的。我们公司采取的途径就是方法一，不断优化产品的体验，这样，对产品开发的压力就很大，要去不断地改进版本，也就需要有着良好的代码扩展能力(这里我其实是做的不太好的，前期没有考虑架构问题)。还有一个问题就是开发人员比较少，还不太稳定，技术氛围就得不到保证。</li>
-<li><strong>不足二：学习深度与总结的问题</strong><br>在学习程序的过程中，在开始阶段，只是需要使程序运行出预期的结果即可，而在成为高手，更进一步的过程中，则需要知其所以然，而不简简单单地停留在表面上。这在面试一些好公司的过程中，是及其必要的，另一个关于基础的算法，也是及其需要的。这就需要我们多读源码，多理解代码的原理，还有一些设计的问题，多注意总结。</li>
-<li><strong>收获一：公司的技术氛围</strong><br>现在入职的这家公司，公司对技术的重视，是工作以来接触的一家最不错的公司。公司能够对一些线下活动提供一些资费的报销，并且鼓励去参加线下的活动。另外，公司技术小组也会有内部分享，Code Review，倾向于新技术的尝试与学习。</li>
-<li><strong>收获二：线下活动的参加</strong><br>这一年参加的两个主要的活动：一是上海的GDG，二是杭州的D2前端会议。通过这些活动，了解了一些新技术RxJava的使用情况以及前端火热的技术发展，并且可以认识一些这方面的技术大神。</li>
-</ol>
-<p>以上简单地总结了一下收获，接下来针对自己以前的陋习做一些改正，主要从以上学习、生活几个方面做一些罗列：</p>
-<h3 id="u5B66_u4E60"><a href="#u5B66_u4E60" class="headerlink" title="学习"></a>学习</h3><ol>
-<li>注重工作效率：<br>每天的工作任务，尽量在这一天的开始时，就大致定下来，然后分条目地去完成；按照番茄工作法，来进行工作时间的安排，利用间隔时间来休息。同时，在进行一个复杂任务的同时，通过使用思维导图以及UML建模工具来建立一个全局的统筹的认识，在实践的过程中，再去不断完善细节，这样也会不断促进自己设计架构以及全局规划的能力。</li>
-<li>多读书：<br>读书不仅仅要读技术书，还要读一些文学类以及其他方面的书，也要学会读书，把读书也变成自己的一个习惯。技术书籍，会使自己一项技术有个全局而又深入的认识，而不像使用搜索引擎零敲碎打地学习。另外，虽然我们做技术的，也不能生活中全是代码、技术，应该多接触接触其他的，感兴趣的东西。谈到读书这个问题，接触到的两个公司的老板，就都是非常喜欢读书的人。听他们的谈吐，以及对事物的看法，都有非常独到的见解与认识。回想自己的以前，只是对技术感兴趣，感觉看书的才都是书呆子，最后发现自己的谈吐，都是随心而出的，没有经过大脑的，恩，非常“不善言谈”。所以，想想这是需要有些丰富的阅历，并对这些做一些深入思考总结的，要么是从社会中获取，要么是从书籍中获取。另外，读书也是讲究方法的，需要对书籍中的知识做些总结、笔记或者感受的记录。</li>
-<li>多实践：<br>身为程序员，就得需要多多动手去敲代码。代码的学习，不仅仅是网上或者书上看到就结束了，也需要自己动手去练习，去实践。还有就是，技术架构的学习，若是再工作中得不到实践的时候，是可以考虑自己业余实践做一个项目，需求、设计自己一把抓，也是一番不错的体验，当然，若能赚到一笔额外的费用，就更加妙了。</li>
-</ol>
-<h3 id="u751F_u6D3B"><a href="#u751F_u6D3B" class="headerlink" title="生活"></a>生活</h3><ol>
-<li>养成良好习惯：<ul>
-<li>早睡早起</li>
-<li>多喝水、多吃水果</li>
-<li>每天预留2个小时左右的时间进行看书</li>
-</ul>
+        <span itemprop="articleBody"><p>最近刚刚实践了一把Rails的自动部署，由于自己对这个一知半解，期间遇到了不少实践性的问题以及概念性的问题，在这里把这些问题都记录下来，以防以后再遇到。文中主要参照<a href="http://www.jianshu.com/p/3417c69a824a" target="_blank" rel="external">capstrano半自动部署rails程序</a>这篇文章，来按步骤部署。</p>
+<p>###先说一下capstrano能帮我们做什么？###<br>在我们使用rails建一个简单的服务器的时候，最后我们需要也同样把它建立在我们自己的服务器上去。capstrano就是这样的场景产生的，最终我们只需在我们的应用程序的主目录下，直接调用<code>cap production deploy</code>（production指的是我们的开发环境）就可直接在服务器上看到我们更改之后的运行程序了，当然在这之前，是需要我们在rails中，进行一些必要的配置的。</p>
+<h3 id="u4E3B_u8981_u95EE_u9898_u8BB0_u5F55"><a href="#u4E3B_u8981_u95EE_u9898_u8BB0_u5F55" class="headerlink" title="主要问题记录"></a>主要问题记录</h3><ul>
+<li><p>配置cap的远程连接<br>在cap中的部署过程中，它需要读取我们的git远程仓库所在的地址，然后将其部署编译到我们在服务器中所指定的位置。若是配置了nginx，则也会在nginx的配置中，添加代理我们的应用程序的配置。<br>这里，有几个细节问题需要注意一下，<br>1） git仓库ssh key的添加。例如，我们若是设置了github作为我们应用程序的仓库，则需要在github添加服务器所对应ssh key，这样来保证我们服务器能获取到github仓库中最新的代码。</p>
+<p>2）cap配置远程的ssh。我使用的是亚马逊的aws，它的ssh不是通过用户名跟密码来连接的，这个让我愣怔了半天，一直在找我的用户名跟密码。但是最后在配置中看到一个key的设置，才想到直接使用它提供的.pem文件，是不是可以，竟然就成功了，颇感神奇。主要的代码配置如下，这样就不用填用户名跟密码了。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The server-based syntax can be used to override options:</span></span><br><span class="line"><span class="comment"># ------------------------------------</span></span><br><span class="line"> server <span class="string">'ec2-52-193-240-0.ap-northeast-1.compute.amazonaws.com'</span>,</span><br><span class="line">   user: <span class="string">'ubuntu'</span>,</span><br><span class="line">   roles: <span class="variable">%w</span>&#123;web app db&#125;,</span><br><span class="line">   ssh_options: &#123;</span><br><span class="line">     <span class="comment">#user: '****', # overrides user setting above</span></span><br><span class="line">     <span class="keyword">keys</span>: <span class="variable">%w</span>(~<span class="regexp">/.ssh/david</span>.pem),</span><br><span class="line">     forward_agent: false,</span><br><span class="line">     auth_methods: <span class="variable">%w</span>(publickey password),</span><br><span class="line">     <span class="comment">#password: '****'</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li>多参加活动：<ul>
-<li>这里指的是参加线下的一些活动，扩宽视野，多结识一些朋友</li>
 </ul>
+<p>PS: 这里使用的<code>.pem</code>文件是aws提供的私钥文件，用来进行ssh的连接。</p>
+<ul>
+<li>nginx的使用<br>先得弄明白nginx的主要作用，来提供我们的服务的代理，进行我们的应用服务程序的跳转过滤以及代理配置。这里，举个最肤浅的例子，我们的rails程序启动之后往往都是默认3000端口，但是我们通过nginx，只对外暴露一个80端口，同时隐藏了我们的应用名称，只需配置相应的路由规则，让其访问我们本地的3000端口，但在用户看来只有80端口，很神奇的有木有。<br>这里，注意的是nginx一般对我们的静态文件做缓存的全局代理，另外，访问我们的动态程序，需要在nginx的配置中，在server节点添加我们的应用程序对应规则，我们这里直接修改<code>proxy_pass</code>这个节点，指向我们的地址就好。<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxy_pass <span class="string">http:</span><span class="comment">//localhost:3000;</span></span><br></pre></td></tr></table></figure>
 </li>
-<li>多锻炼：<ul>
-<li>每周一定量的锻炼</li>
 </ul>
+<p>接下来，就是需要启动我们本地服务的3000端口了。</p>
+<ul>
+<li>rails服务的启动<br>这里之前一直以为执行<code>cap deploy</code>之后，我们的服务器程序也就自动启动了。可是那我的端口是多少，它是怎么设置的。最后发现还是我太天真了，这里还是要自己启动的。跳转至我们的服务器程序<code>/var/www/app/current</code>目录下，通过执行<code>bundle exec rails s -e production</code>，来启动我们的程序。看我们的rails程序是否处于启动的状态，可通过进程查看的方式来确定，执行命令<code>ps -ef | grep rails</code>来找到是否有相应的进程。</li>
+</ul>
+<h3 id="u5E38_u7528_u7684_u547D_u4EE4"><a href="#u5E38_u7528_u7684_u547D_u4EE4" class="headerlink" title="常用的命令"></a>常用的命令</h3><ul>
+<li>执行nginx的重启操作</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> service nginx restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>nginx的信息 <code>nginx -V</code> 可以看到nginx的访问日志以及错误日志的目录</p>
 </li>
-</ol>
-<h3 id="u5C55_u671B_u4E0E_u76EE_u6807"><a href="#u5C55_u671B_u4E0E_u76EE_u6807" class="headerlink" title="展望与目标"></a>展望与目标</h3><ol>
-<li>上面罗列的这些，都是接下来自己要去努力的方向，希望在接下来的一年内，逐渐养成这些良好的习惯。</li>
-<li>Android技术的成长，深入一些Android常用库的理解，在架构设计方面有足够深入的理解；另一方面完成“Android三剑客”与《Effective Java》书籍的阅读。</li>
-<li>博客文章的书写，尽量保证质量与篇数。</li>
-<li>Ruby与React的熟练学习。Ruby是我感觉其设计非常独特的一门语言，在以后的常用的脚本语言及简单的服务器多多熟练Ruby的使用；React感觉这是前端的一个趋势，则继续保持深入的学习。</li>
-</ol>
+<li><p>nginx维护的设置目录：<code>/etc/nginx/sites-enabled/</code></p>
+</li>
+<li><p>查看nginx的进程： <code>ps -ef | grep nginx</code></p>
+</li>
+<li><p>服务器上rails的执行： <code>bundle exec rails s -e production</code></p>
+</li>
+<li><p>使Rails server在后台运行的命令screen， 通过screen命令可以避免我们的ssh连接断开时，保证我们启动的服务还在运行。常用的screen命令如下：</p>
+</li>
+</ul>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">screen + 命令 <span class="comment">//会立即创建并进入一个会话。</span></span><br><span class="line">screen -dmS &#123;<span class="built_in">name</span>&#125; <span class="comment">//建立一个处于断开模式下的会话，并根据我们的需要指定其会话名称。</span></span><br><span class="line">screen -<span class="built_in">list</span> <span class="comment">//列出所有会话。</span></span><br><span class="line">screen -r &#123;<span class="built_in">name</span>&#125; <span class="comment">//进入指定会话。</span></span><br><span class="line">ctrl +ad <span class="comment">//输入快捷键ctrl +a和d，可暂时退出当前会话。</span></span><br><span class="line"><span class="keyword">exit</span> <span class="comment">//进入指定会话后执行exit即可关闭该会话。</span></span><br></pre></td></tr></table></figure>
+<p>最后，我们的程序已经完整的在服务器上跑起来了，过程还是颇多周折。期间，又加深了对linux命令的熟悉同时深入了解之前只知其名的程序，还是感觉代码这种要多动手啊。最后最后，欢迎对我这个菜鸟拍砖。</p>
 </span>
       
     </div>
@@ -335,7 +335,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/总结/" rel="tag">#总结</a>
+            <a href="/tags/rails部署/" rel="tag">#rails部署</a>
           
         </div>
       
@@ -344,17 +344,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/12/22/Android内存泄露代码详解/" rel="next" title="Android内存泄露代码详解">
-                <i class="fa fa-chevron-left"></i> Android内存泄露代码详解
+              <a href="/2016/03/02/程序猿看产品开发/" rel="next" title="程序猿看产品开发">
+                <i class="fa fa-chevron-left"></i> 程序猿看产品开发
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/02/29/一键收藏至Github/" rel="prev" title="一键收藏至Github">
-                一键收藏至Github <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -381,8 +377,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/10/2015年终总结/"
-           data-title="2015年终总结" data-url="http://david-wei.github.io/2016/02/10/2015年终总结/">
+      <div class="ds-thread" data-thread-key="2016/03/20/rails的部署实践总结/"
+           data-title="rails的部署实践总结" data-url="http://david-wei.github.io/2016/03/20/rails的部署实践总结/">
       </div>
     
   </div>
@@ -529,7 +525,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6536_u83B7_u4E0E_u4E0D_u8DB3"><span class="nav-number">1.</span> <span class="nav-text">收获与不足</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5B66_u4E60"><span class="nav-number">2.</span> <span class="nav-text">学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u751F_u6D3B"><span class="nav-number">3.</span> <span class="nav-text">生活</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5C55_u671B_u4E0E_u76EE_u6807"><span class="nav-number">4.</span> <span class="nav-text">展望与目标</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u4E3B_u8981_u95EE_u9898_u8BB0_u5F55"><span class="nav-number">1.</span> <span class="nav-text">主要问题记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u5E38_u7528_u7684_u547D_u4EE4"><span class="nav-number">2.</span> <span class="nav-text">常用的命令</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

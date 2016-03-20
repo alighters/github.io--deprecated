@@ -4,7 +4,7 @@
   <subtitle><![CDATA[READ THE FUCKING SOURCE CODE]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://david-wei.github.io/"/>
-  <updated>2016-03-02T15:37:12.000Z</updated>
+  <updated>2016-03-20T15:11:22.000Z</updated>
   <id>http://david-wei.github.io/</id>
   
   <author>
@@ -13,6 +13,58 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[rails的部署实践总结]]></title>
+    <link href="http://david-wei.github.io/2016/03/20/rails%E7%9A%84%E9%83%A8%E7%BD%B2%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"/>
+    <id>http://david-wei.github.io/2016/03/20/rails的部署实践总结/</id>
+    <published>2016-03-20T15:05:55.000Z</published>
+    <updated>2016-03-20T15:11:22.000Z</updated>
+    <content type="html"><![CDATA[<p>最近刚刚实践了一把Rails的自动部署，由于自己对这个一知半解，期间遇到了不少实践性的问题以及概念性的问题，在这里把这些问题都记录下来，以防以后再遇到。文中主要参照<a href="http://www.jianshu.com/p/3417c69a824a" target="_blank" rel="external">capstrano半自动部署rails程序</a>这篇文章，来按步骤部署。</p>
+<p>###先说一下capstrano能帮我们做什么？###<br>在我们使用rails建一个简单的服务器的时候，最后我们需要也同样把它建立在我们自己的服务器上去。capstrano就是这样的场景产生的，最终我们只需在我们的应用程序的主目录下，直接调用<code>cap production deploy</code>（production指的是我们的开发环境）就可直接在服务器上看到我们更改之后的运行程序了，当然在这之前，是需要我们在rails中，进行一些必要的配置的。</p>
+<h3 id="u4E3B_u8981_u95EE_u9898_u8BB0_u5F55"><a href="#u4E3B_u8981_u95EE_u9898_u8BB0_u5F55" class="headerlink" title="主要问题记录"></a>主要问题记录</h3><ul>
+<li><p>配置cap的远程连接<br>在cap中的部署过程中，它需要读取我们的git远程仓库所在的地址，然后将其部署编译到我们在服务器中所指定的位置。若是配置了nginx，则也会在nginx的配置中，添加代理我们的应用程序的配置。<br>这里，有几个细节问题需要注意一下，<br>1） git仓库ssh key的添加。例如，我们若是设置了github作为我们应用程序的仓库，则需要在github添加服务器所对应ssh key，这样来保证我们服务器能获取到github仓库中最新的代码。</p>
+<p>2）cap配置远程的ssh。我使用的是亚马逊的aws，它的ssh不是通过用户名跟密码来连接的，这个让我愣怔了半天，一直在找我的用户名跟密码。但是最后在配置中看到一个key的设置，才想到直接使用它提供的.pem文件，是不是可以，竟然就成功了，颇感神奇。主要的代码配置如下，这样就不用填用户名跟密码了。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The server-based syntax can be used to override options:</span></span><br><span class="line"><span class="comment"># ------------------------------------</span></span><br><span class="line"> server <span class="string">'ec2-52-193-240-0.ap-northeast-1.compute.amazonaws.com'</span>,</span><br><span class="line">   user: <span class="string">'ubuntu'</span>,</span><br><span class="line">   roles: <span class="variable">%w</span>&#123;web app db&#125;,</span><br><span class="line">   ssh_options: &#123;</span><br><span class="line">     <span class="comment">#user: '****', # overrides user setting above</span></span><br><span class="line">     <span class="keyword">keys</span>: <span class="variable">%w</span>(~<span class="regexp">/.ssh/david</span>.pem),</span><br><span class="line">     forward_agent: false,</span><br><span class="line">     auth_methods: <span class="variable">%w</span>(publickey password),</span><br><span class="line">     <span class="comment">#password: '****'</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>PS: 这里使用的<code>.pem</code>文件是aws提供的私钥文件，用来进行ssh的连接。</p>
+<ul>
+<li>nginx的使用<br>先得弄明白nginx的主要作用，来提供我们的服务的代理，进行我们的应用服务程序的跳转过滤以及代理配置。这里，举个最肤浅的例子，我们的rails程序启动之后往往都是默认3000端口，但是我们通过nginx，只对外暴露一个80端口，同时隐藏了我们的应用名称，只需配置相应的路由规则，让其访问我们本地的3000端口，但在用户看来只有80端口，很神奇的有木有。<br>这里，注意的是nginx一般对我们的静态文件做缓存的全局代理，另外，访问我们的动态程序，需要在nginx的配置中，在server节点添加我们的应用程序对应规则，我们这里直接修改<code>proxy_pass</code>这个节点，指向我们的地址就好。<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxy_pass <span class="string">http:</span><span class="comment">//localhost:3000;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>接下来，就是需要启动我们本地服务的3000端口了。</p>
+<ul>
+<li>rails服务的启动<br>这里之前一直以为执行<code>cap deploy</code>之后，我们的服务器程序也就自动启动了。可是那我的端口是多少，它是怎么设置的。最后发现还是我太天真了，这里还是要自己启动的。跳转至我们的服务器程序<code>/var/www/app/current</code>目录下，通过执行<code>bundle exec rails s -e production</code>，来启动我们的程序。看我们的rails程序是否处于启动的状态，可通过进程查看的方式来确定，执行命令<code>ps -ef | grep rails</code>来找到是否有相应的进程。</li>
+</ul>
+<h3 id="u5E38_u7528_u7684_u547D_u4EE4"><a href="#u5E38_u7528_u7684_u547D_u4EE4" class="headerlink" title="常用的命令"></a>常用的命令</h3><ul>
+<li>执行nginx的重启操作</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> service nginx restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>nginx的信息 <code>nginx -V</code> 可以看到nginx的访问日志以及错误日志的目录</p>
+</li>
+<li><p>nginx维护的设置目录：<code>/etc/nginx/sites-enabled/</code></p>
+</li>
+<li><p>查看nginx的进程： <code>ps -ef | grep nginx</code></p>
+</li>
+<li><p>服务器上rails的执行： <code>bundle exec rails s -e production</code></p>
+</li>
+<li><p>使Rails server在后台运行的命令screen， 通过screen命令可以避免我们的ssh连接断开时，保证我们启动的服务还在运行。常用的screen命令如下：</p>
+</li>
+</ul>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">screen + 命令 <span class="comment">//会立即创建并进入一个会话。</span></span><br><span class="line">screen -dmS &#123;<span class="built_in">name</span>&#125; <span class="comment">//建立一个处于断开模式下的会话，并根据我们的需要指定其会话名称。</span></span><br><span class="line">screen -<span class="built_in">list</span> <span class="comment">//列出所有会话。</span></span><br><span class="line">screen -r &#123;<span class="built_in">name</span>&#125; <span class="comment">//进入指定会话。</span></span><br><span class="line">ctrl +ad <span class="comment">//输入快捷键ctrl +a和d，可暂时退出当前会话。</span></span><br><span class="line"><span class="keyword">exit</span> <span class="comment">//进入指定会话后执行exit即可关闭该会话。</span></span><br></pre></td></tr></table></figure>
+<p>最后，我们的程序已经完整的在服务器上跑起来了，过程还是颇多周折。期间，又加深了对linux命令的熟悉同时深入了解之前只知其名的程序，还是感觉代码这种要多动手啊。最后最后，欢迎对我这个菜鸟拍砖。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>最近刚刚实践了一把Rails的自动部署，由于自己对这个一知半解，期间遇到了不少实践性的问题以及概念性的问题，在这里把这些问题都记录下来，以防以后再遇到。文中主要参照<a href="http://www.jianshu.com/p/3417c69a824a" target=]]>
+    </summary>
+    
+      <category term="rails部署" scheme="http://david-wei.github.io/tags/rails%E9%83%A8%E7%BD%B2/"/>
+    
+      <category term="Ruby" scheme="http://david-wei.github.io/categories/Ruby/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[程序猿看产品开发]]></title>
@@ -55,7 +107,7 @@
     <link href="http://david-wei.github.io/2016/02/29/%E4%B8%80%E9%94%AE%E6%94%B6%E8%97%8F%E8%87%B3Github/"/>
     <id>http://david-wei.github.io/2016/02/29/一键收藏至Github/</id>
     <published>2016-02-29T14:33:04.000Z</published>
-    <updated>2016-03-02T15:35:22.000Z</updated>
+    <updated>2016-03-20T15:11:56.000Z</updated>
     <content type="html"><![CDATA[<p>因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。</p>
 <h3 id="u7B80_u5355_u9700_u6C42"><a href="#u7B80_u5355_u9700_u6C42" class="headerlink" title="简单需求"></a>简单需求</h3><p>  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体的文章输出结果显示如<a href="http://www.jianshu.com/p/7f5295eed909" target="_blank" rel="external">2016.01阅读文章</a>。</p>
 <h3 id="u6280_u672F_u642D_u5EFA"><a href="#u6280_u672F_u642D_u5EFA" class="headerlink" title="技术搭建"></a>技术搭建</h3><p>  这里主要的技术主要两个难点：</p>

@@ -219,15 +219,143 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/20/rails的部署实践总结/" itemprop="url">
+                  rails的部署实践总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-03-20T23:05:55+08:00" content="2016-03-20">
+              2016-03-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Ruby/" itemprop="url" rel="index">
+                    <span itemprop="name">Ruby</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/20/rails的部署实践总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/20/rails的部署实践总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+              <p>最近刚刚实践了一把Rails的自动部署，由于自己对这个一知半解，期间遇到了不少实践性的问题以及概念性的问题，在这里把这些问题都记录下来，以防以后再遇到。文中主要参照<a href="http://www.jianshu.com/p/3417c69a824a" target="_blank" rel="external">capstrano半自动部署rails程序</a>这篇文章，来按步骤部署。</p>
+<p>###先说一下capstrano能帮我们做什么？###<br>在我们使用rails建一个简单的服务器的时候，最后我们需要也同样把它建立在我们自己的服务器上去。capstrano就是这样的场景产生的，最终我们只需在我们的应用程序的主目录下，直接调用<code>cap production deploy</code>（production指的是我们的开发环境）就可直接在服务器上看到我们更改之后的运行程序了，当然在这之前，是需要我们在rails中，进行一些必要的配置的。</p>
+<h3 id="u4E3B_u8981_u95EE_u9898_u8BB0_u5F55"><a href="#u4E3B_u8981_u95EE_u9898_u8BB0_u5F55" class="headerlink" title="主要问题记录"></a>主要问题记录</h3><ul>
+<li><p>配置cap的远程连接<br>在cap中的部署过程中，它需要读取我们的git远程仓库所在的地址，然后将其部署编译到我们在服务器中所指定的位置。若是配置了nginx，则也会在nginx的配置中，添加代理我们的应用程序的配置。<br>这里，有几个细节问题需要注意一下，<br>1） git仓库ssh key的添加。例如，我们若是设置了github作为我们应用程序的仓库，则需要在github添加服务器所对应ssh key，这样来保证我们服务器能获取到github仓库中最新的代码。</p>
+<p>2）cap配置远程的ssh。我使用的是亚马逊的aws，它的ssh不是通过用户名跟密码来连接的，这个让我愣怔了半天，一直在找我的用户名跟密码。但是最后在配置中看到一个key的设置，才想到直接使用它提供的.pem文件，是不是可以，竟然就成功了，颇感神奇。主要的代码配置如下，这样就不用填用户名跟密码了。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The server-based syntax can be used to override options:</span></span><br><span class="line"><span class="comment"># ------------------------------------</span></span><br><span class="line"> server <span class="string">'ec2-52-193-240-0.ap-northeast-1.compute.amazonaws.com'</span>,</span><br><span class="line">   user: <span class="string">'ubuntu'</span>,</span><br><span class="line">   roles: <span class="variable">%w</span>&#123;web app db&#125;,</span><br><span class="line">   ssh_options: &#123;</span><br><span class="line">     <span class="comment">#user: '****', # overrides user setting above</span></span><br><span class="line">     <span class="keyword">keys</span>: <span class="variable">%w</span>(~<span class="regexp">/.ssh/david</span>.pem),</span><br><span class="line">     forward_agent: false,</span><br><span class="line">     auth_methods: <span class="variable">%w</span>(publickey password),</span><br><span class="line">     <span class="comment">#password: '****'</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>PS: 这里使用的<code>.pem</code>文件是aws提供的私钥文件，用来进行ssh的连接。</p>
+<ul>
+<li>nginx的使用<br>先得弄明白nginx的主要作用，来提供我们的服务的代理，进行我们的应用服务程序的跳转过滤以及代理配置。这里，举个最肤浅的例子，我们的rails程序启动之后往往都是默认3000端口，但是我们通过nginx，只对外暴露一个80端口，同时隐藏了我们的应用名称，只需配置相应的路由规则，让其访问我们本地的3000端口，但在用户看来只有80端口，很神奇的有木有。<br>这里，注意的是nginx一般对我们的静态文件做缓存的全局代理，另外，访问我们的动态程序，需要在nginx的配置中，在server节点添加我们的应用程序对应规则，我们这里直接修改<code>proxy_pass</code>这个节点，指向我们的地址就好。<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxy_pass <span class="string">http:</span><span class="comment">//localhost:3000;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>接下来，就是需要启动我们本地服务的3000端口了。</p>
+<ul>
+<li>rails服务的启动<br>这里之前一直以为执行<code>cap deploy</code>之后，我们的服务器程序也就自动启动了。可是那我的端口是多少，它是怎么设置的。最后发现还是我太天真了，这里还是要自己启动的。跳转至我们的服务器程序<code>/var/www/app/current</code>目录下，通过执行<code>bundle exec rails s -e production</code>，来启动我们的程序。看我们的rails程序是否处于启动的状态，可通过进程查看的方式来确定，执行命令<code>ps -ef | grep rails</code>来找到是否有相应的进程。</li>
+</ul>
+<h3 id="u5E38_u7528_u7684_u547D_u4EE4"><a href="#u5E38_u7528_u7684_u547D_u4EE4" class="headerlink" title="常用的命令"></a>常用的命令</h3><ul>
+<li>执行nginx的重启操作</li>
+</ul>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> service nginx restart</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>nginx的信息 <code>nginx -V</code> 可以看到nginx的访问日志以及错误日志的目录</p>
+</li>
+<li><p>nginx维护的设置目录：<code>/etc/nginx/sites-enabled/</code></p>
+</li>
+<li><p>查看nginx的进程： <code>ps -ef | grep nginx</code></p>
+</li>
+<li><p>服务器上rails的执行： <code>bundle exec rails s -e production</code></p>
+</li>
+<li><p>使Rails server在后台运行的命令screen， 通过screen命令可以避免我们的ssh连接断开时，保证我们启动的服务还在运行。常用的screen命令如下：</p>
+</li>
+</ul>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">screen + 命令 <span class="comment">//会立即创建并进入一个会话。</span></span><br><span class="line">screen -dmS &#123;<span class="built_in">name</span>&#125; <span class="comment">//建立一个处于断开模式下的会话，并根据我们的需要指定其会话名称。</span></span><br><span class="line">screen -<span class="built_in">list</span> <span class="comment">//列出所有会话。</span></span><br><span class="line">screen -r &#123;<span class="built_in">name</span>&#125; <span class="comment">//进入指定会话。</span></span><br><span class="line">ctrl +ad <span class="comment">//输入快捷键ctrl +a和d，可暂时退出当前会话。</span></span><br><span class="line"><span class="keyword">exit</span> <span class="comment">//进入指定会话后执行exit即可关闭该会话。</span></span><br></pre></td></tr></table></figure>
+<p>最后，我们的程序已经完整的在服务器上跑起来了，过程还是颇多周折。期间，又加深了对linux命令的熟悉同时深入了解之前只知其名的程序，还是感觉代码这种要多动手啊。最后最后，欢迎对我这个菜鸟拍砖。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -351,6 +479,1031 @@
 
 
     
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/02/29/一键收藏至Github/" itemprop="url">
+                  一键收藏至Github
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-29T22:33:04+08:00" content="2016-02-29">
+              2016-02-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Ruby/" itemprop="url" rel="index">
+                    <span itemprop="name">Ruby</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/29/一键收藏至Github/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/29/一键收藏至Github/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>因本人比较喜欢对一些技术文章进行收藏，并进行整理。像Pocket、Evernote这些工具都可以进行离线收藏，都是很不错的工具，但我就想把这些喜欢的文章，进行收藏整理至github，并且一键提交（顺便还可以刷刷Github的活跃度），同时省了自己的时间，只需要在固定的时间，对这些进行整理即可。</p>
+<h3 id="u7B80_u5355_u9700_u6C42"><a href="#u7B80_u5355_u9700_u6C42" class="headerlink" title="简单需求"></a>简单需求</h3><p>  首先，简单得说一下自己的需求，根据每天的阅读文章通过每天归类显示，并按照每月来生成文章，具体的文章输出结果显示如<a href="http://www.jianshu.com/p/7f5295eed909" target="_blank" rel="external">2016.01阅读文章</a>。</p>
+<h3 id="u6280_u672F_u642D_u5EFA"><a href="#u6280_u672F_u642D_u5EFA" class="headerlink" title="技术搭建"></a>技术搭建</h3><p>  这里主要的技术主要两个难点：</p>
+<ul>
+<li>一键点击插件的生成</li>
+<li>脚本编写生成对应的markdown</li>
+</ul>
+<h3 id="u6280_u672F_u5B9E_u73B0"><a href="#u6280_u672F_u5B9E_u73B0" class="headerlink" title="技术实现"></a>技术实现</h3><ol>
+<li>JS来获取当前文章的标题以及链接<br>这里参照百度首页链接的添加，通过JS先获取到document以及location对象，然后通过它俩来拿到当前窗口的链接以及标题，然后调用本地服务的一个请求，传递给本地服务，来进行当前网址的记录。主要的代码如下：<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">javascript: ((<span class="function"><span class="keyword">function</span>(<span class="params">s, d, e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> u = location;</span><br><span class="line">    <span class="keyword">var</span> f = <span class="string">'http://localhost:3000/create?link='</span> + e(u.href) + <span class="string">'&amp;title='</span> + e(d.title) + <span class="string">'&amp;_t='</span> + <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">window</span>.open(f, <span class="string">''</span>, <span class="string">'toolbar=0,status=0,resizable=1,width=700,height=450,left='</span> + (s.width - <span class="number">700</span>) / <span class="number">2</span> + <span class="string">',top='</span> + (s.height - <span class="number">650</span>) / <span class="number">2</span>)) u.href = f</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/Firefox/</span>.test(navigator.userAgent)) setTimeout(a, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">else</span> a()</span><br><span class="line">&#125;)(screen, <span class="built_in">document</span>, <span class="built_in">encodeURIComponent</span>));</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>从上述的代码可以看到，最主要的代码就是通过window对象来打开一个新的窗口，指定窗口就是咱们本地的一个API请求，链接格式为<a href="http://localhost:3000/create" target="_blank" rel="external">http://localhost:3000/create</a>, 以及两个参数link和title，对应咱们生成markdown的内容。</p>
+<blockquote>
+<p>这里如何使用呢？在app/views/welcome/index.html.erb中，将上述的Js代码放置在一个a标签中，将代码作为链接href属性的值。启动rails的服务器，输入<a href="http://localhost:3000/index" target="_blank" rel="external">http://localhost:3000/index</a> 就会显示这个相对应的url，我们将其拖拽至我们的书签栏，则就会使用我们的插件工具了。</p>
+<ol>
+<li>搭建获取链接的API<br>这里主要使用Ruby on Rails来搭建一个本地的服务器，毕竟是号称10分钟创建一个完整的Web应用程序的语言。<br>对应的主要代码目录在app/controllers/article_controller.rb文件中，通过api请求<em><a href="http://localhost:3000/create?link={0}&amp;title&amp;{1}" target="_blank" rel="external">http://localhost:3000/create?link={0}&amp;title&amp;{1}</a></em> 来获取需要保存的链接，主要代码如下：</li>
+</ol>
+</blockquote>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArticleController</span> <span class="inheritance">&lt; <span class="parent">ApplicationController</span></span></span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">create</span></span></span><br><span class="line">    title = params[<span class="symbol">:title</span>]</span><br><span class="line">    link = params[<span class="symbol">:link</span>]</span><br><span class="line">    data = []</span><br><span class="line">    file_name = <span class="constant">Rails</span>.root.to_s + <span class="string">'/README.md'</span></span><br><span class="line">    status = <span class="string">'ok'</span></span><br><span class="line">    <span class="keyword">if</span> title.<span class="keyword">nil</span>? <span class="keyword">or</span> link.<span class="keyword">nil</span>?</span><br><span class="line">      status = <span class="string">'error'</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="keyword">if</span>(<span class="constant">Date</span>.today.mday == <span class="number">1</span>)</span><br><span class="line">        new_file_name = <span class="string">"<span class="subst">#&#123;<span class="constant">Rails</span>.root.to_s&#125;</span>/<span class="subst">#&#123;<span class="constant">Date</span>.today.prev_day.strftime(<span class="string">'%Y-%m'</span>).to_s&#125;</span>.md"</span></span><br><span class="line">        <span class="constant">File</span>.rename(file_name, new_file_name)</span><br><span class="line">        <span class="constant">File</span>.new(file_name, <span class="string">'w+'</span>)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      data = <span class="constant">DataHelper</span>.append_to(file_name, title, link)</span><br><span class="line">      <span class="keyword">if</span> !data.<span class="keyword">nil</span>?</span><br><span class="line">        <span class="constant">DataHelper</span>.write_to(file_name, data)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="constant">GitHelper</span>.commit(title)</span><br><span class="line">    render <span class="symbol">json:</span> &#123;<span class="string">'status'</span> =&gt; status, <span class="string">'data'</span> =&gt; data&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>上述代码中，主要的逻辑有三处：</p>
+<ul>
+<li>判断当天是否为当月的第一天，若是的话，则需要重命名README.md文件为上个月的文件，形如‘2016-01.md’格式的文件。主要的目的是将咱们的文章按每个月份来分类。</li>
+<li>通过DataHelper类来添加链接及其对应的标题，可以看到主要通过DataHelper的append_to和write_to方法来实现链接标题的添加。代码如下：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">module DataHelper</span><br><span class="line"></span><br><span class="line">  # 根据文件获取添入标题和链接之后的最新文本内容</span><br><span class="line">  def self.append_to(file_name, title, link)</span><br><span class="line">    data = []</span><br><span class="line">    changed = false</span><br><span class="line">    inserted = false</span><br><span class="line"></span><br><span class="line">    File.open(file_name).each <span class="operator"><span class="keyword">do</span> |line|</span><br><span class="line">      <span class="keyword">if</span> !inserted <span class="keyword">and</span> line.start_with?(<span class="string">'###'</span>) </span><br><span class="line">        # 当前行为具体的日期</span><br><span class="line">        date_str = line.slice(<span class="number">3</span>, <span class="number">3</span> + <span class="number">10</span>).squish</span><br><span class="line">        <span class="keyword">if</span>(is_date(date_str))</span><br><span class="line">          # 当前日期为今天，则在当前天下添加新的一行数据</span><br><span class="line">          <span class="keyword">if</span>(<span class="built_in">Date</span>.<span class="keyword">parse</span>(date_str) == <span class="built_in">Date</span>.today)</span><br><span class="line">            <span class="keyword">data</span>.push line</span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">changed</span> = <span class="literal">true</span></span><br><span class="line">            inserted = <span class="literal">true</span></span><br><span class="line">          # 当前日期小于今天，则新建今天的数据</span><br><span class="line">          <span class="keyword">elsif</span>(<span class="built_in">Date</span>.<span class="keyword">parse</span>(date_str) &lt; <span class="built_in">Date</span>.today)</span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"### #&#123;Date.today&#125;&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">            <span class="keyword">data</span>.push <span class="string">"\r\n"</span></span><br><span class="line">            inserted = <span class="literal">true</span></span><br><span class="line">          <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">if</span> !<span class="keyword">changed</span></span><br><span class="line">        <span class="keyword">data</span>.push line</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      <span class="keyword">changed</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    # 若没有添加，则表示是个新建的文件，直接添加今天的数据</span><br><span class="line">    <span class="keyword">if</span>(!inserted)</span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"### #&#123;Date.today&#125;&lt;br&gt;\n"</span></span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"+ [#&#123;title&#125;](#&#123;link&#125;)&lt;br&gt;\n"</span></span><br><span class="line">       <span class="keyword">data</span>.push <span class="string">"\r\n"</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">data</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  # 向文件中写入<span class="keyword">data</span></span><br><span class="line">  <span class="keyword">def</span> <span class="keyword">self</span>.write_to(file_name, <span class="keyword">data</span>)</span><br><span class="line">    <span class="keyword">file</span> = <span class="keyword">File</span>.<span class="keyword">new</span>(file_name, <span class="string">'w+'</span>)</span><br><span class="line">    <span class="keyword">data</span>.<span class="keyword">each</span> <span class="keyword">do</span> |line|</span><br><span class="line">      <span class="keyword">file</span>.write line</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">file</span>.<span class="keyword">close</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  # 判断字符是否为一个日期</span><br><span class="line">  <span class="keyword">def</span> <span class="keyword">self</span>.is_date(<span class="keyword">str</span>)</span><br><span class="line">    <span class="keyword">result</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      <span class="built_in">Date</span>.<span class="keyword">parse</span>(<span class="keyword">str</span>)</span><br><span class="line">      <span class="keyword">result</span> = <span class="literal">true</span></span><br><span class="line">    rescue ArgumentError</span><br><span class="line">      <span class="keyword">result</span> = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">result</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span></span><br></pre></td></tr></table></figure>
+<p>在Datahelper的append_to方法中，是通过逐行读取文件，根据文件对应的日期标题，获取到相应的日期，判断当前日期是否大于获取的日期，大于的时候则可直接添加，等于的时候则可在日期下面的第一行中插入，最后我们获取的将是一个data的数组。另外，使用write_to将data中的数据，逐行写入文件中。</p>
+<ul>
+<li>Git的自动提交，这里实现的主要的代码在GitHelper中，其中的代码呈上：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">module GitHelper</span><br><span class="line"></span><br><span class="line">  def self.commit(title)</span><br><span class="line">    t = fork <span class="operator"><span class="keyword">do</span></span><br><span class="line">      Signal.trap(<span class="string">"HUP"</span>) &#123;</span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git status'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git add .'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">"git commit -am 'add #&#123;title&#125;'"</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git pull --rebase'</span></span><br><span class="line">        <span class="keyword">system</span> <span class="string">'git push'</span></span><br><span class="line">      &#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    Process.<span class="keyword">kill</span>(<span class="string">"HUP"</span>, <span class="keyword">t</span>) </span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span></span><br></pre></td></tr></table></figure>
+<p>我们知道Git提交是件耗时的操作，所以为了提高API的响应速度，这里通过使用异步来提交Git请求，可以看到使用rebase来提交请求，所以出现冲突的时候，我们得自己手动解决了。</p>
+<h3 id="u4F7F_u7528"><a href="#u4F7F_u7528" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>打开项目所在的目录，使用<strong> rails s</strong>来启动服务</li>
+<li>在浏览器中输入 <a href="http://localhost:3000/index" target="_blank" rel="external">http://localhost:3000/index</a> 来显示我们需要的书签链接，如图所示；</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/656559-e9ae2afa571f8fff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="书签链接.png"></p>
+<ul>
+<li>将上图中的链接拖拽至chrome的书签栏中，如图：</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/656559-abb43fe9a339d4f8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="书签.png"></p>
+<ul>
+<li>点击<strong>fav</strong>书签，就可保存当前的页面了，并自动提交了。</li>
+</ul>
+<h3 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h3><p>这样，我们一个很简单的文章记录加自动提交的功能就完成了。当然还有许多功能可以做一些扩展，例如，可以支持不同的GitHub的仓库；做成chrome的插件来方便使用。最后，放上代码地址：<a href="https://github.com/david-wei/MediumArticles" target="_blank" rel="external">代码地址</a></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/02/10/2015年终总结/" itemprop="url">
+                  2015年终总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-02-10T09:18:56+08:00" content="2016-02-10">
+              2016-02-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/随笔/" itemprop="url" rel="index">
+                    <span itemprop="name">随笔</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/02/10/2015年终总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/10/2015年终总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>在这一年里，一大半的时间都在创业公司度过，10月中旬开始跳槽换公司，12月临时决定了去一家氛围比较满意的公司。这期间有着好多波折，同时也是自己一个思考的过程，为自己将来的目标与计划做一个比较好的筛选。所以，以后在面试找工作的过程中，一定要慎重，不要着急，结合自己的兴趣与想要的环境、氛围来确定自己的去处。接下来，主要从自己收获、不足、展望来进行一番总结。接下来，从自己感触最深的几个方面谈起。</p>
+<h3 id="u6536_u83B7_u4E0E_u4E0D_u8DB3"><a href="#u6536_u83B7_u4E0E_u4E0D_u8DB3" class="headerlink" title="收获与不足"></a>收获与不足</h3><ol>
+<li><strong>不足一：创业公司压力大的问题</strong><br>这一点感触最深的就是，在创业公司度过的一年多时间里面，是加班加点地迭代产品，没有太多的时间去深入学习，也没有太多的时间去进行代码的重构。另一方面，创业公司想要获取成功，就要拥有用户数，这里就需要有用户数目的积累，一是要有保证产品的质量，另一个就是要有一条独特的销售途径。创业公司要想找到一个靠谱的推广产品的点子，还得顾及成本问题，往往就是比较艰难的。我们公司采取的途径就是方法一，不断优化产品的体验，这样，对产品开发的压力就很大，要去不断地改进版本，也就需要有着良好的代码扩展能力(这里我其实是做的不太好的，前期没有考虑架构问题)。还有一个问题就是开发人员比较少，还不太稳定，技术氛围就得不到保证。</li>
+<li><strong>不足二：学习深度与总结的问题</strong><br>在学习程序的过程中，在开始阶段，只是需要使程序运行出预期的结果即可，而在成为高手，更进一步的过程中，则需要知其所以然，而不简简单单地停留在表面上。这在面试一些好公司的过程中，是及其必要的，另一个关于基础的算法，也是及其需要的。这就需要我们多读源码，多理解代码的原理，还有一些设计的问题，多注意总结。</li>
+<li><strong>收获一：公司的技术氛围</strong><br>现在入职的这家公司，公司对技术的重视，是工作以来接触的一家最不错的公司。公司能够对一些线下活动提供一些资费的报销，并且鼓励去参加线下的活动。另外，公司技术小组也会有内部分享，Code Review，倾向于新技术的尝试与学习。</li>
+<li><strong>收获二：线下活动的参加</strong><br>这一年参加的两个主要的活动：一是上海的GDG，二是杭州的D2前端会议。通过这些活动，了解了一些新技术RxJava的使用情况以及前端火热的技术发展，并且可以认识一些这方面的技术大神。</li>
+</ol>
+<p>以上简单地总结了一下收获，接下来针对自己以前的陋习做一些改正，主要从以上学习、生活几个方面做一些罗列：</p>
+<h3 id="u5B66_u4E60"><a href="#u5B66_u4E60" class="headerlink" title="学习"></a>学习</h3><ol>
+<li>注重工作效率：<br>每天的工作任务，尽量在这一天的开始时，就大致定下来，然后分条目地去完成；按照番茄工作法，来进行工作时间的安排，利用间隔时间来休息。同时，在进行一个复杂任务的同时，通过使用思维导图以及UML建模工具来建立一个全局的统筹的认识，在实践的过程中，再去不断完善细节，这样也会不断促进自己设计架构以及全局规划的能力。</li>
+<li>多读书：<br>读书不仅仅要读技术书，还要读一些文学类以及其他方面的书，也要学会读书，把读书也变成自己的一个习惯。技术书籍，会使自己一项技术有个全局而又深入的认识，而不像使用搜索引擎零敲碎打地学习。另外，虽然我们做技术的，也不能生活中全是代码、技术，应该多接触接触其他的，感兴趣的东西。谈到读书这个问题，接触到的两个公司的老板，就都是非常喜欢读书的人。听他们的谈吐，以及对事物的看法，都有非常独到的见解与认识。回想自己的以前，只是对技术感兴趣，感觉看书的才都是书呆子，最后发现自己的谈吐，都是随心而出的，没有经过大脑的，恩，非常“不善言谈”。所以，想想这是需要有些丰富的阅历，并对这些做一些深入思考总结的，要么是从社会中获取，要么是从书籍中获取。另外，读书也是讲究方法的，需要对书籍中的知识做些总结、笔记或者感受的记录。</li>
+<li>多实践：<br>身为程序员，就得需要多多动手去敲代码。代码的学习，不仅仅是网上或者书上看到就结束了，也需要自己动手去练习，去实践。还有就是，技术架构的学习，若是再工作中得不到实践的时候，是可以考虑自己业余实践做一个项目，需求、设计自己一把抓，也是一番不错的体验，当然，若能赚到一笔额外的费用，就更加妙了。</li>
+</ol>
+<h3 id="u751F_u6D3B"><a href="#u751F_u6D3B" class="headerlink" title="生活"></a>生活</h3><ol>
+<li>养成良好习惯：<ul>
+<li>早睡早起</li>
+<li>多喝水、多吃水果</li>
+<li>每天预留2个小时左右的时间进行看书</li>
+</ul>
+</li>
+<li>多参加活动：<ul>
+<li>这里指的是参加线下的一些活动，扩宽视野，多结识一些朋友</li>
+</ul>
+</li>
+<li>多锻炼：<ul>
+<li>每周一定量的锻炼</li>
+</ul>
+</li>
+</ol>
+<h3 id="u5C55_u671B_u4E0E_u76EE_u6807"><a href="#u5C55_u671B_u4E0E_u76EE_u6807" class="headerlink" title="展望与目标"></a>展望与目标</h3><ol>
+<li>上面罗列的这些，都是接下来自己要去努力的方向，希望在接下来的一年内，逐渐养成这些良好的习惯。</li>
+<li>Android技术的成长，深入一些Android常用库的理解，在架构设计方面有足够深入的理解；另一方面完成“Android三剑客”与《Effective Java》书籍的阅读。</li>
+<li>博客文章的书写，尽量保证质量与篇数。</li>
+<li>Ruby与React的熟练学习。Ruby是我感觉其设计非常独特的一门语言，在以后的常用的脚本语言及简单的服务器多多熟练Ruby的使用；React感觉这是前端的一个趋势，则继续保持深入的学习。</li>
+</ol>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/22/Android内存泄露代码详解/" itemprop="url">
+                  Android内存泄露代码详解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-22T13:49:19+08:00" content="2015-12-22">
+              2015-12-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/22/Android内存泄露代码详解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/22/Android内存泄露代码详解/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <h1 id="u5185_u5B58_u6CC4_u9732"><a href="#u5185_u5B58_u6CC4_u9732" class="headerlink" title="内存泄露"></a>内存泄露</h1><p>在开发应用的过程中，我们总会遇到内存泄露的问题。现在通过代码列出一些常见的内存泄露的情况以及解决方案。</p>
+<p>在安卓中内存泄露常常出现的情况是指组件生命周期已经结束，但是其引用被其他对象持有，得不到释放引起的。常见的内存泄露的情况，主要是有两种：内部类和静态引用的问题。</p>
+<h2 id="u5185_u90E8_u7C7B"><a href="#u5185_u90E8_u7C7B" class="headerlink" title="内部类"></a>内部类</h2><h3 id="u5185_u90E8_u7C7B_u7684_u79CD_u7C7B"><a href="#u5185_u90E8_u7C7B_u7684_u79CD_u7C7B" class="headerlink" title="内部类的种类"></a>内部类的种类</h3><ul>
+<li>成员内部类</li>
+<li>局部内部类</li>
+<li>匿名内部类</li>
+<li>静态内部类</li>
+</ul>
+<h3 id="u975E_u9759_u6001_u5185_u90E8_u7C7B_u7684_u95EE_u9898"><a href="#u975E_u9759_u6001_u5185_u90E8_u7C7B_u7684_u95EE_u9898" class="headerlink" title="非静态内部类的问题"></a>非静态内部类的问题</h3><p>问题：非静态内部类会持有其外部类的引用。而外部类则不会有这个问题，所以我们在使用内部类的时候，要慎重考虑，尽量使用静态内部类。</p>
+<p><em>PS:在EffectiveJava一书中（第四章第22条：优先考虑静态成员类，P94），作者将这四种情况统一称为嵌套类，非静态内部类（除静态内部类之外的三种）统称为内部类</em></p>
+<h2 id="u4EE3_u7801_u8BE6_u89E3"><a href="#u4EE3_u7801_u8BE6_u89E3" class="headerlink" title="代码详解"></a>代码详解</h2><p>对内部类有一些了解之后，我们开始结合代码对内存泄露的问题进行讲解。<br>具体的代码地址见：<a href="https://github.com/david-wei/LightersTest" target="_blank" rel="external">LightersTest的leak包</a></p>
+<h3 id="u4F7F_u7528_u5E93"><a href="#u4F7F_u7528_u5E93" class="headerlink" title="使用库"></a>使用库</h3><ul>
+<li><a href="https://github.com/square/leakcanary" target="_blank" rel="external">LeakCanary</a> Square出的用来记录内存泄露的工具，非常好用</li>
+<li><a href="https://github.com/orhanobut/logger" target="_blank" rel="external">Logger</a> 可以详细地打印出Log信息，包括线程信息，方便查看</li>
+</ul>
+<h3 id="u5E38_u89C1_u8017_u65F6_u7C7B_u6CC4_u9732"><a href="#u5E38_u89C1_u8017_u65F6_u7C7B_u6CC4_u9732" class="headerlink" title="常见耗时类泄露"></a>常见耗时类泄露</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadActivity</span> <span class="keyword">extends</span> <span class="title">BaseActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span> <span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        showThreadInfo();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showThreadInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">                        Logger.d(i++ + <span class="string">""</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，当TreadActivity的生命周期结束，就会出现内存泄露。这里，主要匿名内部类new Runnable的使用，这是一个耗时的线程操作，它会持有外部类ThreadActivity的使用。当退出TreadActivity时，因Runnable持有其引用，导致其不能释放，造成内存泄露。<strong>注意，这里的new Thread并不是一个匿名内部类，仅仅是一个变量而已，Thread类并没有在TreadActivity中定义。</strong></p>
+<p>现在，针对这个ThreadActivity做一些改进。代码如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ThreadActivity</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">BaseActivity</span> &#123;</span></span><br><span class="line">    </span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> void onCreate (<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        showWeakThreadInfo();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    int i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> void showWeakThreadInfo() &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> <span class="type">MyThread</span>(<span class="keyword">new</span> <span class="type">Runnable</span>() &#123;</span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            public void run() &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">                        <span class="type">Thread</span>.sleep(<span class="number">1000</span>);</span><br><span class="line">                        <span class="type">Logger</span>.d(i++ + <span class="string">""</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (<span class="type">InterruptedException</span> e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Thread</span> &#123;</span></span><br><span class="line">        <span class="type">WeakReference</span>&lt;<span class="type">Runnable</span>&gt; mWeakReference;</span><br><span class="line"></span><br><span class="line">        public <span class="type">MyThread</span>(<span class="type">Runnable</span> runnable) &#123;</span><br><span class="line">            mWeakReference = <span class="keyword">new</span> <span class="type">WeakReference</span>&lt;&gt;(runnable);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="annotation">@Override</span></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            <span class="keyword">super</span>.run();</span><br><span class="line">            <span class="keyword">if</span> (mWeakReference.get() != <span class="literal">null</span>) &#123;</span><br><span class="line">                mWeakReference.get().run();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，主要做的一个改进是，在MyThread中，持有一个Runable的弱引用，这样，MyThread的执行，就不会对Activity的执行产生什么影响了。但是，在使用Demo的过程中，还是会出现内存泄露的问题。为什么呢？原因在new MyThread的过程中，穿进去的参数new Runable还是持有ThreadActivity的引用，这种写法真的是<em>然并卵</em>。</p>
+<h3 id="Weak_CallBack_u89E3_u51B3_u5F31_u5F15_u7528_u95EE_u9898"><a href="#Weak_CallBack_u89E3_u51B3_u5F31_u5F15_u7528_u95EE_u9898" class="headerlink" title="Weak CallBack解决弱引用问题"></a>Weak CallBack解决弱引用问题</h3><p>主要思想：就是把上面的耗时操作Thread相关代码，提取放置到一个新的类中，进一步弱化跟Activity的引用。代码如下：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WeakTask</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">excute</span>(<span class="params">CallBack callback</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> WeakThread(callback).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">WeakThread</span> <span class="title">extends</span> <span class="title">Thread</span> &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">WeakThread</span>(<span class="params">CallBack callback</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.call = <span class="keyword">new</span> WeakReference&lt;&gt;(callback);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> WeakReference&lt;CallBack&gt; call;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        @<span class="function">Override</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            super.run();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">if</span> (call.<span class="keyword">get</span>() != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    call.<span class="keyword">get</span>().onStart(i + <span class="string">""</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (call.<span class="keyword">get</span>() != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        call.<span class="keyword">get</span>().onExcute(i + <span class="string">""</span>);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        Logger.d(<span class="string">"Thread内部:"</span> + i);</span><br><span class="line">                    &#125;</span><br><span class="line">                    i++;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，使用到的CallBack仅仅做一个回调，代码如下：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">CallBack</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onStart</span>(<span class="params">String msg</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onExcute</span>(<span class="params">String msg</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onSucces</span>(<span class="params">String msg</span>)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，调用实现的代码就比较简单了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeakCallbackActivity</span> <span class="keyword">extends</span> <span class="title">BaseActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setTitle(R.string.leak_weak_callback);</span><br><span class="line">        execute();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Logger.d(<span class="string">"execute"</span>);</span><br><span class="line">        <span class="keyword">new</span> WeakTask().excute(<span class="keyword">new</span> CallBack() &#123;</span><br><span class="line"></span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStart</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">                Logger.d(msg);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onExcute</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">                Logger.d(msg);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="annotation">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSucces</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">                Logger.d(msg);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码所做的主要思想就是在耗时操作类中，持有的回调仅仅是一个弱引用，这样在Activity界面类中传入的CallBack匿名类因为弱引用是可以及时被回收掉的，就避免了Activity的泄露。</p>
+<h3 id="Handler_u5F15_u8D77_u7684_u5185_u5B58_u6CC4_u9732"><a href="#Handler_u5F15_u8D77_u7684_u5185_u5B58_u6CC4_u9732" class="headerlink" title="Handler引起的内存泄露"></a>Handler引起的内存泄露</h3><p>提到Handler，我们知道在通过Handler的post以及postDelayed方法会往对应的Looper的MessageQueue中插入一条Message，而Message中的target就是指向当前的handler。这样若是handler使用的是内部类，则会持有外部类的引用。而当这条Message还没被执行，则会导致咱们的外部类不能得到释放。所以，我们在使用Handler的时候，要谨慎一些，尽量使用静态Handler，然后持有Context的弱引用。具体详解可见：<a href="http://droidyue.com/blog/2014/12/28/in-android-handler-classes-should-be-static-or-leaks-might-occur/" target="_blank" rel="external">Android中Handler引起的内存泄露</a></p>
+<h2 id="u9759_u6001_u5F15_u7528"><a href="#u9759_u6001_u5F15_u7528" class="headerlink" title="静态引用"></a>静态引用</h2><p>另一种，常常出现内存泄露的问题就是静态应用了。若是当前的Activity，被一个静态变量持有，会导致当前的Activity不能及时的释放，这样就会导致内存泄露。代码如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">StaticReferenceActivity</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">BaseActivity</span> &#123;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> static <span class="type">Context</span> mContext;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    public void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setTitle(<span class="type">R</span>.string.leak_static_reference);</span><br><span class="line">        mContext = <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里举得例子是比较简单地，当前的StaticReferenceActivity被静态变量mContext所持有，这就要求我们在当前组件生命周期结束时（OnDestory回调）及时释放静态变量所持有的对象。这种常见的情况就是：在做一些静态初始化的过程中，会持有context的引用，譬如好多第三库都要求我们持有的是ApplicationContext的引用。还有就是我们给第三方库或者不知道其内部实现的代码，需要我们对其传入Context对象，这里我们就得小心一二了。</p>
+<p>最后，这里使用到得弱引用并不是万能的，它也有自己的问题，若是当一次GC之后，它就会被回收掉，会导致我们的回调收不到。所以我们需要对使用到的耗时操作时间长短，确定使用WeakReference还是SoftWeakRefernce或者强引用做一些筛选判定。</p>
+<p><strong>PS:</strong>若是还有疑问，则可以针对<a href="https://github.com/david-wei/LightersTest" target="_blank" rel="external">代码</a>进行一些修改来验证自己的猜想。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/06/RxJava原理解析一/" itemprop="url">
+                  RxJava原理解析一
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-12-06T23:53:00+08:00" content="2015-12-06">
+              2015-12-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/06/RxJava原理解析一/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/06/RxJava原理解析一/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>初学RxJava，对其许多的API颇感神奇，所以RxJava的原理充满了兴趣。正好最近教父大头鬼也出了一篇<a href="http://blog.csdn.net/lzyzsd/article/details/50110355" target="_blank" rel="external">RxJava解析的文章</a>，本人也结合源码给出自己的理解。</p>
+<p>这里主要先就一点来讲解。问题如下：</p>
+<h3 id="u8BA2_u9605_u8DDF_u88AB_u8BA2_u9605_u7684_u5173_u7CFB_uFF1F_u662F_u5982_u4F55_u5B9E_u73B0_u8FD9_u4E00_u673A_u5236_u7684_uFF1F"><a href="#u8BA2_u9605_u8DDF_u88AB_u8BA2_u9605_u7684_u5173_u7CFB_uFF1F_u662F_u5982_u4F55_u5B9E_u73B0_u8FD9_u4E00_u673A_u5236_u7684_uFF1F" class="headerlink" title="订阅跟被订阅的关系？是如何实现这一机制的？"></a>订阅跟被订阅的关系？是如何实现这一机制的？</h3><ul>
+<li>首先，理解OnSubscribe的概念</li>
+</ul>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * Invoked when Observable.subscribe is called.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnSubscribe</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">Action1</span>&lt;<span class="title">Subscriber</span>&lt;? <span class="title">super</span> <span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="comment">// cover for generics insanity</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>OnSubscribe继承自Action1，来看看Action1是干什么的<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * A one-argument action.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Action1</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">Action</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span> call(T t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Action1仅仅是一个参数的泛型接口，提供了使用泛型的类型来作为参数，这样就可以调用这个指定的泛型类型。<br>在此，我把这个onSubscribe理解为订阅的行为。这个行为是指，我在创建一个被观察者的时候，就是要指定这个被观察者所要发布的行为；在观察者的角度来理解，就表示观察者订阅了这些行为。</p>
+<ul>
+<li>理解了这个OnSubscribe之后，看看Observable的创建。这里主要看Observable的构造方法：</li>
+</ul>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line"> <span class="keyword">*</span> Creates an Observable with a Function to execute when it is subscribed to.</span><br><span class="line"> <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span></span><br><span class="line"> <span class="keyword">*</span> <span class="variable">&lt;em&gt;</span>Note:<span class="variable">&lt;/em&gt;</span> Use &#123;<span class="comment">@link #create(OnSubscribe)&#125; to create an Observable, instead of this constructor,</span></span><br><span class="line"> <span class="keyword">*</span> unless you specifically have a need for inheritance.</span><br><span class="line"> <span class="keyword">*</span> </span><br><span class="line"> <span class="keyword">*</span> <span class="comment">@param f</span></span><br><span class="line"> <span class="keyword">*</span>            &#123;<span class="comment">@link OnSubscribe&#125; to be executed when &#123;@link #subscribe(Subscriber)&#125; is called</span></span><br><span class="line"> <span class="keyword">*</span>/</span><br><span class="line">protected Observable(OnSubscribe<span class="variable">&lt;T&gt;</span> f) &#123;</span><br><span class="line">    this.onSubscribe = f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>额，很简单的嘛。这里主要就是需要把OnSubscribe的属性保存下来，（即咱们所订阅的行为）。这里咱们着重点放在这段代码的类注释上面：<strong>创建一个带有执行操作的被观察者，当它被订阅时，执行它的操作（即咱们提到的订阅行为）</strong>，<em>翻译的不好，欢迎拍砖啊</em>。另外，就是这里的推荐的内容了，官方希望我们尽量通过create来创建Obserable，而不是使用继承。</p>
+<ul>
+<li>订阅者/观察者的使用。咱们知晓了被观察者的创建，接下来就是观察者。它的实现就很简单了。主要是由一些的主要的周期函数构成。在此，就略过了。</li>
+<li>订阅操作的实现。这个是咱们关注的重头戏。先看代码：</li>
+</ul>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">Subscription <span class="title">subscribe</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> T&gt; subscriber, Observable&lt;T&gt; observable)</span> </span>&#123;</span><br><span class="line"><span class="comment">// validate and proceed</span></span><br><span class="line">  <span class="keyword">if</span> (subscriber == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"observer can not be null"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (observable.onSubscribe == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"onSubscribe function can not be null."</span>);</span><br><span class="line">      <span class="comment">/*</span><br><span class="line">       * the subscribe function can also be overridden but generally that's not the appropriate approach</span><br><span class="line">       * so I won't mention that in the exception</span><br><span class="line">       */</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// new Subscriber so onStart it</span></span><br><span class="line">  subscriber.onStart();</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/*</span><br><span class="line">   * See https://github.com/ReactiveX/RxJava/issues/216 for discussion on "Guideline 6.4: Protect calls</span><br><span class="line">   * to user code from within an Observer"</span><br><span class="line">   */</span></span><br><span class="line">  <span class="comment">// if not already wrapped</span></span><br><span class="line">  <span class="keyword">if</span> (!(subscriber <span class="keyword">instanceof</span> SafeSubscriber)) &#123;</span><br><span class="line">      <span class="comment">// assign to `observer` so we return the protected version</span></span><br><span class="line">      subscriber = <span class="keyword">new</span> SafeSubscriber&lt;T&gt;(subscriber);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// The code below is exactly the same an unsafeSubscribe but not used because it would </span></span><br><span class="line">  <span class="comment">// add a significant depth to already huge call stacks.</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// allow the hook to intercept and/or decorate</span></span><br><span class="line">      hook.onSubscribeStart(observable, observable.onSubscribe).call(subscriber);</span><br><span class="line">      <span class="function"><span class="keyword">return</span> hook.<span class="title">onSubscribeReturn</span><span class="params">(subscriber)</span></span>;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">      <span class="comment">// special handling for certain Throwable/Error/Exception types</span></span><br><span class="line">      Exceptions.throwIfFatal(e);</span><br><span class="line">      <span class="comment">// if an unhandled error occurs executing the onSubscribe we will propagate it</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          subscriber.onError(hook.onSubscribeError(e));</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Throwable e2) &#123;</span><br><span class="line">          Exceptions.throwIfFatal(e2);</span><br><span class="line">          <span class="comment">// if this happens it means the onError itself failed (perhaps an invalid function implementation)</span></span><br><span class="line">          <span class="comment">// so we are unable to propagate the error correctly and will just throw</span></span><br><span class="line">          RuntimeException r = <span class="keyword">new</span> RuntimeException(<span class="string">"Error occurred attempting to subscribe ["</span> + e.getMessage() + <span class="string">"] and then again while trying to pass to onError."</span>, e2);</span><br><span class="line">          <span class="comment">// TODO could the hook be the cause of the error in the on error handling.</span></span><br><span class="line">          hook.onSubscribeError(r);</span><br><span class="line">          <span class="comment">// TODO why aren't we throwing the hook's return value.</span></span><br><span class="line">          <span class="keyword">throw</span> r;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="function"><span class="keyword">return</span> Subscriptions.<span class="title">unsubscribed</span><span class="params">()</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码略多，能一行行读下来，还是需要相当耐心的。这里，我就从代码中获取到的知识点做些说明：1）首先也是最重要的，当执行了subscribe的方法，就开始执行Subscriber的订阅操作。2）Subscriber的onStart方法，是第一个被调用的。3）在代码中，<em>hook.onSubscribeStart(observable, observable.onSubscribe).call(subscriber)</em>，这句代码主要是获取到observable的onSubscribe属性，然后调用它的call方法，而且参数还是subscriber，很熟悉了，有木有，这就是之前所说的订阅的行为。4）在执行观察者订阅的行为的时候，可能会出现错误，通过捕捉异常，来调用subscriber的onError方法。</p>
+<ul>
+<li><p>总结：这里一个简单的完整的订阅与被订阅的流程就结束了，对其原理做以概括：创建一个被观察者，需要给被观察者指定其所<strong>发布的行为（onSubscribe来实现）</strong>；指定观察者时，只需指定相应的观察回调即可；在完成订阅的操作时，是先调用subscriber的onStart方法，之后通过<strong>订阅行为onSubscribe</strong>来调用subscriber完成相应的订阅操作，最后若出现异常则会回调subscriber的onError方法。</p>
+</li>
+<li><p>问题：因为之前看过一些RxJava的介绍文章，提到一点Subscriber的onComplete方法和onError方法是只会执行一个，记不太确切了，是不是这样。<br>但是从源码中可以看出，若是执行到onComplete的方法时候，若在其中抛出了一场，那之后Observable的subscribe方法会捕捉异常，又会调用到onError方法，所以这样看的话，onComplete和onError是有机会都执行到的。</p>
+</li>
+</ul>
+<p>看了这个简单的订阅，产生了一些疑问，也就是接下来要去研究的问题，也是下篇要解决的问题，列举如下：</p>
+<ul>
+<li>TODO:<br>1) onError和onComplete的执行唯一性<br>2）多个观察者是如何处理订阅的？</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/11/29/Activity之SwipeBack原理解析/" itemprop="url">
+                  Activity之SwipeBack原理解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-11-29T23:09:33+08:00" content="2015-11-29">
+              2015-11-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/11/29/Activity之SwipeBack原理解析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/29/Activity之SwipeBack原理解析/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>最近在项目中遇到了使用<a href="https://github.com/ikew0ng/SwipeBackLayout" target="_blank" rel="external">SwipeBackLayout</a>来模拟ios中右滑退出当前界面的效果（<em>万恶的模仿IOS</em>），颇感神奇，然后大致研究了下其代码实现的原理，接下来就一些主要的原理做一些讲解。</p>
+<h3 id="u539F_u7406_u6982_u62EC_uFF1A"><a href="#u539F_u7406_u6982_u62EC_uFF1A" class="headerlink" title="原理概括："></a>原理概括：</h3><p>通过使用SwipeBackLayout作为咱们设置contentView的Parent，之后右滑的操作，则会由咱们的最外层容器SwipeBackLayout来处理，右滑中移动的距离，则将SwipeBackLayout的childView向右移动相应的距离。移动之后左边的间隙，则在draw方法来绘制置透明色，来显示下层的界面（必须在主题中指定windowIsTranslucent为true，这样咱们才可以看到下层的activity）。</p>
+<h3 id="u539F_u7406_u89E3_u6790_uFF1A"><a href="#u539F_u7406_u89E3_u6790_uFF1A" class="headerlink" title="原理解析："></a>原理解析：</h3><p>为了验证咱们的原理是否准确，咱们通过一下几个方面进行验证：</p>
+<ul>
+<li><strong>SwipeBackLayout是如何设置最外层container的呢？</strong><br>在SwipeBackActivity中的onPostCreate的回调中，可以发现通过SwipeBackActivityHelper的onPostCreate来执行SwipeBackLayout的attachToActivity方法。在此方法中，通过拿到decorView的子view，使用狸猫换太子，把咱们SwipeBackLayout作为根view。具体的代码如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">attachToActivity</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">    mActivity = activity;</span><br><span class="line">    TypedArray a = activity.getTheme().obtainStyledAttributes(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;</span><br><span class="line">            android.R.attr.windowBackground</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">int</span> background = a.getResourceId(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    a.recycle();</span><br><span class="line"></span><br><span class="line">    ViewGroup decor = (ViewGroup) activity.getWindow().getDecorView();</span><br><span class="line">    ViewGroup decorChild = (ViewGroup) decor.getChildAt(<span class="number">0</span>);</span><br><span class="line">    decorChild.setBackgroundResource(background);</span><br><span class="line">    decor.removeView(decorChild);</span><br><span class="line">    addView(decorChild);</span><br><span class="line">    setContentView(decorChild);</span><br><span class="line">    decor.addView(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>SwipeBackLayout的右滑操作是否是进行自己的右移操作实现？</strong><br>像这种滑动的过程中，移动的view的效果，肯定都是在OnTouchEvent中的move方法，判断坐标的改变值，之后进行view的操作来实现的。接下来，咱们找一下代码进行验证一下，通过代码查找，发现它将onTouchEvent的操作逻辑放置在<br>ViewDragHelper中进行：<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">case</span> MotionEvent.<span class="string">ACTION_MOVE:</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (mDragState == STATE_DRAGGING) &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="typename">int</span> index = MotionEventCompat.findPointerIndex(ev, mActivePointerId);</span><br><span class="line">        <span class="keyword">final</span> <span class="typename">float</span> x = MotionEventCompat.getX(ev, index);</span><br><span class="line">        <span class="keyword">final</span> <span class="typename">float</span> y = MotionEventCompat.getY(ev, index);</span><br><span class="line">        <span class="keyword">final</span> <span class="typename">int</span> idx = (<span class="typename">int</span>) (x - mLastMotionX[mActivePointerId]);</span><br><span class="line">        <span class="keyword">final</span> <span class="typename">int</span> idy = (<span class="typename">int</span>) (y - mLastMotionY[mActivePointerId]);</span><br><span class="line"></span><br><span class="line">        dragTo(mCapturedView.getLeft() + idx, mCapturedView.getTop() + idy, idx, idy);</span><br><span class="line"></span><br><span class="line">        saveLastMotion(ev);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Check to see if any pointer is now over a draggable view.</span></span><br><span class="line">        <span class="keyword">final</span> <span class="typename">int</span> pointerCount = MotionEventCompat.getPointerCount(ev);</span><br><span class="line">        <span class="keyword">for</span> (<span class="typename">int</span> i = <span class="number">0</span>; i &lt; pointerCount; i++) &#123;</span><br><span class="line">            <span class="keyword">final</span> <span class="typename">int</span> pointerId = MotionEventCompat.getPointerId(ev, i);</span><br><span class="line">            <span class="keyword">final</span> <span class="typename">float</span> x = MotionEventCompat.getX(ev, i);</span><br><span class="line">            <span class="keyword">final</span> <span class="typename">float</span> y = MotionEventCompat.getY(ev, i);</span><br><span class="line">            <span class="keyword">final</span> <span class="typename">float</span> dx = x - mInitialMotionX[pointerId];</span><br><span class="line">            <span class="keyword">final</span> <span class="typename">float</span> dy = y - mInitialMotionY[pointerId];</span><br><span class="line"></span><br><span class="line">            reportNewEdgeDrags(dx, dy, pointerId);</span><br><span class="line">            <span class="keyword">if</span> (mDragState == STATE_DRAGGING) &#123;</span><br><span class="line">                <span class="comment">// Callback might have started an edge drag.</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">final</span> View toCapture = findTopChildUnder((<span class="typename">int</span>) x, (<span class="typename">int</span>) y);</span><br><span class="line">            <span class="keyword">if</span> (checkTouchSlop(toCapture, dx, dy)</span><br><span class="line">                    &amp;&amp; tryCaptureViewForDrag(toCapture, pointerId)) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        saveLastMotion(ev);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在以上的代码中，发现获取了移动的距离idx和idy，之后调用了dragTo的方法。跳转到dragTo方法：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">dragTo</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> top, <span class="keyword">int</span> dx, <span class="keyword">int</span> dy)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> clampedX = left;</span><br><span class="line">    <span class="keyword">int</span> clampedY = top;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> oldLeft = mCapturedView.getLeft();</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> oldTop = mCapturedView.getTop();</span><br><span class="line">    <span class="keyword">if</span> (dx != <span class="number">0</span>) &#123;</span><br><span class="line">        clampedX = mCallback.clampViewPositionHorizontal(mCapturedView, left, dx);</span><br><span class="line">        mCapturedView.offsetLeftAndRight(clampedX - oldLeft);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (dy != <span class="number">0</span>) &#123;</span><br><span class="line">        clampedY = mCallback.clampViewPositionVertical(mCapturedView, top, dy);</span><br><span class="line">        mCapturedView.offsetTopAndBottom(clampedY - oldTop);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dx != <span class="number">0</span> || dy != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> clampedDx = clampedX - oldLeft;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> clampedDy = clampedY - oldTop;</span><br><span class="line">        mCallback</span><br><span class="line">                .onViewPositionChanged(mCapturedView, clampedX, clampedY, clampedDx, clampedDy);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出它是通过调用了offsetLeftAndRight跟offsetTopAndBottom来改变相应view的位置。</p>
+<ul>
+<li><strong>在SwipeBackLayout右滑的过程中，左边的透明部分是如何处理的？</strong><br>这部分的逻辑，在SwipeBackLayout的drawChild的方法中，可以看出一些端倪。通过childView的移动之后的具体，在移动之后的间隙出，绘制透明色跟过度的图片。看代码：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">@<span class="function">Override</span><br><span class="line"><span class="keyword">protected</span> boolean <span class="title">drawChild</span><span class="params">(Canvas canvas, View child, <span class="keyword">long</span> drawingTime)</span> </span>&#123;</span><br><span class="line">    final boolean drawContent = child == mContentView;</span><br><span class="line"></span><br><span class="line">    boolean ret = super.drawChild(canvas, child, drawingTime);</span><br><span class="line">    <span class="keyword">if</span> (mScrimOpacity &gt; <span class="number">0</span> &amp;&amp; drawContent</span><br><span class="line">            &amp;&amp; mDragHelper.getViewDragState() != ViewDragHelper.STATE_IDLE) &#123;</span><br><span class="line">        drawShadow(canvas, child);</span><br><span class="line">        drawScrim(canvas, child);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawScrim</span><span class="params">(Canvas canvas, View child)</span> </span>&#123;</span><br><span class="line">    final <span class="keyword">int</span> baseAlpha = (mScrimColor &amp; <span class="number">0xff000000</span>) &gt;&gt;&gt; <span class="number">24</span>;</span><br><span class="line">    final <span class="keyword">int</span> alpha = (<span class="keyword">int</span>) (baseAlpha * mScrimOpacity);</span><br><span class="line">    final <span class="keyword">int</span> color = alpha &lt;&lt; <span class="number">24</span> | (mScrimColor &amp; <span class="number">0xffffff</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((mTrackingEdge &amp; EDGE_LEFT) != <span class="number">0</span>) &#123;</span><br><span class="line">        canvas.clipRect(<span class="number">0</span>, <span class="number">0</span>, child.getLeft(), getHeight());</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((mTrackingEdge &amp; EDGE_RIGHT) != <span class="number">0</span>) &#123;</span><br><span class="line">        canvas.clipRect(child.getRight(), <span class="number">0</span>, getRight(), getHeight());</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((mTrackingEdge &amp; EDGE_BOTTOM) != <span class="number">0</span>) &#123;</span><br><span class="line">        canvas.clipRect(child.getLeft(), child.getBottom(), getRight(), getHeight());</span><br><span class="line">    &#125;</span><br><span class="line">    canvas.drawColor(color);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawShadow</span><span class="params">(Canvas canvas, View child)</span> </span>&#123;</span><br><span class="line">    final Rect childRect = mTmpRect;</span><br><span class="line">    child.getHitRect(childRect);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((mEdgeFlag &amp; EDGE_LEFT) != <span class="number">0</span>) &#123;</span><br><span class="line">        mShadowLeft.setBounds(childRect.left - mShadowLeft.getIntrinsicWidth(), childRect.top,</span><br><span class="line">                childRect.left, childRect.bottom);</span><br><span class="line">        mShadowLeft.setAlpha((<span class="keyword">int</span>) (mScrimOpacity * FULL_ALPHA));</span><br><span class="line">        mShadowLeft.draw(canvas);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((mEdgeFlag &amp; EDGE_RIGHT) != <span class="number">0</span>) &#123;</span><br><span class="line">        mShadowRight.setBounds(childRect.right, childRect.top,</span><br><span class="line">                childRect.right + mShadowRight.getIntrinsicWidth(), childRect.bottom);</span><br><span class="line">        mShadowRight.setAlpha((<span class="keyword">int</span>) (mScrimOpacity * FULL_ALPHA));</span><br><span class="line">        mShadowRight.draw(canvas);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((mEdgeFlag &amp; EDGE_BOTTOM) != <span class="number">0</span>) &#123;</span><br><span class="line">        mShadowBottom.setBounds(childRect.left, childRect.bottom, childRect.right,</span><br><span class="line">                childRect.bottom + mShadowBottom.getIntrinsicHeight());</span><br><span class="line">        mShadowBottom.setAlpha((<span class="keyword">int</span>) (mScrimOpacity * FULL_ALPHA));</span><br><span class="line">        mShadowBottom.draw(canvas);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以明确的看出，他正是根据不同的移动方向，来绘制咱们所需要的那块透明的过度区域。在drawScrim绘制底色，在drawShadow中绘制过渡的图片，来达到咱们所需要的效果。</p>
+<h3 id="u4E0D_u8DB3_u4E4B_u5904_uFF1A"><a href="#u4E0D_u8DB3_u4E4B_u5904_uFF1A" class="headerlink" title="不足之处："></a>不足之处：</h3><p>我们从代码中可以发现，它是在decorview中给第一个子view来添加一个父view（SwipeBackLayout）来实现view滑动之后，结束当前activity的效果。注意问题来了，decorView的第一个childView是不包含状态栏的，这样在5.0上就会出现一个视觉的bug。界面在右滑的过程中，状态栏是不改变的，在确定滑动过程结束之后，才会执行activity的finish的方法，这样状态栏次啊会消失。因为在5.0上的，嗯，我的大魅族就是5.0的，亲测这个bug，5.0上系统会根据界面的头部，动态来设置状态栏的颜色，（当然代码也是可以设置的），这个视觉的bug就比较明显了。</p>
+<h3 id="Demo_u5B9E_u73B0_uFF1A"><a href="#Demo_u5B9E_u73B0_uFF1A" class="headerlink" title="Demo实现："></a>Demo实现：</h3><p>现在，楼主感觉自己掌握了这个原理，就来验证是否可行，咱们通过简单的demo来实现。<a href="https://github.com/david-wei/SwipeBackPractice" target="_blank" rel="external">Demo地址</a>，主要的细节点如下：</p>
+<ul>
+<li>在主题中设置windowIsTransluceni为true</li>
+<li>onIntercept跟onTouchEvent事件的重写，进行指定的view的移动操作。</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/11/14/ReactNative初体验HelloWorld/" itemprop="url">
+                  ReactNative初体验HelloWorld
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-11-14T00:13:21+08:00" content="2015-11-14">
+              2015-11-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/11/14/ReactNative初体验HelloWorld/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/14/ReactNative初体验HelloWorld/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>近来由于ReactNative颇为火爆，所以也尝试了一把ReactNative搭建最初的HelloWorld程序。我是跟着race604大神的<a href="http://www.race604.com/react-native-for-android-start/" target="_blank" rel="external">ReactNative的专题</a>开始一步一步操作的。大家也可以参照官方的文档，下面主要记录一下，在搭建第一个ReactNative项目中遇到的坑。</p>
+<ol>
+<li>使用nvm下载Node4.0之后，系统默认node还一直处于低版本的情况。<br>使用nvm list命令是可以查看到node 4.0是成功安装的。出现系统Node版本还处于较低的情况。只可能是之前通过homebrew安装过Node了，解决办法是使用brew uninstall node，将brew中的Node卸载掉。</li>
+<li><p>在执行brew update 的时候，发现一直失败。（提示缺少参数）<br>找到我的homebrew的目录，发现竟然没有远程仓库，不是git目录，这可叫我怎么升级啊。因为homebrew装的比较早，当时比较懵懂，可能中间误操作过什么。所以怎么办呢？</p>
+<ul>
+<li>1）把我本地的Homebrew的目录连接到github上的homebrew，但是发现在执行merge的过程中，冲突的东西略多（自己通过homebrew也安装了好多东西）。这就太麻烦了。切换第二种。</li>
+<li>2）重命名本地homebrew的目录名称（也就是相当于删除，这里以防万一，做个备份）。再执行brew -v的时候，发现brew命令没了。那好，再按官网homebrew的安装方法重新安装一遍，再把需要用brew安装的再重新安装一遍。（这个的过程还是蛮简单的，就是比较好时而已），接下来再执行brew udpate的时候，发现没问题了。Ok.</li>
+</ul>
+</li>
+<li><p>执行react-native init project的时候，发现好久的等待，竟然还是处于初始的状态。问了几个大神，他们说遇到这种情况，就断掉重试一下。我重试了好几次，还是没反应。可神奇的是第二天早上的时候，再执行此操作的时候，竟然神奇的下载下来了。（看来这是个人品活。。）</p>
+</li>
+</ol>
+<p>额，就遇到这几个问题，由于懂得不是太多，解决问题的办法都比较粗暴，先简单的留下一个记录。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/10/26/Viewpager实现循环滚动/" itemprop="url">
+                  Viewpager实现循环滚动
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-10-26T23:41:03+08:00" content="2015-10-26">
+              2015-10-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/10/26/Viewpager实现循环滚动/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/26/Viewpager实现循环滚动/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>Android中常常也会出现像Web网页上图片轮播的效果，也就是实现图片的循环滚动，这里以<a href="https://github.com/imbryk/LoopingViewPager" target="_blank" rel="external">LoopingViewPager</a>为例，讲解一下如何实现viewPager的无限滚动。</p>
+<p>###LoopingViewPager原理讲解<br>这里主要有两个类LoopPagerAdapterWrapper和LoopViewPager。主要的思想简单来说就是存在两个数据源，外面的数据源就是我们看到的数据项，内部的数据源，需要在开头和末尾各添加1个数据项（以A、B表示），这样相比外部的count多两项，A显示的内容跟真实数据源最后一项相同，B显示的内容跟真实数据源第一项相同。</p>
+<ul>
+<li>LoopPagerAdapterWrapper<br>通过继承PagerAdapter，实现PagerAdapter的功能，内部引用了一个新的pagerAdpater，实现了一个新的数据源的映射。映射的规则是这样的：<br>原始的数据源[0,1,2,3]，对应内部的数据源则是[0,1,2,3,4,5]，换算的公式则是，realPosition=(position-1)%count 对应的关系：[0-&gt;3, 1-&gt;0, 2-&gt;1, 3-&gt;2, 4-&gt;3, 5-&gt;0]。这样，内部的数据源在调用instantiateItem的时候，则会在生成对应的View的时候，调用对应realPostion位置上的View，具体的代码如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">toRealPosition</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> realCount = getRealCount();</span><br><span class="line">       <span class="keyword">if</span> (realCount == <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">int</span> realPosition = (position-<span class="number">1</span>) % realCount;</span><br><span class="line">       <span class="keyword">if</span> (realPosition &lt; <span class="number">0</span>)</span><br><span class="line">           realPosition += realCount;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> realPosition;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> Object <span class="title">instantiateItem</span><span class="params">(ViewGroup container, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> realPosition = (mAdapter <span class="keyword">instanceof</span> FragmentPagerAdapter || mAdapter <span class="keyword">instanceof</span> FragmentStatePagerAdapter)</span><br><span class="line">               ? position</span><br><span class="line">               : toRealPosition(position);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (mBoundaryCaching) &#123;</span><br><span class="line">           ToDestroy toDestroy = mToDestroy.get(position);</span><br><span class="line">           <span class="keyword">if</span> (toDestroy != <span class="keyword">null</span>) &#123;</span><br><span class="line">               mToDestroy.remove(position);</span><br><span class="line">               <span class="keyword">return</span> toDestroy.object;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> mAdapter.instantiateItem(container, realPosition);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>上面的代码解决了正常情况下，在边界条件下，viewpager可以滑动的问题（添加了两个边界的pagerItem的显示），但是会有一个新的问题产生，就是当我滑动到这两个新添加的pagerItem的时候，是如何可以继续向边界滑动的。</p>
+<h3 id="LoopViewPager"><a href="#LoopViewPager" class="headerlink" title="LoopViewPager"></a>LoopViewPager</h3><p>通过继承Viewpager,并设置了一个内部的PagechangeListener，在onPageScrolled的回调中，发现当内部的pagerAdpater的position滑动到边界的时候，通过调用setCurrentItem，将position又设置到正确的位置。具体代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrolled</span><span class="params">(<span class="keyword">int</span> position, <span class="keyword">float</span> positionOffset,</span><br><span class="line">               <span class="keyword">int</span> positionOffsetPixels)</span> </span>&#123;</span><br><span class="line">           <span class="keyword">int</span> realPosition = position;</span><br><span class="line">           <span class="keyword">if</span> (mAdapter != <span class="keyword">null</span>) &#123;</span><br><span class="line">               realPosition = mAdapter.toRealPosition(position);</span><br><span class="line"></span><br><span class="line">               <span class="keyword">if</span> (positionOffset == <span class="number">0</span></span><br><span class="line">                       &amp;&amp; mPreviousOffset == <span class="number">0</span></span><br><span class="line">                       &amp;&amp; (position == <span class="number">0</span> || position == mAdapter.getCount() - <span class="number">1</span>)) &#123;</span><br><span class="line">                   setCurrentItem(realPosition, <span class="keyword">false</span>);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           mPreviousOffset = positionOffset;</span><br><span class="line">           <span class="keyword">if</span> (mOuterPageChangeListener != <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">if</span> (realPosition != mAdapter.getRealCount() - <span class="number">1</span>) &#123;</span><br><span class="line">                   mOuterPageChangeListener.onPageScrolled(realPosition,</span><br><span class="line">                           positionOffset, positionOffsetPixels);</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   <span class="keyword">if</span> (positionOffset &gt; .<span class="number">5</span>) &#123;</span><br><span class="line">                       mOuterPageChangeListener.onPageScrolled(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">                   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                       mOuterPageChangeListener.onPageScrolled(realPosition,</span><br><span class="line">                               <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure></p>
+<p>综上，可以看出这是个比较简单的方案了，唯一不足的地方就是需要监听pageChangeListener的pageScroll方法，重新设置position的值（具体的方法是调用scrollTo进行重绘一遍，比较浪费性能）。</p>
+<h3 id="u8FDB_u9636_u5B9E_u73B0_u81EA_u52A8_u6EDA_u52A8_u7684_u529F_u80FD"><a href="#u8FDB_u9636_u5B9E_u73B0_u81EA_u52A8_u6EDA_u52A8_u7684_u529F_u80FD" class="headerlink" title="进阶实现自动滚动的功能"></a>进阶实现自动滚动的功能</h3><p>因为Viewpager已经自带了smoothScroll的功能，则我们只需要在固定的间隔时间发送一个让viewPager滚动的message即可，这个还是比较简单而且容易实现的。</p>
+<p>PS:转载请注明来自原文链接。</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/10/18/ListView滑动性能优化/" itemprop="url">
+                  ListView图片加载讲解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-10-18T23:24:48+08:00" content="2015-10-18">
+              2015-10-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/10/18/ListView滑动性能优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/18/ListView滑动性能优化/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>在ListView加载图片的时候，我们就会关于这里的图片加载产生一些问题。另外，我们知道针对ListView加载图片常用的优化方案之一就是，在列表的滑动过程中，暂停图片的加载任务，在滑动结束之后，则继续之前的任务。所以我们针对这些问题进行一些探讨研究（以UIL图片加载为例）。</p>
+<ul>
+<li><p>知识点1：加载图片的线程的控制;<br>我们知道在ListView的adapter的getView方法中，进行图片的获取，这里为执行LoadAndDisplayImageTask，这是一个单独的线程去加载图片。但我们不会对每个View加载图片都去执行一个新的线程，所以这里采用的是一个线程池来控制线程的数目，来避免频繁地创建线程。</p>
+</li>
+<li><p>知识点2：在ListView的滑动过程中，是如何暂停当前的图片下载的任务的；<br> 由于这里我们采用的是单独的线程来控制图片的加载显示的，针对线程，我们使用的是加锁来使线程阻塞，当ListView滑动结束，则使其恢复。<br> 在UIL中，锁声明的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> AtomicBoolean paused = <span class="keyword">new</span> AtomicBoolean(<span class="keyword">false</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Object pauseLock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Pauses engine. All new "load&amp;display" tasks won't be executed until ImageLoader is &#123;<span class="doctag">@link</span> #resume() resumed&#125;.Already running tasks are not paused.</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	paused.set(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Resumes engine work. Paused "load&amp;display" tasks will continue its work. */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	paused.set(<span class="keyword">false</span>);</span><br><span class="line">	<span class="keyword">synchronized</span> (pauseLock) &#123;</span><br><span class="line">		pauseLock.notifyAll();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">     </span><br><span class="line"><span class="function">AtomicBoolean <span class="title">getPause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> paused;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Object <span class="title">getPauseLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> pauseLock;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在LoadAndDisplayImageTask的方法中，执行图片的加载的时候，会进行pause的判断。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@return</span> &lt;b&gt;true&lt;/b&gt; - if task should be interrupted; &lt;b&gt;false&lt;/b&gt; - otherwise */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">waitIfPaused</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	AtomicBoolean pause = engine.getPause();</span><br><span class="line">	<span class="keyword">if</span> (pause.get()) &#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (engine.getPauseLock()) &#123;</span><br><span class="line">			<span class="keyword">if</span> (pause.get()) &#123;</span><br><span class="line">				L.d(LOG_WAITING_FOR_RESUME, memoryCacheKey);</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					engine.getPauseLock().wait();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					L.e(LOG_TASK_INTERRUPTED, memoryCacheKey);</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				L.d(LOG_RESUME_AFTER_PAUSE, memoryCacheKey);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> isTaskNotActual();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外，pause跟resume的调用，则是在UIL的PauseOnScrollListener进行滑动判断的调用。所以可以明显的看出是通过object的wait跟notifyAll实现线程同步，来达到暂停图片加载的任务的。</p>
+</li>
+<li><p>知识点3：当一个Item的view滑出屏幕外，应该怎么处理其对应的图片加载任务：<br>我们先要判断的是怎么确定一个view已经滑出屏幕之外了呢？这里有个取巧的办法就是判断view是否重用了，因为ListView显示界面所需要的ItemView是固定的（确保当前ListView是采用convertView的缓存机制），而在实现图片显示加载的时候，每个view是要绑定当前加载的图片的链接的，如果当前任务（是指当前View显示加载图片的线程）的图片链接与View要显示的图片链接不一致，则可以判定当前view已经重用了。所以则可以结束当前的显示图片的任务了，具体判断View重用的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@return</span> &lt;b&gt;true&lt;/b&gt; - if current ImageAware is reused for displaying another image; &lt;b&gt;false&lt;/b&gt; - otherwise */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isViewReused</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	String currentCacheKey = engine.getLoadingUriForView(imageAware);</span><br><span class="line">	<span class="comment">// Check whether memory cache key (image URI) for current ImageAware is actual.</span></span><br><span class="line">	<span class="comment">// If ImageAware is reused for another task then current task should be cancelled.</span></span><br><span class="line">	<span class="keyword">boolean</span> imageAwareWasReused = !memoryCacheKey.equals(currentCacheKey);</span><br><span class="line">	<span class="keyword">if</span> (imageAwareWasReused) &#123;</span><br><span class="line">		L.d(LOG_TASK_CANCELLED_IMAGEAWARE_REUSED, memoryCacheKey);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而在调用isViewReused的checkViewReused的如下，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@throws</span> TaskCancelledException if target ImageAware is collected by GC */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkViewReused</span><span class="params">()</span> <span class="keyword">throws</span> TaskCancelledException </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (isViewReused()) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> TaskCancelledException();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，在线程的主体run方法中，通过调用checkTaskNotActual()判断view重用或者被回收，抛出TaskCancelledException，来结束当前的线程，并回调图片加载的cancel方法。</p>
+<p>最后，我感兴趣的几个问题记录如上，有疑问，大家不吝赐教，可以一起探讨。</p>
+<p>PS:转载请注明来自原文链接。</p>
+</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
 
   </section>
 
@@ -397,7 +1550,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -411,7 +1564,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
