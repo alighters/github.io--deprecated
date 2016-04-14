@@ -242,6 +242,156 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/15/Dagger2深入理解/" itemprop="url">
+                  Dagger2深入理解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2016-04-15T00:29:52+08:00" content="2016-04-15">
+              2016-04-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/15/Dagger2深入理解/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/15/Dagger2深入理解/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>最近，看到一些小伙伴想要入门Dagger2，加之最近刚经历了Dagger2的水深火热，在这里针对Dagger2中不同的注解方式，会生成怎样的代码，结合其生成的不同代码，来帮助大家做一些深入的理解。</p>
+<p>#概念<br>首先，Dagger2是一个DI的解决方案，跟之前接触过的Spring相比，它最主要的好处是通过apt插件在编译阶段时，用来生成注入的代码；而Spring是需要在运行时，通过XML或者注解来进行代码注入的。所以，相比来说，在性能上，Dagger2是优于Spring，但带来的是编译阶段时间的延长。这样的话，每当我们修改或者添加这些注解代码的时候，就需要我们重新Build一下（即由apt插件来生成我们所需要使用的代码），build时间的延长，感觉这对Android开发程序员来说，应该习以为常了吧。（掩面而泣。。。）</p>
+<p>另外，不得不提的就是apt插件的成熟。apt插件通过生成代码的方式会使得我们则针对特定规则的代码，通过添加注解，使用apt在编译阶段生成代码，减少我们的代码书写量。在gayhub上，已经有很多成熟的库，在使用apt来生成代码，像<a href="https://github.com/workarounds/bundler" target="_blank" rel="external">bundler</a>这个库，就是通过封装Intent参数跟界面组件来绑定，这样我们就可不必通过getIntent来一个个获取参数。另外还提供了使用<code>saveState</code>和<code>restoreState</code>，使得我们在界面组件异常退出的时候，不必再使用<code>savedInstance</code>来进行数据的保存与获取。还有就是支持<code>Parcelable</code>数据以及自定义数据parser，另作者不由不喜欢啊。</p>
+<p>#使用<br>根项目添加apt的版本依赖</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    ...</span><br><span class="line">   <span class="keyword">classpath</span> <span class="string">'com.neenbedankt.gradle.plugins:android-apt:1.8'</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>项目中配置apt插件的使用，以及Dagger2的版本</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'com.neenbedankt.android-apt'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">   <span class="keyword">compile</span> <span class="string">'com.google.dagger:dagger:2.0.2'</span></span><br><span class="line">   <span class="keyword">compile</span> <span class="string">'com.google.dagger:dagger-compiler:2.0.2'</span></span><br><span class="line">   <span class="keyword">compile</span> <span class="string">'org.glassfish:javax.annotation:10.0-b28'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>#重要概念<br>这里简单提一下它们的主要作用，dagger2两个很重要的东西，不过介绍的文章很多，需要的话，可自行查找一下。</p>
+<ul>
+<li><h3 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h3><p>用来为“被注入方“提供其所需要的注入类。当在子Scoped的Component中，也要被注入相同的类的时候，则需要在当前的Component添加相应的返回对应的类的方法。</p>
+</li>
+<li><h3 id="Module"><a href="#Module" class="headerlink" title="Module"></a>Module</h3><p>用来提供上层所需要的依赖类。这里所带来的好处就是，所有的依赖类都是通过Module来提供出去，当我们的依赖发生改变时，我们只需要在这里改变提供一个新的对象类即可，而不影响我们上层使用的代码。这里，举一个最简单的例子就是，当我们调用服务器提供的API的时候，我们为上层提供了一个Repository命名的接口，并对其返回的是调用API的类；这里，当API还未实现，我们仅仅对其提供一个MockAPI即可，上层的调用者根本不需要关心我的数据提供从哪里来，是否真实。</p>
+</li>
+</ul>
+<h1 id="u4F9D_u8D56_u5B9E_u73B0_u8F85_u52A9_u7C7B"><a href="#u4F9D_u8D56_u5B9E_u73B0_u8F85_u52A9_u7C7B" class="headerlink" title="依赖实现辅助类"></a>依赖实现辅助类</h1><p>###Provider<br><code>Provider</code>定义了一个来提供泛型T的方式，是个很简单的接口。</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public interface Provider<span class="variable">&lt;T&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">   /<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">    <span class="keyword">*</span> Provides a fully-constructed and injected instance of &#123;<span class="comment">@code T&#125;.</span></span><br><span class="line">    <span class="keyword">*</span></span><br><span class="line">    <span class="keyword">*</span> <span class="comment">@throws RuntimeException if the injector encounters an error while</span></span><br><span class="line">    <span class="keyword">*</span>  providing an instance. For example, if an injectable member on</span><br><span class="line">    <span class="keyword">*</span>  &#123;<span class="comment">@code T&#125; throws an exception, the injector may wrap the exception</span></span><br><span class="line">    <span class="keyword">*</span>  and throw it to the caller of &#123;<span class="comment">@code get()&#125;. Callers should not try</span></span><br><span class="line">    <span class="keyword">*</span>  to handle such exceptions as the behavior may vary across injector</span><br><span class="line">    <span class="keyword">*</span>  implementations and even different configurations of the same injector.</span><br><span class="line">    <span class="keyword">*</span>/</span><br><span class="line">   T get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ScopedProvider"><a href="#ScopedProvider" class="headerlink" title="ScopedProvider"></a>ScopedProvider</h3><p>而<code>ScopedProvider</code>在<code>Provider</code>的基础上，加上了Scoped的概念，主要通过指定类型的Factory来创建出来对应类型的ScopedProvider，在get方法上，主要通过<code>double-checked</code>来确保获取实例T的唯一性。</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * A &#123;@link <span class="type">Provider</span>&#125; implementation that memoizes the <span class="literal">result</span> <span class="keyword">of</span> a &#123;@link <span class="type">Factory</span>&#125; instance.</span><br><span class="line"> *</span><br><span class="line"> * @author <span class="type">Gregory</span> <span class="type">Kick</span></span><br><span class="line"> * @since <span class="number">2</span>.<span class="number">0</span></span><br><span class="line"> */</span><br><span class="line">public final class <span class="type">ScopedProvider</span>&lt;T&gt; implements <span class="type">Provider</span>&lt;T&gt; &#123;</span><br><span class="line">   private <span class="keyword">static</span> final <span class="type">Object</span> <span class="type">UNINITIALIZED</span> = new <span class="type">Object</span>();</span><br><span class="line"></span><br><span class="line">   private final <span class="type">Factory</span>&lt;T&gt; factory;</span><br><span class="line">   private volatile <span class="type">Object</span> instance = <span class="type">UNINITIALIZED</span>;</span><br><span class="line"></span><br><span class="line">   private <span class="type">ScopedProvider</span>(<span class="type">Factory</span>&lt;T&gt; factory) &#123;</span><br><span class="line">      assert factory != null;</span><br><span class="line">      this.factory = factory;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   @<span class="type">SuppressWarnings</span>(<span class="string">"unchecked"</span>) // <span class="keyword">cast</span> only happens <span class="keyword">when</span> <span class="literal">result</span> comes <span class="keyword">from</span> the factory</span><br><span class="line">      @<span class="type">Override</span></span><br><span class="line">      public T get() &#123;</span><br><span class="line">         // double-check idiom <span class="keyword">from</span> <span class="type">EJ2</span>: <span class="type">Item</span> <span class="number">71</span></span><br><span class="line">         <span class="type">Object</span> <span class="literal">result</span> = instance;</span><br><span class="line">         <span class="keyword">if</span> (<span class="literal">result</span> == <span class="type">UNINITIALIZED</span>) &#123;</span><br><span class="line">            synchronized (this) &#123;</span><br><span class="line">               <span class="literal">result</span> = instance;</span><br><span class="line">               <span class="keyword">if</span> (<span class="literal">result</span> == <span class="type">UNINITIALIZED</span>) &#123;</span><br><span class="line">                  instance = <span class="literal">result</span> = factory.get();</span><br><span class="line">               &#125;</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> (T) <span class="literal">result</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">   /** <span class="type">Returns</span> a new scoped provider <span class="keyword">for</span> the given factory. */</span><br><span class="line">   public <span class="keyword">static</span> &lt;T&gt; <span class="type">Provider</span>&lt;T&gt; create(<span class="type">Factory</span>&lt;T&gt; factory) &#123;</span><br><span class="line">      <span class="keyword">if</span> (factory == null) &#123;</span><br><span class="line">         throw new <span class="type">NullPointerException</span>();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> new <span class="type">ScopedProvider</span>&lt;T&gt;(factory);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>###Factory<br><code>Factory</code>仅仅继承了一个Provider，并是一个空的实现。</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Factory</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">Provider</span>&lt;<span class="title">T</span>&gt; </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>###MembersInjector<br>从类的注释中，可以看出它的主要作用是给类的属性字段，或者方法参数来提供注入，并忽略是否在含有构造器的注入，都会生成<code>MembersInjector</code>的类。</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line"> <span class="keyword">*</span> Injects dependencies into the fields and methods on instances of type &#123;<span class="comment">@code T&#125;. Ignores the</span></span><br><span class="line"> <span class="keyword">*</span> presence or absence of an injectable constructor.</span><br><span class="line"> <span class="keyword">*</span></span><br><span class="line"> <span class="keyword">*</span> <span class="comment">@param &lt;T&gt; type to inject members of</span></span><br><span class="line"> <span class="keyword">*</span></span><br><span class="line"> <span class="keyword">*</span> <span class="comment">@author Bob Lee</span></span><br><span class="line"> <span class="keyword">*</span> <span class="comment">@author Jesse Wilson</span></span><br><span class="line"> <span class="keyword">*</span> <span class="comment">@since 2.0 (since 1.0 without the provision that &#123;@link #injectMembers&#125; cannot accept</span></span><br><span class="line"> <span class="keyword">*</span>      &#123;<span class="comment">@code null&#125;)</span></span><br><span class="line"> <span class="keyword">*</span>/</span><br><span class="line">public interface MembersInjector<span class="variable">&lt;T&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">   /<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">    <span class="keyword">*</span> Injects dependencies into the fields and methods of &#123;<span class="comment">@code instance&#125;. Ignores the presence or</span></span><br><span class="line">    <span class="keyword">*</span> absence of an injectable constructor.</span><br><span class="line">    <span class="keyword">*</span></span><br><span class="line">    <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>Whenever the object graph creates an instance, it performs this injection automatically</span><br><span class="line">    <span class="keyword">*</span> (after first performing constructor injection), so if you're able to let the object graph</span><br><span class="line">    <span class="keyword">*</span> create all your objects for you, you'll never need to use this method.</span><br><span class="line">    <span class="keyword">*</span></span><br><span class="line">    <span class="keyword">*</span> <span class="comment">@param instance into which members are to be injected</span></span><br><span class="line">    <span class="keyword">*</span> <span class="comment">@throws NullPointerException if &#123;@code instance&#125; is &#123;@code null&#125;</span></span><br><span class="line">    <span class="keyword">*</span>/</span><br><span class="line">   void injectMembers(T instance);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="u6CE8_u5165_u65B9_u5F0F"><a href="#u6CE8_u5165_u65B9_u5F0F" class="headerlink" title="注入方式"></a>注入方式</h1><p>这里通过列举几种不同的注入方式，探究其的实现，了解它们的不同使用场合</p>
+<p>###构造器注入<br>这里先看一个简单的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestData</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="annotation">@Inject</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">TestData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过在构造器上添加<code>@Inject</code>注解，则会编译生成一个实现了<code>Factory</code>接口的单例类，用来生成TestData类。生成的代码如下：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@Generated</span>(<span class="string">"dagger.internal.codegen.ComponentProcessor"</span>)</span><br><span class="line">public <span class="class"><span class="keyword">enum</span> <span class="title">TestData_Factory</span> <span class="title">implements</span> <span class="title">Factory</span>&lt;<span class="title">TestData</span>&gt; &#123;</span></span><br><span class="line">   <span class="constant">INSTANCE</span>;</span><br><span class="line"></span><br><span class="line">   <span class="variable">@Override</span></span><br><span class="line">   public <span class="constant">TestData</span> get() &#123;  </span><br><span class="line">      <span class="keyword">return</span> new <span class="constant">TestData</span>()</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   public static <span class="constant">Factory</span>&lt;<span class="constant">TestData</span>&gt; create() &#123;  </span><br><span class="line">      <span class="keyword">return</span> <span class="constant">INSTANCE</span>;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出通过构造器注入的生成的Factory类，是一个通过enum来实现的一个单例工厂类，是不是有个新技能Get。</p>
+<h3 id="Module_u6CE8_u5165"><a href="#Module_u6CE8_u5165" class="headerlink" title="Module注入"></a>Module注入</h3><p>实现一个Module来提供TestData的依赖，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestModule</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="annotation">@Singleton</span></span><br><span class="line">   <span class="annotation">@Provides</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> TestData <span class="title">provideTestData</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> TestData();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再查看一下，通过apt生成之后的代码：</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@Generated</span>(<span class="string">"dagger.internal.codegen.ComponentProcessor"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> TestModule_ProvideTestDataFactory implements Factory&lt;TestData&gt; &#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> TestModule <span class="keyword">module</span>;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> TestModule_ProvideTestDataFactory(TestModule <span class="keyword">module</span>) &#123;  </span><br><span class="line">      <span class="keyword">assert</span> <span class="keyword">module</span> != <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">this</span>.<span class="keyword">module</span> = <span class="keyword">module</span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">@Override</span></span><br><span class="line">      <span class="keyword">public</span> TestData get() &#123;  </span><br><span class="line">         TestData provided = <span class="keyword">module</span>.provideTestData();</span><br><span class="line">         <span class="keyword">if</span> (provided == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Cannot return null from a non-@Nullable @Provides method"</span>);</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> provided;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> Factory&lt;TestData&gt; create(TestModule <span class="keyword">module</span>) &#123;  </span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> TestModule_ProvideTestDataFactory(<span class="keyword">module</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，针对Module注解，dagger2会根据咱们定义了<code>Provides</code>的注解方法，会生成相应以Module为开头的Factory类，而这个Factory会以<code>Module</code>作为参数，通过调用Module中的代码，来实现注入类的提供。</p>
+<h3 id="u5C5E_u6027_u6CE8_u5165_uFF0C_u65B9_u6CD5_u6CE8_u5165"><a href="#u5C5E_u6027_u6CE8_u5165_uFF0C_u65B9_u6CD5_u6CE8_u5165" class="headerlink" title="属性注入，方法注入"></a>属性注入，方法注入</h3><p>这里，以我们常用的<code>Activity</code>为例，毕竟<code>Activity</code>的使用可是不允许我们通过构造器来生成一个Activity的，此时就是<code>MembersInjector</code>的用武之地了。<br>来看个Activity的代码先。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">AppCompatActivity</span> &#123;</span></span><br><span class="line"></span><br><span class="line">   <span class="annotation">@Inject</span></span><br><span class="line">   <span class="type">TestData</span> mData;</span><br><span class="line"></span><br><span class="line">   <span class="annotation">@Override</span></span><br><span class="line">   <span class="keyword">protected</span> void onCreate(<span class="type">Bundle</span> savedInstanceState) &#123;</span><br><span class="line">      <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">      setContentView(<span class="type">R</span>.layout.activity_main);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，也可以使用方法来进行注入，像下面这样：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Inject</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">setTestData</span><span class="params">(TestData testData)</span></span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>会生成一个<code>MainActivity_MembersInjector</code>的类，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Generated</span>(<span class="string">"dagger.internal.codegen.ComponentProcessor"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity_MembersInjector</span> <span class="keyword">implements</span> <span class="title">MembersInjector</span>&lt;<span class="title">MainActivity</span>&gt; </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> MembersInjector&lt;AppCompatActivity&gt; supertypeInjector;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> Provider&lt;TestData&gt; mDataProvider;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">MainActivity_MembersInjector</span><span class="params">(MembersInjector&lt;AppCompatActivity&gt; supertypeInjector, Provider&lt;TestData&gt; mDataProvider)</span> </span>&#123;  </span><br><span class="line">      <span class="keyword">assert</span> supertypeInjector != <span class="keyword">null</span>;</span><br><span class="line">      <span class="keyword">this</span>.supertypeInjector = supertypeInjector;</span><br><span class="line">      <span class="keyword">assert</span> mDataProvider != <span class="keyword">null</span>;</span><br><span class="line">      <span class="keyword">this</span>.mDataProvider = mDataProvider;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="annotation">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">injectMembers</span><span class="params">(MainActivity instance)</span> </span>&#123;  </span><br><span class="line">         <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Cannot inject members into a null reference"</span>);</span><br><span class="line">         &#125;</span><br><span class="line">         supertypeInjector.injectMembers(instance);</span><br><span class="line">         instance.mData = mDataProvider.get();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> MembersInjector&lt;MainActivity&gt; <span class="title">create</span><span class="params">(MembersInjector&lt;AppCompatActivity&gt; supertypeInjector, Provider&lt;TestData&gt; mDataProvider)</span> </span>&#123;  </span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> MainActivity_MembersInjector(supertypeInjector, mDataProvider);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上方可以看出，<code>MainActivity_MembersInjector</code>类通过实现<code>MembersInjector</code>类，通过<code>injectMembers</code>方法，来给<code>MainActivity</code>的实例，采用Provider获取实例的方式，来给我们之前定义的<code>Inject</code>参数或者属性，来赋值相应的注入类。<br>另外，我们看到，在<code>injectMembers</code>的方法中，也会调用父类的<code>supertypepInjector</code>的类，来调用父类的参数注入。</p>
+<h1 id="Component_u5B8C_u6210_u6CE8_u5165"><a href="#Component_u5B8C_u6210_u6CE8_u5165" class="headerlink" title="Component完成注入"></a>Component完成注入</h1><p>上面，我们提到了Activity所需要的类注入，只能通过方法参数，或者字段属性两个方式，（构造器是行不通的）。其<code>MembersInjector</code>的类页编写好了，我们该怎么调用呢？继续上面的例子，我们来给MainActivity来提供注入方式，神奇的Component就登上舞台了。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Singleton</span></span><br><span class="line"><span class="annotation">@Component</span>(modules = &#123; TestModule.<span class="keyword">class</span> &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ApplicationComponent</span> &#123;</span></span><br><span class="line">   <span class="typename">void</span> inject(MainActivity mainActivity);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，component一般在使用的时候，都是需要跟Scope相绑定的，不然会报错。看它的生成代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Generated</span>(<span class="string">"dagger.internal.codegen.ComponentProcessor"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DaggerApplicationComponent</span> <span class="keyword">implements</span> <span class="title">ApplicationComponent</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> Provider&lt;TestData&gt; provideTestDataProvider;</span><br><span class="line">   <span class="keyword">private</span> MembersInjector&lt;MainActivity&gt; mainActivityMembersInjector;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="title">DaggerApplicationComponent</span><span class="params">(Builder builder)</span> </span>&#123;  </span><br><span class="line">      <span class="keyword">assert</span> builder != <span class="keyword">null</span>;</span><br><span class="line">      initialize(builder);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Builder <span class="title">builder</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> Builder();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ApplicationComponent <span class="title">create</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">      <span class="keyword">return</span> builder().build();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">(<span class="keyword">final</span> Builder builder)</span> </span>&#123;  </span><br><span class="line">      <span class="keyword">this</span>.provideTestDataProvider = ScopedProvider.create(TestModule_ProvideTestDataFactory.create(builder.testModule));</span><br><span class="line">      <span class="keyword">this</span>.mainActivityMembersInjector = MainActivity_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), provideTestDataProvider);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="annotation">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inject</span><span class="params">(MainActivity mainActivity)</span> </span>&#123;  </span><br><span class="line">         mainActivityMembersInjector.injectMembers(mainActivity);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line">      <span class="keyword">private</span> TestModule testModule;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">private</span> <span class="title">Builder</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> ApplicationComponent <span class="title">build</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">         <span class="keyword">if</span> (testModule == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.testModule = <span class="keyword">new</span> TestModule();</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">new</span> DaggerApplicationComponent(<span class="keyword">this</span>);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> Builder <span class="title">testModule</span><span class="params">(TestModule testModule)</span> </span>&#123;  </span><br><span class="line">         <span class="keyword">if</span> (testModule == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"testModule"</span>);</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">this</span>.testModule = testModule;</span><br><span class="line">         <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们定义好的<code>Component</code>接口，都会生成一个以Dagger开头的一个实现类。在其中，就可以看到它在实现咱们定义的<code>void inject(MainActivity activity)</code>方法，就是通过使用<code>MainActivity_MembersInjector</code>类，来完成这一步注入的，有木有颇感神奇啊。这就是apt插件的神奇之处，定义好了规则，按照规则来生成代码即可。</p>
+<p>这里，紧接着提及一下<code>Scope</code>的的用法。当我们为<code>Component</code>定义了<code>Scope</code>之后，并且在<code>module</code>的方法上，添加了<code>Scope</code>注解，这样Dagger2在<code>Component</code>中生成相应的<code>Provider</code>的时候，就会在前面添加<code>ScopedProvider</code>，来对我们所需要的<code>Provider</code>来提供单例模式的访问。具体可以看到的代码就是上面初始化过程中，生成<code>provideTestDataProvider</code>的字段。</p>
+<h1 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h1><p>掌握了上面提及的这些内容，则Dagger2的不同注入方法，生成怎样的代码，我们就上手Dagger2的使用，若是在使用中还遇到问题的话，可加入下方的二维码群，来进行交流讨论。另外，感谢明道小伙伴们(<a href="https://github.com/yueban" target="_blank" rel="external">月半兄</a>，<a href="https://github.com/laobie" target="_blank" rel="external">jager</a>，<a href="https://github.com/lchad" target="_blank" rel="external">lchad</a>)对Dagger2的讨论。</p>
+<p>![Paste_Image.png](<a href="http://upload-images.jianshu.io/upload_images/656559-d313437074c9b39b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" target="_blank" rel="external">http://upload-images.jianshu.io/upload_images/656559-d313437074c9b39b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240</a></p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/20/rails的部署实践总结/" itemprop="url">
                   rails的部署实践总结
                 </a>
@@ -1383,127 +1533,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/10/18/ListView滑动性能优化/" itemprop="url">
-                  ListView图片加载讲解
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            发表于
-            <time itemprop="dateCreated" datetime="2015-10-18T23:24:48+08:00" content="2015-10-18">
-              2015-10-18
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; 分类于
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2015/10/18/ListView滑动性能优化/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/18/ListView滑动性能优化/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <p>在ListView加载图片的时候，我们就会关于这里的图片加载产生一些问题。另外，我们知道针对ListView加载图片常用的优化方案之一就是，在列表的滑动过程中，暂停图片的加载任务，在滑动结束之后，则继续之前的任务。所以我们针对这些问题进行一些探讨研究（以UIL图片加载为例）。</p>
-<ul>
-<li><p>知识点1：加载图片的线程的控制;<br>我们知道在ListView的adapter的getView方法中，进行图片的获取，这里为执行LoadAndDisplayImageTask，这是一个单独的线程去加载图片。但我们不会对每个View加载图片都去执行一个新的线程，所以这里采用的是一个线程池来控制线程的数目，来避免频繁地创建线程。</p>
-</li>
-<li><p>知识点2：在ListView的滑动过程中，是如何暂停当前的图片下载的任务的；<br> 由于这里我们采用的是单独的线程来控制图片的加载显示的，针对线程，我们使用的是加锁来使线程阻塞，当ListView滑动结束，则使其恢复。<br> 在UIL中，锁声明的代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> AtomicBoolean paused = <span class="keyword">new</span> AtomicBoolean(<span class="keyword">false</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Object pauseLock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Pauses engine. All new "load&amp;display" tasks won't be executed until ImageLoader is &#123;<span class="doctag">@link</span> #resume() resumed&#125;.Already running tasks are not paused.</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	paused.set(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Resumes engine work. Paused "load&amp;display" tasks will continue its work. */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	paused.set(<span class="keyword">false</span>);</span><br><span class="line">	<span class="keyword">synchronized</span> (pauseLock) &#123;</span><br><span class="line">		pauseLock.notifyAll();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">     </span><br><span class="line"><span class="function">AtomicBoolean <span class="title">getPause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> paused;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Object <span class="title">getPauseLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> pauseLock;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在LoadAndDisplayImageTask的方法中，执行图片的加载的时候，会进行pause的判断。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@return</span> &lt;b&gt;true&lt;/b&gt; - if task should be interrupted; &lt;b&gt;false&lt;/b&gt; - otherwise */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">waitIfPaused</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	AtomicBoolean pause = engine.getPause();</span><br><span class="line">	<span class="keyword">if</span> (pause.get()) &#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (engine.getPauseLock()) &#123;</span><br><span class="line">			<span class="keyword">if</span> (pause.get()) &#123;</span><br><span class="line">				L.d(LOG_WAITING_FOR_RESUME, memoryCacheKey);</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					engine.getPauseLock().wait();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					L.e(LOG_TASK_INTERRUPTED, memoryCacheKey);</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				L.d(LOG_RESUME_AFTER_PAUSE, memoryCacheKey);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> isTaskNotActual();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>另外，pause跟resume的调用，则是在UIL的PauseOnScrollListener进行滑动判断的调用。所以可以明显的看出是通过object的wait跟notifyAll实现线程同步，来达到暂停图片加载的任务的。</p>
-</li>
-<li><p>知识点3：当一个Item的view滑出屏幕外，应该怎么处理其对应的图片加载任务：<br>我们先要判断的是怎么确定一个view已经滑出屏幕之外了呢？这里有个取巧的办法就是判断view是否重用了，因为ListView显示界面所需要的ItemView是固定的（确保当前ListView是采用convertView的缓存机制），而在实现图片显示加载的时候，每个view是要绑定当前加载的图片的链接的，如果当前任务（是指当前View显示加载图片的线程）的图片链接与View要显示的图片链接不一致，则可以判定当前view已经重用了。所以则可以结束当前的显示图片的任务了，具体判断View重用的代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@return</span> &lt;b&gt;true&lt;/b&gt; - if current ImageAware is reused for displaying another image; &lt;b&gt;false&lt;/b&gt; - otherwise */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isViewReused</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	String currentCacheKey = engine.getLoadingUriForView(imageAware);</span><br><span class="line">	<span class="comment">// Check whether memory cache key (image URI) for current ImageAware is actual.</span></span><br><span class="line">	<span class="comment">// If ImageAware is reused for another task then current task should be cancelled.</span></span><br><span class="line">	<span class="keyword">boolean</span> imageAwareWasReused = !memoryCacheKey.equals(currentCacheKey);</span><br><span class="line">	<span class="keyword">if</span> (imageAwareWasReused) &#123;</span><br><span class="line">		L.d(LOG_TASK_CANCELLED_IMAGEAWARE_REUSED, memoryCacheKey);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>而在调用isViewReused的checkViewReused的如下，</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@throws</span> TaskCancelledException if target ImageAware is collected by GC */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkViewReused</span><span class="params">()</span> <span class="keyword">throws</span> TaskCancelledException </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (isViewReused()) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> TaskCancelledException();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最后，在线程的主体run方法中，通过调用checkTaskNotActual()判断view重用或者被回收，抛出TaskCancelledException，来结束当前的线程，并回调图片加载的cancel方法。</p>
-<p>最后，我感兴趣的几个问题记录如上，有疑问，大家不吝赐教，可以一起探讨。</p>
-<p>PS:转载请注明来自原文链接。</p>
-</li>
-</ul>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1550,7 +1579,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1564,7 +1593,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

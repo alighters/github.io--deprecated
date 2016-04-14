@@ -242,6 +242,127 @@
             
               
                 
+                <a class="post-title-link" href="/2015/10/18/ListView滑动性能优化/" itemprop="url">
+                  ListView图片加载讲解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            发表于
+            <time itemprop="dateCreated" datetime="2015-10-18T23:24:48+08:00" content="2015-10-18">
+              2015-10-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; 分类于
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/10/18/ListView滑动性能优化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/18/ListView滑动性能优化/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>在ListView加载图片的时候，我们就会关于这里的图片加载产生一些问题。另外，我们知道针对ListView加载图片常用的优化方案之一就是，在列表的滑动过程中，暂停图片的加载任务，在滑动结束之后，则继续之前的任务。所以我们针对这些问题进行一些探讨研究（以UIL图片加载为例）。</p>
+<ul>
+<li><p>知识点1：加载图片的线程的控制;<br>我们知道在ListView的adapter的getView方法中，进行图片的获取，这里为执行LoadAndDisplayImageTask，这是一个单独的线程去加载图片。但我们不会对每个View加载图片都去执行一个新的线程，所以这里采用的是一个线程池来控制线程的数目，来避免频繁地创建线程。</p>
+</li>
+<li><p>知识点2：在ListView的滑动过程中，是如何暂停当前的图片下载的任务的；<br> 由于这里我们采用的是单独的线程来控制图片的加载显示的，针对线程，我们使用的是加锁来使线程阻塞，当ListView滑动结束，则使其恢复。<br> 在UIL中，锁声明的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> AtomicBoolean paused = <span class="keyword">new</span> AtomicBoolean(<span class="keyword">false</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Object pauseLock = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * Pauses engine. All new "load&amp;display" tasks won't be executed until ImageLoader is &#123;<span class="doctag">@link</span> #resume() resumed&#125;.Already running tasks are not paused.</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	paused.set(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Resumes engine work. Paused "load&amp;display" tasks will continue its work. */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">resume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	paused.set(<span class="keyword">false</span>);</span><br><span class="line">	<span class="keyword">synchronized</span> (pauseLock) &#123;</span><br><span class="line">		pauseLock.notifyAll();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">     </span><br><span class="line"><span class="function">AtomicBoolean <span class="title">getPause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> paused;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">Object <span class="title">getPauseLock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> pauseLock;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在LoadAndDisplayImageTask的方法中，执行图片的加载的时候，会进行pause的判断。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@return</span> &lt;b&gt;true&lt;/b&gt; - if task should be interrupted; &lt;b&gt;false&lt;/b&gt; - otherwise */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">waitIfPaused</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	AtomicBoolean pause = engine.getPause();</span><br><span class="line">	<span class="keyword">if</span> (pause.get()) &#123;</span><br><span class="line">		<span class="keyword">synchronized</span> (engine.getPauseLock()) &#123;</span><br><span class="line">			<span class="keyword">if</span> (pause.get()) &#123;</span><br><span class="line">				L.d(LOG_WAITING_FOR_RESUME, memoryCacheKey);</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					engine.getPauseLock().wait();</span><br><span class="line">				&#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">					L.e(LOG_TASK_INTERRUPTED, memoryCacheKey);</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				L.d(LOG_RESUME_AFTER_PAUSE, memoryCacheKey);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> isTaskNotActual();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外，pause跟resume的调用，则是在UIL的PauseOnScrollListener进行滑动判断的调用。所以可以明显的看出是通过object的wait跟notifyAll实现线程同步，来达到暂停图片加载的任务的。</p>
+</li>
+<li><p>知识点3：当一个Item的view滑出屏幕外，应该怎么处理其对应的图片加载任务：<br>我们先要判断的是怎么确定一个view已经滑出屏幕之外了呢？这里有个取巧的办法就是判断view是否重用了，因为ListView显示界面所需要的ItemView是固定的（确保当前ListView是采用convertView的缓存机制），而在实现图片显示加载的时候，每个view是要绑定当前加载的图片的链接的，如果当前任务（是指当前View显示加载图片的线程）的图片链接与View要显示的图片链接不一致，则可以判定当前view已经重用了。所以则可以结束当前的显示图片的任务了，具体判断View重用的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@return</span> &lt;b&gt;true&lt;/b&gt; - if current ImageAware is reused for displaying another image; &lt;b&gt;false&lt;/b&gt; - otherwise */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isViewReused</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	String currentCacheKey = engine.getLoadingUriForView(imageAware);</span><br><span class="line">	<span class="comment">// Check whether memory cache key (image URI) for current ImageAware is actual.</span></span><br><span class="line">	<span class="comment">// If ImageAware is reused for another task then current task should be cancelled.</span></span><br><span class="line">	<span class="keyword">boolean</span> imageAwareWasReused = !memoryCacheKey.equals(currentCacheKey);</span><br><span class="line">	<span class="keyword">if</span> (imageAwareWasReused) &#123;</span><br><span class="line">		L.d(LOG_TASK_CANCELLED_IMAGEAWARE_REUSED, memoryCacheKey);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而在调用isViewReused的checkViewReused的如下，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** <span class="doctag">@throws</span> TaskCancelledException if target ImageAware is collected by GC */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">checkViewReused</span><span class="params">()</span> <span class="keyword">throws</span> TaskCancelledException </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (isViewReused()) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> TaskCancelledException();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，在线程的主体run方法中，通过调用checkTaskNotActual()判断view重用或者被回收，抛出TaskCancelledException，来结束当前的线程，并回调图片加载的cancel方法。</p>
+<p>最后，我感兴趣的几个问题记录如上，有疑问，大家不吝赐教，可以一起探讨。</p>
+<p>PS:转载请注明来自原文链接。</p>
+</li>
+</ul>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/10/11/Git进阶命令/" itemprop="url">
                   Git进阶命令
                 </a>
@@ -1320,7 +1441,7 @@ public static boolean isGooglePhotosUri(Uri uri) {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1334,7 +1455,7 @@ public static boolean isGooglePhotosUri(Uri uri) {
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
